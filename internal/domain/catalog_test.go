@@ -10,7 +10,7 @@ func TestInferCategory(t *testing.T) {
 		1000001: "misc", // currency is asserted from context, not inferred
 		1000500: "misc", // stackable sharing the 100x prefix
 		1410002: "potion",
-		1420204: "food",
+		1429999: "food",
 		1430003: "material",
 		1450001: "material",
 		1510018: "misc",
@@ -40,15 +40,15 @@ func TestLookupFallback(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	it := c.Lookup(1420204)
+	it := c.Lookup(1429999)
 	if it.Category != "food" {
 		t.Errorf("category = %q, want food", it.Category)
 	}
 	if it.Known {
 		t.Error("expected Known=false for an unseeded CID")
 	}
-	if it.NameFR != "Food 1420204" {
-		t.Errorf("fallback name = %q, want %q", it.NameFR, "Food 1420204")
+	if it.NameFR != "Food 1429999" {
+		t.Errorf("fallback name = %q, want %q", it.NameFR, "Food 1429999")
 	}
 }
 
@@ -58,10 +58,10 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := c.SetLabel(1420204, "Grilled Meat"); err != nil {
+	if err := c.SetLabel(1429999, "Grilled Meat"); err != nil {
 		t.Fatal(err)
 	}
-	it := c.Lookup(1420204)
+	it := c.Lookup(1429999)
 	if it.NameFR != "Grilled Meat" || !it.Known {
 		t.Fatalf("after label: name=%q known=%v", it.NameFR, it.Known)
 	}
@@ -71,15 +71,15 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := c2.Lookup(1420204).NameFR; got != "Grilled Meat" {
+	if got := c2.Lookup(1429999).NameFR; got != "Grilled Meat" {
 		t.Fatalf("persisted label = %q, want %q", got, "Grilled Meat")
 	}
 
 	// Clearing the label falls back to inference.
-	if err := c2.SetLabel(1420204, ""); err != nil {
+	if err := c2.SetLabel(1429999, ""); err != nil {
 		t.Fatal(err)
 	}
-	if got := c2.Lookup(1420204); got.Known || got.NameFR != "Food 1420204" {
+	if got := c2.Lookup(1429999); got.Known || got.NameFR != "Food 1429999" {
 		t.Fatalf("after clear: name=%q known=%v", got.NameFR, got.Known)
 	}
 }
