@@ -2,8 +2,20 @@ default:
     @just --list
 
 # Full quality gate: format check + vet + lint + test + build.
-# Single source of truth for the gates — CI and pre-commit call this same recipe.
+# Single source of truth for the Go gates — pre-commit calls this same recipe.
 ci: fmt-check vet lint test build
+
+# Nix-level checks: build + go test + gofmt (via `nix flake check`).
+check:
+    nix flake check
+
+# Format Nix files in place (nixfmt).
+fmt-nix:
+    nixfmt *.nix
+
+# Verify Nix formatting without modifying.
+fmt-nix-check:
+    nixfmt --check *.nix
 
 # Format all Go code in place (gofmt).
 fmt:
