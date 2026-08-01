@@ -24,6 +24,11 @@ const catClass = (c) => "cat-" + (CATS.includes(c) ? c : "misc");
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+let lang = localStorage.getItem("dsa-lang") || "fr";
+// Item names come in both languages; pick the active one, falling back gracefully.
+const displayName = (it) =>
+  (lang === "fr" ? it.nameFr : it.nameEn) || it.nameEn || it.nameFr || "CID " + it.cid;
+
 // ── View & section switching ─────────────────────────────────────────────
 let dbLoaded = false;
 
@@ -126,7 +131,7 @@ async function renderCurrency() {
   for (const c of currencies || []) {
     rows.appendChild(
       stepperRow({
-        cat: c.category, name: c.name, cid: c.cid, known: c.known, value: c.amount,
+        cat: c.category, name: displayName(c), cid: c.cid, known: c.known, value: c.amount,
         onCommit: (v) => postJSON("/api/game/currency", { cid: c.cid, amount: v }),
         onLabel: (name) => postJSON("/api/game/label", { cid: c.cid, name }).then(renderCurrency),
       })
@@ -154,7 +159,7 @@ async function renderConsumables() {
     for (const it of groups[cat]) {
       rows.appendChild(
         stepperRow({
-          cat: it.category, name: it.name, cid: it.cid, known: it.known, value: it.count,
+          cat: it.category, name: displayName(it), cid: it.cid, known: it.known, value: it.count,
           onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
           onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
         })
@@ -177,7 +182,7 @@ async function renderCharacters() {
     const stat = (label, v) => `<div><dt>${label}</dt><dd>${v}</dd></div>`;
     card.innerHTML =
       `<div class="card-head"><span class="cat-dot ${catClass(c.category)}"></span>` +
-      `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(c.name)}</span></div>` +
+      `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(displayName(c))}</span></div>` +
       `<div class="icid">CID ${c.cid}</div>` +
       `<dl class="stats">${stat("Level", c.level)}${stat("EXP", c.exp)}${stat("HP", c.hp)}` +
       `${stat("Ascend", c.ascend)}${stat("Transcend", c.transcend)}${stat("Soldier", c.soldierGrade)}</dl>`;
@@ -207,7 +212,7 @@ async function renderTeam() {
       } else {
         slot.innerHTML =
           `<span class="cat-dot ${catClass(s.category)}"></span>` +
-          `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(s.name)}</span>` +
+          `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(displayName(s))}</span>` +
           `<span class="lv">Lv ${s.level}</span>`;
       }
       slots.appendChild(slot);
@@ -317,7 +322,7 @@ async function renderEquipment() {
     const dot = document.createElement("span");
     dot.className = "cat-dot " + catClass(e.category);
     row.appendChild(dot);
-    row.appendChild(namesCell(e.category, e.name, e.cid, e.known, (name) =>
+    row.appendChild(namesCell(e.category, displayName(e), e.cid, e.known, (name) =>
       postJSON("/api/game/label", { cid: e.cid, name }).then(renderEquipment)
     ));
     const fields = document.createElement("div");
@@ -357,7 +362,7 @@ async function renderGems() {
     const dot = document.createElement("span");
     dot.className = "cat-dot " + catClass(gm.category);
     row.appendChild(dot);
-    row.appendChild(namesCell(gm.category, gm.name, gm.cid, gm.known, (name) =>
+    row.appendChild(namesCell(gm.category, displayName(gm), gm.cid, gm.known, (name) =>
       postJSON("/api/game/label", { cid: gm.cid, name }).then(renderGems)
     ));
     const fields = document.createElement("div");
@@ -419,7 +424,7 @@ async function loadPage() {
   const data = await api(`/api/table?name=${encodeURIComponent(table)}&limit=${limit}&offset=${offset}`);
   state.columns = data.columns;
   state.total = data.total;
-  state.pkCols = data.columns.filter((c) => c.primaryKey).map((c) => c.name);
+  state.pkCols = data.columns.filter((c) => c.primaryKey).map((c) => displayName(c));
   $("#table-name").textContent = table;
   $("#hint").classList.add("hidden");
   renderGrid(data.columns, data.rows);
@@ -441,7 +446,7 @@ function renderGrid(columns, rows) {
   const htr = document.createElement("tr");
   for (const c of columns) {
     const th = document.createElement("th");
-    th.textContent = c.name;
+    th.textContent = displayName(c);
     if (c.primaryKey) {
       const s = document.createElement("span");
       s.className = "pk";
@@ -462,7 +467,7 @@ function renderGrid(columns, rows) {
     const tr = document.createElement("tr");
     const pk = {};
     columns.forEach((c, i) => {
-      if (c.primaryKey) pk[c.name] = row[i];
+      if (c.primaryKey) pk[displayName(c)] = row[i];
     });
     columns.forEach((c, i) => {
       const td = document.createElement("td");
@@ -562,6 +567,22 @@ $("#save-btn").onclick = async () => {
   setTimeout(() => (s.textContent = ""), 4000);
 };
 
+function initLang() {
+  const sync = () => $$("#lang button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
+  $$("#lang button").forEach(
+    (b) =>
+      (b.onclick = () => {
+        if (b.dataset.lang === lang) return;
+        lang = b.dataset.lang;
+        localStorage.setItem("dsa-lang", lang);
+        sync();
+        loadEditor().catch((e) => toast("Editor load failed: " + e.message));
+      })
+  );
+  sync();
+}
+
 initTabs();
+initLang();
 loadInfo().catch((e) => toast("Load failed: " + e.message));
 loadEditor().catch((e) => toast("Editor load failed: " + e.message));

@@ -47,6 +47,10 @@ button:hover { border-color: var(--accent); }
 .status.ok { color: var(--ok); }
 .status.err { color: #e06a5a; }
 
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.lang button { background: var(--panel-2); border: none; border-radius: 0; padding: .3rem .55rem; font-size: .72rem; color: var(--muted); }
+.lang button.active { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
 main { flex: 1; display: flex; min-height: 0; }
 aside {
   width: 260px; flex: none; border-right: 1px solid var(--line);
