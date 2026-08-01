@@ -13,7 +13,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gfriloux/dragonswordawakening/internal/sqlcipher"
+	"github.com/gfriloux/dragonsword-save-editor/internal/sqlcipher"
 	_ "modernc.org/sqlite"
 )
 

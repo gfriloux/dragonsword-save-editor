@@ -1,4 +1,4 @@
-module github.com/gfriloux/dragonswordawakening
+module github.com/gfriloux/dragonsword-save-editor
 
 go 1.26.4
 

@@ -15,8 +15,8 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/gfriloux/dragonswordawakening/internal/save"
-	"github.com/gfriloux/dragonswordawakening/internal/web"
+	"github.com/gfriloux/dragonsword-save-editor/internal/save"
+	"github.com/gfriloux/dragonsword-save-editor/internal/web"
 )
 
 func main() {
