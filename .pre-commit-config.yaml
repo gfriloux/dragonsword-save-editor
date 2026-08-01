@@ -1,0 +1,19 @@
+---
+# Local hooks. They call the same gates as `just ci` and `nix flake check` — one
+# definition (the Justfile), run automatically before each commit. Enable with
+# `pre-commit install` from inside `nix develop`.
+repos:
+  - repo: local
+    hooks:
+      - id: just-ci
+        name: just ci (gofmt + vet + staticcheck + test + build)
+        language: system
+        entry: just ci
+        pass_filenames: false
+        always_run: true
+      - id: nixfmt
+        name: nixfmt (check)
+        language: system
+        entry: just fmt-nix-check
+        files: \.nix$
+        pass_filenames: false
