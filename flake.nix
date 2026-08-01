@@ -47,15 +47,31 @@
               mainProgram = "dsa-save-editor";
             };
           };
+        editor = mkEditor { };
       in
       {
         packages = {
-          default = mkEditor { };
+          default = editor;
           windows = mkEditor {
             GOOS = "windows";
             GOARCH = "amd64";
             ext = ".exe";
           };
+        };
+
+        # `nix flake check` runs these. staticcheck/vet stay in `just lint`/pre-commit
+        # to avoid sandbox dependency fragility; the build check still runs go test.
+        checks = {
+          build = editor; # builds and runs `go test`
+          gofmt = pkgs.runCommandLocal "gofmt-check" { nativeBuildInputs = [ pkgs.go ]; } ''
+            bad=$(cd ${self} && gofmt -l .)
+            if [ -n "$bad" ]; then
+              echo "not gofmt-clean:"
+              echo "$bad"
+              exit 1
+            fi
+            touch $out
+          '';
         };
 
         devShells.default = pkgs.mkShell {
@@ -66,6 +82,8 @@
             go-tools # staticcheck (honnef.co/go/tools)
             just
             git-cliff
+            pre-commit
+            nixfmt
             sqlcipher
             sqlite
           ];
