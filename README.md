@@ -25,7 +25,7 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
 
 - **Editor** — a friendly, game-oriented view:
   - **Currency** and **Consumables** (potions, cooked food, materials) with quantity
-    steppers.
+    steppers; add materials from the catalog by name and fill every stack at once.
   - **Characters** and **Team** — read-only reference views (levels, squads).
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.

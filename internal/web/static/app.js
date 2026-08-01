@@ -141,9 +141,79 @@ async function renderCurrency() {
 }
 
 // ── Editor: Consumables panel ─────────────────────────────────────────────
+let catalogCache = null;
+async function catalog() {
+  if (!catalogCache) catalogCache = (await api("/api/game/catalog")).items || [];
+  return catalogCache;
+}
+
+// Toolbar to add a material from the catalog and to fill every stack.
+async function consumablesToolbar() {
+  const bar = document.createElement("div");
+  bar.className = "toolbar";
+
+  const materials = (await catalog()).filter((i) => i.category === "material");
+  const dl = document.createElement("datalist");
+  dl.id = "cat-materials";
+  for (const i of materials) {
+    const o = document.createElement("option");
+    o.value = displayName(i) + " (" + i.cid + ")";
+    dl.appendChild(o);
+  }
+  const search = document.createElement("input");
+  search.setAttribute("list", "cat-materials");
+  search.placeholder = "Add a material by name…";
+  search.className = "add-search";
+  const qty = document.createElement("input");
+  qty.type = "number";
+  qty.value = 1;
+  qty.min = 1;
+  qty.className = "add-qty";
+  const add = document.createElement("button");
+  add.textContent = "Add";
+  add.onclick = async () => {
+    const m = /\((\d+)\)\s*$/.exec(search.value);
+    if (!m) return toast("Pick an item from the list.");
+    try {
+      await postJSON("/api/game/stackable", { cid: parseInt(m[1], 10), count: Math.max(1, parseInt(qty.value, 10) || 1) });
+      search.value = "";
+      await renderConsumables();
+    } catch (e) {
+      toast("Add failed: " + e.message);
+    }
+  };
+
+  const sep = document.createElement("span");
+  sep.className = "sep";
+  const label = document.createElement("span");
+  label.className = "tb-label";
+  label.textContent = "Set all stacks to";
+  const fillN = document.createElement("input");
+  fillN.type = "number";
+  fillN.value = 999;
+  fillN.min = 0;
+  fillN.className = "add-qty";
+  const fill = document.createElement("button");
+  fill.textContent = "Fill";
+  fill.onclick = async () => {
+    const n = Math.max(0, parseInt(fillN.value, 10) || 0);
+    if (!confirm(`Set ALL stackable items to ${n}?`)) return;
+    try {
+      await postJSON("/api/game/stackable/fill", { count: n });
+      await renderConsumables();
+    } catch (e) {
+      toast("Fill failed: " + e.message);
+    }
+  };
+
+  bar.append(search, qty, add, dl, sep, label, fillN, fill);
+  return bar;
+}
+
 async function renderConsumables() {
   const el = $("#panel-consumables");
-  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Potions, cooked food and materials. Grouped by category; names unknown until seeded or labelled (✎).</p>`;
+  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Potions, cooked food and materials. Add a material from the catalog, or set all stacks at once.</p>`;
+  el.appendChild(await consumablesToolbar());
   const { items } = await api("/api/game/consumables");
   const groups = {};
   for (const it of items || []) (groups[it.category] ||= []).push(it);

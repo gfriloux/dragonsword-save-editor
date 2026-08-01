@@ -83,3 +83,28 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 		t.Fatalf("after clear: name=%q known=%v", got.NameFR, got.Known)
 	}
 }
+
+func TestEntries(t *testing.T) {
+	c, err := LoadCatalog("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	es := c.Entries()
+	if len(es) < 100 {
+		t.Fatalf("expected a populated catalog, got %d", len(es))
+	}
+	for i := 1; i < len(es); i++ {
+		if es[i-1].CID > es[i].CID {
+			t.Fatal("entries not sorted by CID")
+		}
+	}
+	var eileen *Item
+	for i := range es {
+		if es[i].CID == 10001 {
+			eileen = &es[i]
+		}
+	}
+	if eileen == nil || eileen.NameFR != "Eileen" {
+		t.Fatalf("expected 10001=Eileen, got %+v", eileen)
+	}
+}

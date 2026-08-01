@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 )
 
@@ -103,6 +104,19 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 		Category: category,
 		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
 	}
+}
+
+// Entries returns every seeded catalog item (resolved), sorted by CID — used to
+// populate the "add item" picker.
+func (c *Catalog) Entries() []Item {
+	out := make([]Item, 0, len(c.seed))
+	for k := range c.seed {
+		if cid, err := strconv.ParseInt(k, 10, 64); err == nil {
+			out = append(out, c.Lookup(cid))
+		}
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].CID < out[j].CID })
+	return out
 }
 
 // SetLabel records a user-provided name for a CID (both languages) and persists it
