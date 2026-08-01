@@ -137,6 +137,28 @@ func (g *Game) Consumables() ([]Stack, error) {
 	return out, crows.Err()
 }
 
+// AddOrSetStackable adds a stackable item (or sets its quantity if already owned).
+func (g *Game) AddOrSetStackable(cid, count int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	_, err = g.s.Exec(
+		`INSERT OR REPLACE INTO tb_stackable_item (USER_DBID, ITEM_CID, STACK_CNT) VALUES (?,?,?)`,
+		uid, cid, count)
+	return err
+}
+
+// FillStackables sets every owned stackable item to count.
+func (g *Game) FillStackables(count int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	_, err = g.s.Exec(`UPDATE tb_stackable_item SET STACK_CNT=? WHERE USER_DBID=?`, count, uid)
+	return err
+}
+
 // SetStack sets the quantity of a consumable, routing by kind.
 func (g *Game) SetStack(kind string, id, count int64) error {
 	uid, err := g.UserID()

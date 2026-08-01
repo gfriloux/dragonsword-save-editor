@@ -205,3 +205,49 @@ func TestGemsEmptyOK(t *testing.T) {
 		}
 	}
 }
+
+func TestAddOrSetStackable(t *testing.T) {
+	g := openGame(t)
+	const cid = 1459999 // not present in the reference save
+	if err := g.AddOrSetStackable(cid, 42); err != nil {
+		t.Fatalf("add: %v", err)
+	}
+	find := func() *Stack {
+		items, err := g.Consumables()
+		if err != nil {
+			t.Fatal(err)
+		}
+		for i := range items {
+			if items[i].Kind == KindStackable && items[i].ID == cid {
+				return &items[i]
+			}
+		}
+		return nil
+	}
+	if s := find(); s == nil || s.Count != 42 {
+		t.Fatalf("after add: %+v", s)
+	}
+	// Upsert: setting again replaces the quantity.
+	if err := g.AddOrSetStackable(cid, 7); err != nil {
+		t.Fatal(err)
+	}
+	if s := find(); s == nil || s.Count != 7 {
+		t.Fatalf("after upsert: %+v", s)
+	}
+}
+
+func TestFillStackables(t *testing.T) {
+	g := openGame(t)
+	if err := g.FillStackables(500); err != nil {
+		t.Fatal(err)
+	}
+	items, err := g.Consumables()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, it := range items {
+		if it.Kind == KindStackable && it.Count != 500 {
+			t.Fatalf("stackable %d count %d, want 500", it.ID, it.Count)
+		}
+	}
+}
