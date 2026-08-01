@@ -45,6 +45,9 @@ func New(g *domain.Game) *Server {
 	s.mux.HandleFunc("/api/game/equipment", s.handleEquipment)
 	s.mux.HandleFunc("/api/game/gems", s.handleGems)
 	s.mux.HandleFunc("/api/game/gem", s.handleGem)
+	s.mux.HandleFunc("/api/game/catalog", s.handleCatalog)
+	s.mux.HandleFunc("/api/game/stackable", s.handleAddStackable)
+	s.mux.HandleFunc("/api/game/stackable/fill", s.handleFillStackables)
 	return s
 }
 
