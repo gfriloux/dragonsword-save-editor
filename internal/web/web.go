@@ -10,7 +10,7 @@ import (
 	"math"
 	"net/http"
 
-	"github.com/gfriloux/dragonswordawakening/internal/save"
+	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 )
 
 //go:embed static
