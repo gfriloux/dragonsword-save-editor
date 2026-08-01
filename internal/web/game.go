@@ -50,7 +50,7 @@ func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
 	}
 	var req struct {
 		Kind  string `json:"kind"`
-		ID    int64  `json:"id"`
+		ID    int64  `json:"id,string"`
 		Count int64  `json:"count"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -79,6 +79,93 @@ func (s *Server) handleLabel(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := s.g.Catalog().SetLabel(req.CID, req.Name); err != nil {
 		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleCharacters(w http.ResponseWriter, r *http.Request) {
+	chars, err := s.g.Characters()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"characters": chars})
+}
+
+func (s *Server) handleTeams(w http.ResponseWriter, r *http.Request) {
+	teams, err := s.g.Teams()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"teams": teams})
+}
+
+func (s *Server) handleEquipment(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		eq, err := s.g.Equipments()
+		if err != nil {
+			writeErr(w, 500, err)
+			return
+		}
+		writeJSON(w, 200, map[string]any{"equipment": eq})
+	case http.MethodPost:
+		var req struct {
+			DBID  int64  `json:"dbid,string"`
+			Field string `json:"field"`
+			Value int64  `json:"value"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+			writeErr(w, 400, err)
+			return
+		}
+		var err error
+		switch req.Field {
+		case "enchant":
+			err = s.g.SetEnchant(req.DBID, req.Value)
+		case "exp":
+			err = s.g.SetEquipExp(req.DBID, req.Value)
+		case "lock":
+			err = s.g.SetEquipLock(req.DBID, req.Value != 0)
+		default:
+			err = fmt.Errorf("unknown field %q", req.Field)
+		}
+		if err != nil {
+			writeErr(w, 400, err)
+			return
+		}
+		writeJSON(w, 200, map[string]any{"ok": true})
+	default:
+		writeErr(w, 405, fmt.Errorf("GET or POST only"))
+	}
+}
+
+func (s *Server) handleGems(w http.ResponseWriter, r *http.Request) {
+	gems, err := s.g.Gems()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"gems": gems})
+}
+
+func (s *Server) handleGem(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		DBID   int64 `json:"dbid,string"`
+		Locked bool  `json:"locked"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.SetGemLock(req.DBID, req.Locked); err != nil {
+		writeErr(w, 400, err)
 		return
 	}
 	writeJSON(w, 200, map[string]any{"ok": true})

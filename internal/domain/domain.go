@@ -85,11 +85,12 @@ const (
 	KindCook      = "cook"      // tb_cook_item, keyed by ITEM_DBID (per-instance)
 )
 
-// Stack is a resolved consumable/stackable row.
+// Stack is a resolved consumable/stackable row. ID is sent as a JSON string
+// because cook ITEM_DBIDs exceed 2^53 and would lose precision in a JS number.
 type Stack struct {
 	Item
 	Kind  string `json:"kind"`
-	ID    int64  `json:"id"` // ITEM_CID for stackable, ITEM_DBID for cook
+	ID    int64  `json:"id,string"` // ITEM_CID for stackable, ITEM_DBID for cook
 	Count int64  `json:"count"`
 }
 
@@ -152,6 +153,237 @@ func (g *Game) SetStack(kind string, id, count int64) error {
 	default:
 		return fmt.Errorf("domain: unknown consumable kind %q", kind)
 	}
+}
+
+// Character is a resolved, read-only character row.
+type Character struct {
+	Item
+	Level        int64 `json:"level"`
+	Exp          int64 `json:"exp"`
+	Ascend       int64 `json:"ascend"`
+	HP           int64 `json:"hp"`
+	Transcend    int64 `json:"transcend"`
+	SoldierGrade int64 `json:"soldierGrade"`
+}
+
+// Characters lists the owned characters (read-only).
+func (g *Game) Characters() ([]Character, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT CHARACTER_CID, LEVEL, EXP, ASCEND, HP, TRANSCEND, SOLDIER_GRADE
+		   FROM tb_character WHERE USER_DBID=? ORDER BY CHARACTER_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Character
+	for rows.Next() {
+		var c Character
+		var cid int64
+		if err := rows.Scan(&cid, &c.Level, &c.Exp, &c.Ascend, &c.HP, &c.Transcend, &c.SoldierGrade); err != nil {
+			return nil, err
+		}
+		c.Item = g.cat.LookupCtx(cid, "character")
+		out = append(out, c)
+	}
+	return out, rows.Err()
+}
+
+// characterLevels maps character CID to level, for annotating team slots.
+func (g *Game) characterLevels(uid int64) (map[int64]int64, error) {
+	rows, err := g.s.DB().Query(`SELECT CHARACTER_CID, LEVEL FROM tb_character WHERE USER_DBID=?`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	m := map[int64]int64{}
+	for rows.Next() {
+		var cid, lvl int64
+		if err := rows.Scan(&cid, &lvl); err != nil {
+			return nil, err
+		}
+		m[cid] = lvl
+	}
+	return m, rows.Err()
+}
+
+// TeamSlot is one character slot of a team page (read-only).
+type TeamSlot struct {
+	Item
+	Level int64 `json:"level"`
+	Empty bool  `json:"empty"`
+}
+
+// TeamPage is a saved team composition (read-only).
+type TeamPage struct {
+	PageID int64      `json:"pageId"`
+	Slots  []TeamSlot `json:"slots"`
+}
+
+// Teams lists the saved team pages with their three character slots (read-only).
+func (g *Game) Teams() ([]TeamPage, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	levels, err := g.characterLevels(uid)
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT PAGE_ID, SLOT1_CHARACTER_CID, SLOT2_CHARACTER_CID, SLOT3_CHARACTER_CID
+		   FROM tb_team WHERE USER_DBID=? ORDER BY PAGE_ID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []TeamPage
+	for rows.Next() {
+		var page TeamPage
+		var s [3]int64
+		if err := rows.Scan(&page.PageID, &s[0], &s[1], &s[2]); err != nil {
+			return nil, err
+		}
+		for _, cid := range s {
+			if cid == 0 {
+				page.Slots = append(page.Slots, TeamSlot{Empty: true})
+				continue
+			}
+			page.Slots = append(page.Slots, TeamSlot{Item: g.cat.LookupCtx(cid, "character"), Level: levels[cid]})
+		}
+		out = append(out, page)
+	}
+	return out, rows.Err()
+}
+
+// Equipment is a resolved equipment row. Scalar fields are editable; stat CIDs
+// are references shown read-only (their names are not yet decoded).
+type Equipment struct {
+	Item
+	DBID         int64   `json:"dbid,string"` // 64-bit; string to survive JS precision
+	EnchantLevel int64   `json:"enchantLevel"`
+	Exp          int64   `json:"exp"`
+	IsLock       bool    `json:"isLock"`
+	GemDBID      int64   `json:"gemDbid,string"`
+	MainStatCID  int64   `json:"mainStatCid"`
+	SubStatCIDs  []int64 `json:"subStatCids"`
+}
+
+// Equipments lists active (non-deleted) equipment.
+func (g *Game) Equipments() ([]Equipment, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT ITEM_DBID, ITEM_CID, ENCHANT_LEVEL, EXP, IS_LOCK, GEM_DBID,
+		        MAIN_STAT_CID, SUB_STAT_CID1, SUB_STAT_CID2, SUB_STAT_CID3, SUB_STAT_CID4, SUB_STAT_CID5
+		   FROM tb_equipment WHERE USER_DBID=? AND DELETED_DATE=0 ORDER BY ITEM_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Equipment
+	for rows.Next() {
+		var (
+			e         Equipment
+			cid, lock int64
+			sub       [5]int64
+		)
+		if err := rows.Scan(&e.DBID, &cid, &e.EnchantLevel, &e.Exp, &lock, &e.GemDBID,
+			&e.MainStatCID, &sub[0], &sub[1], &sub[2], &sub[3], &sub[4]); err != nil {
+			return nil, err
+		}
+		e.Item = g.cat.LookupCtx(cid, "gear")
+		e.IsLock = lock != 0
+		for _, s := range sub {
+			if s != 0 {
+				e.SubStatCIDs = append(e.SubStatCIDs, s)
+			}
+		}
+		out = append(out, e)
+	}
+	return out, rows.Err()
+}
+
+// SetEnchant sets an equipment's enchant level.
+func (g *Game) SetEnchant(dbid, level int64) error {
+	return g.setEquip(dbid, "ENCHANT_LEVEL", level)
+}
+
+// SetEquipExp sets an equipment's experience.
+func (g *Game) SetEquipExp(dbid, exp int64) error {
+	return g.setEquip(dbid, "EXP", exp)
+}
+
+// SetEquipLock locks or unlocks an equipment.
+func (g *Game) SetEquipLock(dbid int64, locked bool) error {
+	return g.setEquip(dbid, "IS_LOCK", boolToInt(locked))
+}
+
+func (g *Game) setEquip(dbid int64, column string, value int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	// column is a fixed internal constant, never user input.
+	return exactlyOne(g.s.Exec(
+		"UPDATE tb_equipment SET "+column+"=? WHERE USER_DBID=? AND ITEM_DBID=?", value, uid, dbid))
+}
+
+// Gem is a resolved gem row. Only the lock is editable.
+type Gem struct {
+	Item
+	DBID        int64 `json:"dbid,string"` // 64-bit; string to survive JS precision
+	StatInfoCID int64 `json:"statInfoCid"`
+	IsLock      bool  `json:"isLock"`
+}
+
+// Gems lists active (non-deleted) gems. May be empty.
+func (g *Game) Gems() ([]Gem, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT ITEM_DBID, ITEM_CID, STAT_INFO_CID, IS_LOCK
+		   FROM tb_gem WHERE USER_DBID=? AND DELETED_DATE=0 ORDER BY ITEM_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := []Gem{}
+	for rows.Next() {
+		var gm Gem
+		var cid, lock int64
+		if err := rows.Scan(&gm.DBID, &cid, &gm.StatInfoCID, &lock); err != nil {
+			return nil, err
+		}
+		gm.Item = g.cat.Lookup(cid)
+		gm.IsLock = lock != 0
+		out = append(out, gm)
+	}
+	return out, rows.Err()
+}
+
+// SetGemLock locks or unlocks a gem.
+func (g *Game) SetGemLock(dbid int64, locked bool) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	return exactlyOne(g.s.Exec(
+		`UPDATE tb_gem SET IS_LOCK=? WHERE USER_DBID=? AND ITEM_DBID=?`, boolToInt(locked), uid, dbid))
+}
+
+func boolToInt(b bool) int64 {
+	if b {
+		return 1
+	}
+	return 0
 }
 
 func exactlyOne(res sql.Result, err error) error {

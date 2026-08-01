@@ -23,9 +23,15 @@ nix build .#windows                              # produces a Windows .exe
 
 The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
 
-- **Editor** — a friendly, game-oriented view: currencies and consumables (potions,
-  cooked food, materials) grouped by category, with quantity steppers. Item names
-  come from a small built-in catalog + category inference + your own labels (✎).
+- **Editor** — a friendly, game-oriented view:
+  - **Currency** and **Consumables** (potions, cooked food, materials) with quantity
+    steppers.
+  - **Characters** and **Team** — read-only reference views (levels, squads).
+  - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
+    references are shown read-only.
+
+  Item names come from a small built-in catalog + category inference + your own
+  labels (✎).
 - **Database (advanced)** — the raw `tb_*` table browser: double-click any non-key
   cell to edit it.
 

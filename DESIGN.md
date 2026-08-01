@@ -68,11 +68,13 @@ implementation change.
 
 The web UI has two tabs:
 
-- **Editor** (default) — a friendly, game-oriented view backed by `internal/domain`:
-  currencies, consumables (grouped by category), etc. Item names come from an
-  extensible embedded catalog (`internal/domain/data/items.json`) plus category
-  inference from the CID and user-editable labels (persisted in the OS config dir).
-  Currency and "food" categories are asserted from the source table, not the CID.
+- **Editor** (default) — a friendly, game-oriented view backed by `internal/domain`.
+  Panels: Currency and Consumables (editable quantities), Characters and Team
+  (read-only reference), Equipment and Gems (editable enchant/XP/lock; stat CIDs
+  read-only). Item names come from an extensible embedded catalog
+  (`internal/domain/data/items.json`) plus category inference from the CID and
+  user-editable labels (persisted in the OS config dir). Currency, "food",
+  "character" and "gear" categories are asserted from context, not just the CID.
 - **Database (advanced)** — the generic `tb_*` table browser, kept as the power
   user's escape hatch.
 

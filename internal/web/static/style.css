@@ -145,8 +145,44 @@ td.null { color: var(--muted); font-style: italic; }
 .qty input.saved { animation: flash .8s ease-out; }
 .group-title { margin: 1.2rem 0 .4rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
 .group-title:first-child { margin-top: 0; }
-.cat-currency { background: var(--accent); }
-.cat-potion   { background: #5aa9e0; }
-.cat-food     { background: #6fcf7f; }
-.cat-material { background: #b98ce0; }
-.cat-misc     { background: var(--muted); }
+.cat-currency  { background: var(--accent); }
+.cat-potion    { background: #5aa9e0; }
+.cat-food      { background: #6fcf7f; }
+.cat-material  { background: #b98ce0; }
+.cat-gear      { background: #e08a5a; }
+.cat-character { background: #d75f8f; }
+.cat-misc      { background: var(--muted); }
+
+/* ── Characters (read-only cards) ─────────────────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .7rem; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; }
+.card-head { display: flex; align-items: center; gap: .5rem; }
+.card-head .iname { font-weight: 600; }
+.card .icid { font-size: .68rem; color: var(--muted); font-family: ui-monospace, monospace; margin: .1rem 0 .5rem; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: .25rem .8rem; margin: 0; }
+.stats div { display: flex; justify-content: space-between; border-bottom: 1px dotted var(--line); padding: .12rem 0; }
+.stats dt { color: var(--muted); font-size: .78rem; margin: 0; }
+.stats dd { margin: 0; font-family: ui-monospace, monospace; font-size: .82rem; }
+
+/* ── Team (read-only) ─────────────────────────────────────────────────── */
+.slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; max-width: 720px; }
+.slot {
+  display: flex; align-items: center; gap: .45rem; padding: .5rem .6rem;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+}
+.slot .iname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slot .lv { margin-left: auto; font-size: .72rem; color: var(--muted); font-family: ui-monospace, monospace; }
+.slot.empty { color: var(--muted); font-style: italic; justify-content: center; }
+
+/* ── Equipment / Gems (editable) ──────────────────────────────────────── */
+.eq-row { grid-template-columns: 1.4rem minmax(8rem, 1fr) auto auto; }
+.eq-fields { display: flex; align-items: center; gap: .8rem; }
+.eq-field { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--muted); }
+.eq-field input[type="number"] { width: 5rem; text-align: right; font-family: ui-monospace, monospace;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); padding: .25rem .4rem; }
+.eq-field input.saved { animation: flash .8s ease-out; }
+.stat-chips { display: flex; gap: .25rem; flex-wrap: wrap; }
+.chip { font-size: .64rem; color: var(--muted); background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 4px; padding: .05rem .3rem; font-family: ui-monospace, monospace; }
+.lock { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--muted); }
+.empty-note { color: var(--muted); font-style: italic; }

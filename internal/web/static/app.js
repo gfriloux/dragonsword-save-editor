@@ -19,8 +19,10 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
-const CATS = ["currency", "potion", "food", "material", "misc"];
+const CATS = ["currency", "potion", "food", "material", "gear", "character", "misc"];
 const catClass = (c) => "cat-" + (CATS.includes(c) ? c : "misc");
+const escapeHtml = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 // ── View & section switching ─────────────────────────────────────────────
 let dbLoaded = false;
@@ -40,8 +42,7 @@ function showView(v) {
 }
 function showSection(s) {
   $$(".section-link").forEach((l) => l.classList.toggle("active", l.dataset.section === s));
-  $("#panel-currency").classList.toggle("hidden", s !== "currency");
-  $("#panel-consumables").classList.toggle("hidden", s !== "consumables");
+  $$("#view-editor .panel").forEach((p) => p.classList.toggle("hidden", p.id !== "panel-" + s));
 }
 
 // ── Shared editor row: name + quantity stepper + optional label edit ───────
@@ -163,8 +164,221 @@ async function renderConsumables() {
   }
 }
 
+// ── Editor: Characters panel (read-only) ──────────────────────────────────
+async function renderCharacters() {
+  const el = $("#panel-characters");
+  el.innerHTML = `<h2>Characters</h2><p class="panel-sub">Read-only — owned characters and their progression.</p>`;
+  const { characters } = await api("/api/game/characters");
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  for (const c of characters || []) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const stat = (label, v) => `<div><dt>${label}</dt><dd>${v}</dd></div>`;
+    card.innerHTML =
+      `<div class="card-head"><span class="cat-dot ${catClass(c.category)}"></span>` +
+      `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(c.name)}</span></div>` +
+      `<div class="icid">CID ${c.cid}</div>` +
+      `<dl class="stats">${stat("Level", c.level)}${stat("EXP", c.exp)}${stat("HP", c.hp)}` +
+      `${stat("Ascend", c.ascend)}${stat("Transcend", c.transcend)}${stat("Soldier", c.soldierGrade)}</dl>`;
+    grid.appendChild(card);
+  }
+  el.appendChild(grid);
+}
+
+// ── Editor: Team panel (read-only) ────────────────────────────────────────
+async function renderTeam() {
+  const el = $("#panel-team");
+  el.innerHTML = `<h2>Team</h2><p class="panel-sub">Read-only — saved team pages (three slots each).</p>`;
+  const { teams } = await api("/api/game/teams");
+  for (const p of teams || []) {
+    const title = document.createElement("div");
+    title.className = "group-title";
+    title.textContent = "Page " + p.pageId;
+    el.appendChild(title);
+    const slots = document.createElement("div");
+    slots.className = "slots";
+    for (const s of p.slots || []) {
+      const slot = document.createElement("div");
+      slot.className = "slot";
+      if (s.empty) {
+        slot.classList.add("empty");
+        slot.textContent = "— empty —";
+      } else {
+        slot.innerHTML =
+          `<span class="cat-dot ${catClass(s.category)}"></span>` +
+          `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(s.name)}</span>` +
+          `<span class="lv">Lv ${s.level}</span>`;
+      }
+      slots.appendChild(slot);
+    }
+    el.appendChild(slots);
+  }
+}
+
+// ── Editor: Equipment & Gems panels (editable) ────────────────────────────
+function eqNumField(label, value, onCommit) {
+  const wrap = document.createElement("label");
+  wrap.className = "eq-field";
+  const span = document.createElement("span");
+  span.textContent = label;
+  const input = document.createElement("input");
+  input.type = "number";
+  input.value = value;
+  const commit = async () => {
+    const v = parseInt(input.value, 10);
+    if (!Number.isFinite(v) || String(v) === String(value)) return;
+    try {
+      await onCommit(v);
+      value = v;
+      input.classList.remove("saved");
+      void input.offsetWidth;
+      input.classList.add("saved");
+    } catch (e) {
+      input.value = value;
+      toast("Update failed: " + e.message);
+    }
+  };
+  input.onchange = commit;
+  input.onkeydown = (e) => {
+    if (e.key === "Enter") input.blur();
+  };
+  wrap.appendChild(span);
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function lockToggle(checked, onChange) {
+  const label = document.createElement("label");
+  label.className = "lock";
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = checked;
+  cb.onchange = async () => {
+    try {
+      await onChange(cb.checked);
+    } catch (e) {
+      cb.checked = !cb.checked;
+      toast("Update failed: " + e.message);
+    }
+  };
+  label.appendChild(cb);
+  label.appendChild(document.createTextNode("lock"));
+  return label;
+}
+
+function namesCell(cat, name, cid, known, onLabel) {
+  const names = document.createElement("div");
+  names.className = "names";
+  const iname = document.createElement("span");
+  iname.className = "iname" + (known ? "" : " unknown");
+  iname.textContent = name;
+  if (onLabel) {
+    const edit = document.createElement("button");
+    edit.className = "edit-label";
+    edit.textContent = "✎ name";
+    edit.onclick = () => {
+      const v = prompt(`Name for CID ${cid}`, known ? name : "");
+      if (v !== null) onLabel(v.trim());
+    };
+    iname.appendChild(edit);
+  }
+  const icid = document.createElement("span");
+  icid.className = "icid";
+  icid.textContent = "CID " + cid;
+  names.appendChild(iname);
+  names.appendChild(icid);
+  return names;
+}
+
+function statChips(cids) {
+  const chips = document.createElement("div");
+  chips.className = "stat-chips";
+  for (const cid of cids) {
+    if (!cid) continue;
+    const c = document.createElement("span");
+    c.className = "chip";
+    c.title = "stat CID (read-only)";
+    c.textContent = cid;
+    chips.appendChild(c);
+  }
+  return chips;
+}
+
+async function renderEquipment() {
+  const el = $("#panel-equipment");
+  el.innerHTML = `<h2>Equipment</h2><p class="panel-sub">Enchant level, item XP and lock are editable. Stat references (chips) are read-only.</p>`;
+  const { equipment } = await api("/api/game/equipment");
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  for (const e of equipment || []) {
+    const row = document.createElement("div");
+    row.className = "row eq-row";
+    const dot = document.createElement("span");
+    dot.className = "cat-dot " + catClass(e.category);
+    row.appendChild(dot);
+    row.appendChild(namesCell(e.category, e.name, e.cid, e.known, (name) =>
+      postJSON("/api/game/label", { cid: e.cid, name }).then(renderEquipment)
+    ));
+    const fields = document.createElement("div");
+    fields.className = "eq-fields";
+    fields.appendChild(eqNumField("Enchant", e.enchantLevel, (v) =>
+      postJSON("/api/game/equipment", { dbid: e.dbid, field: "enchant", value: v })
+    ));
+    fields.appendChild(eqNumField("XP", e.exp, (v) =>
+      postJSON("/api/game/equipment", { dbid: e.dbid, field: "exp", value: v })
+    ));
+    fields.appendChild(lockToggle(e.isLock, (locked) =>
+      postJSON("/api/game/equipment", { dbid: e.dbid, field: "lock", value: locked ? 1 : 0 })
+    ));
+    row.appendChild(fields);
+    row.appendChild(statChips([e.mainStatCid, ...(e.subStatCids || [])]));
+    rows.appendChild(row);
+  }
+  el.appendChild(rows);
+}
+
+async function renderGems() {
+  const el = $("#panel-gems");
+  el.innerHTML = `<h2>Gems</h2><p class="panel-sub">Socketed / instanced gems (the game's <code>tb_gem</code>). Lock is editable. Gems you hold as inventory items appear under <b>Consumables</b> (materials).</p>`;
+  const { gems } = await api("/api/game/gems");
+  if (!gems || gems.length === 0) {
+    const p = document.createElement("p");
+    p.className = "empty-note";
+    p.textContent = "No socketed gems here. Inventory gems are editable under Consumables.";
+    el.appendChild(p);
+    return;
+  }
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  for (const gm of gems) {
+    const row = document.createElement("div");
+    row.className = "row eq-row";
+    const dot = document.createElement("span");
+    dot.className = "cat-dot " + catClass(gm.category);
+    row.appendChild(dot);
+    row.appendChild(namesCell(gm.category, gm.name, gm.cid, gm.known, (name) =>
+      postJSON("/api/game/label", { cid: gm.cid, name }).then(renderGems)
+    ));
+    const fields = document.createElement("div");
+    fields.className = "eq-fields";
+    fields.appendChild(lockToggle(gm.isLock, (locked) => postJSON("/api/game/gem", { dbid: gm.dbid, locked })));
+    row.appendChild(fields);
+    row.appendChild(statChips([gm.statInfoCid]));
+    rows.appendChild(row);
+  }
+  el.appendChild(rows);
+}
+
 async function loadEditor() {
-  await Promise.all([renderCurrency(), renderConsumables()]);
+  await Promise.all([
+    renderCurrency(),
+    renderConsumables(),
+    renderCharacters(),
+    renderTeam(),
+    renderEquipment(),
+    renderGems(),
+  ]);
 }
 
 // ── Database: generic table browser ───────────────────────────────────────

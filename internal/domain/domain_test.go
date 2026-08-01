@@ -114,3 +114,94 @@ func TestConsumablesAndSetStack(t *testing.T) {
 		}
 	}
 }
+
+func TestCharactersRead(t *testing.T) {
+	g := openGame(t)
+	chars, err := g.Characters()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(chars) == 0 {
+		t.Fatal("no characters")
+	}
+	for _, c := range chars {
+		if c.Category != "character" {
+			t.Errorf("char %d category %q, want character", c.CID, c.Category)
+		}
+		if c.Level < 1 {
+			t.Errorf("char %d level %d", c.CID, c.Level)
+		}
+	}
+}
+
+func TestTeamsRead(t *testing.T) {
+	g := openGame(t)
+	teams, err := g.Teams()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(teams) == 0 {
+		t.Fatal("no team pages")
+	}
+	for _, p := range teams {
+		if len(p.Slots) != 3 {
+			t.Fatalf("page %d has %d slots, want 3", p.PageID, len(p.Slots))
+		}
+		for _, s := range p.Slots {
+			if !s.Empty && s.Category != "character" {
+				t.Errorf("slot category %q, want character", s.Category)
+			}
+		}
+	}
+}
+
+func TestEquipmentReadAndEdit(t *testing.T) {
+	g := openGame(t)
+	eq, err := g.Equipments()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(eq) == 0 {
+		t.Fatal("no equipment")
+	}
+	for _, e := range eq {
+		if e.Category != "gear" {
+			t.Errorf("equip %d category %q, want gear", e.CID, e.Category)
+		}
+	}
+	target := eq[0]
+	if err := g.SetEnchant(target.DBID, 12); err != nil {
+		t.Fatalf("set enchant: %v", err)
+	}
+	if err := g.SetEquipLock(target.DBID, !target.IsLock); err != nil {
+		t.Fatalf("set lock: %v", err)
+	}
+	eq2, err := g.Equipments()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, e := range eq2 {
+		if e.DBID == target.DBID {
+			if e.EnchantLevel != 12 {
+				t.Fatalf("enchant = %d, want 12", e.EnchantLevel)
+			}
+			if e.IsLock == target.IsLock {
+				t.Fatalf("lock did not toggle")
+			}
+		}
+	}
+}
+
+func TestGemsEmptyOK(t *testing.T) {
+	g := openGame(t)
+	gems, err := g.Gems()
+	if err != nil {
+		t.Fatalf("gems: %v", err)
+	}
+	// The reference save has none; the accessor must simply return an empty slice.
+	for _, gm := range gems {
+		if gm.DBID == 0 {
+			t.Error("gem with zero DBID")
+		}
+	}
+}
