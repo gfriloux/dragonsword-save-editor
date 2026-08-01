@@ -37,7 +37,16 @@
         };
 
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [ go gopls gotools sqlcipher sqlite ];
+          packages = with pkgs; [
+            go
+            gopls
+            gotools # goimports & co (golang.org/x/tools)
+            go-tools # staticcheck (honnef.co/go/tools)
+            just
+            git-cliff
+            sqlcipher
+            sqlite
+          ];
         };
       });
 }
