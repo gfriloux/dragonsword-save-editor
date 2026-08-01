@@ -48,7 +48,7 @@ func TestCurrenciesResolve(t *testing.T) {
 		if c.Category != "currency" {
 			t.Errorf("currency %d resolved to category %q", c.CID, c.Category)
 		}
-		if c.Name == "" {
+		if c.NameFR == "" {
 			t.Errorf("currency %d has empty name", c.CID)
 		}
 	}

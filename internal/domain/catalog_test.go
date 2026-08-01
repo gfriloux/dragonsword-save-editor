@@ -30,8 +30,8 @@ func TestLookupCtxCategory(t *testing.T) {
 	}
 	// Context overrides inference for the fallback name and category.
 	it := c.LookupCtx(1000001, "currency")
-	if it.Category != "currency" || it.Name != "Currency 1000001" {
-		t.Fatalf("LookupCtx currency: category=%q name=%q", it.Category, it.Name)
+	if it.Category != "currency" || it.NameFR != "Currency 1000001" {
+		t.Fatalf("LookupCtx currency: category=%q name=%q", it.Category, it.NameFR)
 	}
 }
 
@@ -47,8 +47,8 @@ func TestLookupFallback(t *testing.T) {
 	if it.Known {
 		t.Error("expected Known=false for an unseeded CID")
 	}
-	if it.Name != "Food 1420204" {
-		t.Errorf("fallback name = %q, want %q", it.Name, "Food 1420204")
+	if it.NameFR != "Food 1420204" {
+		t.Errorf("fallback name = %q, want %q", it.NameFR, "Food 1420204")
 	}
 }
 
@@ -62,8 +62,8 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 		t.Fatal(err)
 	}
 	it := c.Lookup(1420204)
-	if it.Name != "Grilled Meat" || !it.Known {
-		t.Fatalf("after label: name=%q known=%v", it.Name, it.Known)
+	if it.NameFR != "Grilled Meat" || !it.Known {
+		t.Fatalf("after label: name=%q known=%v", it.NameFR, it.Known)
 	}
 
 	// A fresh catalog loading the same overrides file sees the label.
@@ -71,7 +71,7 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := c2.Lookup(1420204).Name; got != "Grilled Meat" {
+	if got := c2.Lookup(1420204).NameFR; got != "Grilled Meat" {
 		t.Fatalf("persisted label = %q, want %q", got, "Grilled Meat")
 	}
 
@@ -79,7 +79,7 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	if err := c2.SetLabel(1420204, ""); err != nil {
 		t.Fatal(err)
 	}
-	if got := c2.Lookup(1420204); got.Known || got.Name != "Food 1420204" {
-		t.Fatalf("after clear: name=%q known=%v", got.Name, got.Known)
+	if got := c2.Lookup(1420204); got.Known || got.NameFR != "Food 1420204" {
+		t.Fatalf("after clear: name=%q known=%v", got.NameFR, got.Known)
 	}
 }
