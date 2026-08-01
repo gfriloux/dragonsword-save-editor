@@ -19,8 +19,10 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
-const CATS = ["currency", "potion", "food", "material", "misc"];
+const CATS = ["currency", "potion", "food", "material", "gear", "character", "misc"];
 const catClass = (c) => "cat-" + (CATS.includes(c) ? c : "misc");
+const escapeHtml = (s) =>
+  String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 // ── View & section switching ─────────────────────────────────────────────
 let dbLoaded = false;
@@ -40,8 +42,7 @@ function showView(v) {
 }
 function showSection(s) {
   $$(".section-link").forEach((l) => l.classList.toggle("active", l.dataset.section === s));
-  $("#panel-currency").classList.toggle("hidden", s !== "currency");
-  $("#panel-consumables").classList.toggle("hidden", s !== "consumables");
+  $$("#view-editor .panel").forEach((p) => p.classList.toggle("hidden", p.id !== "panel-" + s));
 }
 
 // ── Shared editor row: name + quantity stepper + optional label edit ───────
@@ -163,8 +164,60 @@ async function renderConsumables() {
   }
 }
 
+// ── Editor: Characters panel (read-only) ──────────────────────────────────
+async function renderCharacters() {
+  const el = $("#panel-characters");
+  el.innerHTML = `<h2>Characters</h2><p class="panel-sub">Read-only — owned characters and their progression.</p>`;
+  const { characters } = await api("/api/game/characters");
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  for (const c of characters || []) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const stat = (label, v) => `<div><dt>${label}</dt><dd>${v}</dd></div>`;
+    card.innerHTML =
+      `<div class="card-head"><span class="cat-dot ${catClass(c.category)}"></span>` +
+      `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(c.name)}</span></div>` +
+      `<div class="icid">CID ${c.cid}</div>` +
+      `<dl class="stats">${stat("Level", c.level)}${stat("EXP", c.exp)}${stat("HP", c.hp)}` +
+      `${stat("Ascend", c.ascend)}${stat("Transcend", c.transcend)}${stat("Soldier", c.soldierGrade)}</dl>`;
+    grid.appendChild(card);
+  }
+  el.appendChild(grid);
+}
+
+// ── Editor: Team panel (read-only) ────────────────────────────────────────
+async function renderTeam() {
+  const el = $("#panel-team");
+  el.innerHTML = `<h2>Team</h2><p class="panel-sub">Read-only — saved team pages (three slots each).</p>`;
+  const { teams } = await api("/api/game/teams");
+  for (const p of teams || []) {
+    const title = document.createElement("div");
+    title.className = "group-title";
+    title.textContent = "Page " + p.pageId;
+    el.appendChild(title);
+    const slots = document.createElement("div");
+    slots.className = "slots";
+    for (const s of p.slots || []) {
+      const slot = document.createElement("div");
+      slot.className = "slot";
+      if (s.empty) {
+        slot.classList.add("empty");
+        slot.textContent = "— empty —";
+      } else {
+        slot.innerHTML =
+          `<span class="cat-dot ${catClass(s.category)}"></span>` +
+          `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(s.name)}</span>` +
+          `<span class="lv">Lv ${s.level}</span>`;
+      }
+      slots.appendChild(slot);
+    }
+    el.appendChild(slots);
+  }
+}
+
 async function loadEditor() {
-  await Promise.all([renderCurrency(), renderConsumables()]);
+  await Promise.all([renderCurrency(), renderConsumables(), renderCharacters(), renderTeam()]);
 }
 
 // ── Database: generic table browser ───────────────────────────────────────
