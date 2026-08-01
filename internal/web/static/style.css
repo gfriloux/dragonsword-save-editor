@@ -138,10 +138,11 @@ td.null { color: var(--muted); font-style: italic; }
 
 .rows { display: flex; flex-direction: column; gap: .35rem; max-width: 720px; }
 .row {
-  display: grid; grid-template-columns: 1.4rem 1fr auto; align-items: center; gap: .7rem;
+  display: grid; grid-template-columns: 1.9rem 1fr auto; align-items: center; gap: .7rem;
   padding: .4rem .6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
 }
 .row .cat-dot { width: .7rem; height: .7rem; border-radius: 50%; }
+.ic { display: block; flex: none; border-radius: 4px; }
 .row .names { min-width: 0; }
 .row .iname { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .row .iname.unknown { color: var(--muted); }
@@ -187,7 +188,7 @@ td.null { color: var(--muted); font-style: italic; }
 .slot.empty { color: var(--muted); font-style: italic; justify-content: center; }
 
 /* ── Equipment / Gems (editable) ──────────────────────────────────────── */
-.eq-row { grid-template-columns: 1.4rem minmax(8rem, 1fr) auto auto; }
+.eq-row { grid-template-columns: 1.9rem minmax(8rem, 1fr) auto auto; }
 .eq-fields { display: flex; align-items: center; gap: .8rem; }
 .eq-field { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--muted); }
 .eq-field input[type="number"] { width: 5rem; text-align: right; font-family: ui-monospace, monospace;

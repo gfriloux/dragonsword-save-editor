@@ -29,6 +29,32 @@ let lang = localStorage.getItem("dsa-lang") || "fr";
 const displayName = (it) =>
   (lang === "fr" ? it.nameFr : it.nameEn) || it.nameEn || it.nameFr || "CID " + it.cid;
 
+// Icons live in a single sprite (/sprite.webp); each item has an object-position.
+let iconSize = 64; // sprite cell size, from /api/info
+const ICON_DISP = 28; // displayed px
+const iconStyle = (it) =>
+  `object-fit:none;object-position:${it.iconX}px ${it.iconY}px;` +
+  `width:${iconSize}px;height:${iconSize}px;zoom:${ICON_DISP / iconSize}`;
+// DOM <img> icon, or a category dot fallback.
+function iconEl(it) {
+  if (!it.icon) {
+    const d = document.createElement("span");
+    d.className = "cat-dot " + catClass(it.category);
+    return d;
+  }
+  const img = document.createElement("img");
+  img.className = "ic";
+  img.src = "/sprite.webp";
+  img.alt = "";
+  img.style.cssText = iconStyle(it);
+  return img;
+}
+// String form for innerHTML contexts (cards/slots).
+const iconHTML = (it) =>
+  it.icon
+    ? `<img class="ic" src="/sprite.webp" alt="" style="${iconStyle(it)}">`
+    : `<span class="cat-dot ${catClass(it.category)}"></span>`;
+
 // ── View & section switching ─────────────────────────────────────────────
 let dbLoaded = false;
 
@@ -51,13 +77,10 @@ function showSection(s) {
 }
 
 // ── Shared editor row: name + quantity stepper + optional label edit ───────
-function stepperRow({ cat, name, cid, known, value, onCommit, onLabel }) {
+function stepperRow({ item, name, cid, known, value, onCommit, onLabel }) {
   const row = document.createElement("div");
   row.className = "row";
-
-  const dot = document.createElement("span");
-  dot.className = "cat-dot " + catClass(cat);
-  row.appendChild(dot);
+  row.appendChild(iconEl(item));
 
   const names = document.createElement("div");
   names.className = "names";
@@ -131,7 +154,7 @@ async function renderCurrency() {
   for (const c of currencies || []) {
     rows.appendChild(
       stepperRow({
-        cat: c.category, name: displayName(c), cid: c.cid, known: c.known, value: c.amount,
+        item: c, name: displayName(c), cid: c.cid, known: c.known, value: c.amount,
         onCommit: (v) => postJSON("/api/game/currency", { cid: c.cid, amount: v }),
         onLabel: (name) => postJSON("/api/game/label", { cid: c.cid, name }).then(renderCurrency),
       })
@@ -229,7 +252,7 @@ async function renderConsumables() {
     for (const it of groups[cat]) {
       rows.appendChild(
         stepperRow({
-          cat: it.category, name: displayName(it), cid: it.cid, known: it.known, value: it.count,
+          item: it, name: displayName(it), cid: it.cid, known: it.known, value: it.count,
           onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
           onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
         })
@@ -251,7 +274,7 @@ async function renderCharacters() {
     card.className = "card";
     const stat = (label, v) => `<div><dt>${label}</dt><dd>${v}</dd></div>`;
     card.innerHTML =
-      `<div class="card-head"><span class="cat-dot ${catClass(c.category)}"></span>` +
+      `<div class="card-head">${iconHTML(c)}` +
       `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(displayName(c))}</span></div>` +
       `<div class="icid">CID ${c.cid}</div>` +
       `<dl class="stats">${stat("Level", c.level)}${stat("EXP", c.exp)}${stat("HP", c.hp)}` +
@@ -281,7 +304,7 @@ async function renderTeam() {
         slot.textContent = "— empty —";
       } else {
         slot.innerHTML =
-          `<span class="cat-dot ${catClass(s.category)}"></span>` +
+          iconHTML(s) +
           `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(displayName(s))}</span>` +
           `<span class="lv">Lv ${s.level}</span>`;
       }
@@ -389,9 +412,7 @@ async function renderEquipment() {
   for (const e of equipment || []) {
     const row = document.createElement("div");
     row.className = "row eq-row";
-    const dot = document.createElement("span");
-    dot.className = "cat-dot " + catClass(e.category);
-    row.appendChild(dot);
+    row.appendChild(iconEl(e));
     row.appendChild(namesCell(e.category, displayName(e), e.cid, e.known, (name) =>
       postJSON("/api/game/label", { cid: e.cid, name }).then(renderEquipment)
     ));
@@ -429,9 +450,7 @@ async function renderGems() {
   for (const gm of gems) {
     const row = document.createElement("div");
     row.className = "row eq-row";
-    const dot = document.createElement("span");
-    dot.className = "cat-dot " + catClass(gm.category);
-    row.appendChild(dot);
+    row.appendChild(iconEl(gm));
     row.appendChild(namesCell(gm.category, displayName(gm), gm.cid, gm.known, (name) =>
       postJSON("/api/game/label", { cid: gm.cid, name }).then(renderGems)
     ));
@@ -463,6 +482,7 @@ async function loadInfo() {
   const info = await api("/api/info");
   $("#path").textContent = info.path;
   $("#path").title = info.path;
+  iconSize = info.iconSize || 64;
   state.tables = info.tables || [];
 }
 async function loadTables() {
