@@ -175,7 +175,7 @@ td.null { color: var(--muted); font-style: italic; }
 .slot.empty { color: var(--muted); font-style: italic; justify-content: center; }
 
 /* ── Equipment / Gems (editable) ──────────────────────────────────────── */
-.eq-row { grid-template-columns: 1.4rem 1fr auto auto auto; }
+.eq-row { grid-template-columns: 1.4rem minmax(8rem, 1fr) auto auto; }
 .eq-fields { display: flex; align-items: center; gap: .8rem; }
 .eq-field { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--muted); }
 .eq-field input[type="number"] { width: 5rem; text-align: right; font-family: ui-monospace, monospace;
