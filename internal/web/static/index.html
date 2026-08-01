@@ -15,13 +15,31 @@
       <p class="sub">Save Editor</p>
     </div>
   </div>
+  <nav class="tabs">
+    <button class="tab active" data-view="editor">Editor</button>
+    <button class="tab" data-view="database">Database <span class="adv">advanced</span></button>
+  </nav>
   <div class="save-area">
     <code id="path" title="save file"></code>
     <button id="save-btn">Write to save file</button>
     <span id="save-status" class="status"></span>
   </div>
 </header>
-<main>
+
+<!-- ── Editor (friendly, game-oriented) ─────────────────────────────────── -->
+<main id="view-editor" class="view">
+  <aside class="editor-nav">
+    <button class="section-link active" data-section="currency">Currency</button>
+    <button class="section-link" data-section="consumables">Consumables</button>
+  </aside>
+  <section class="editor-body">
+    <div id="panel-currency" class="panel"></div>
+    <div id="panel-consumables" class="panel hidden"></div>
+  </section>
+</main>
+
+<!-- ── Database (generic table browser) ─────────────────────────────────── -->
+<main id="view-database" class="view hidden">
   <aside>
     <input id="filter" type="search" placeholder="Filter tables…" autocomplete="off">
     <ul id="tables"></ul>
@@ -36,9 +54,10 @@
       </div>
     </div>
     <div id="grid-wrap"><table id="grid"></table></div>
-    <p id="hint" class="hint">Pick a table on the left. Edit any non-key cell (double values commit on Enter / blur), then <b>Write to save file</b>. A timestamped backup of the original is made automatically. Close the game before writing.</p>
+    <p id="hint" class="hint">Raw table view. Edit any non-key cell (commit on Enter / blur), then <b>Write to save file</b>. A timestamped backup of the original is made automatically. Close the game before writing.</p>
   </section>
 </main>
+
 <div id="toast" class="toast hidden"></div>
 <script src="app.js"></script>
 </body>

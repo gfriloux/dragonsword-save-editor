@@ -97,3 +97,56 @@ td.null { color: var(--muted); font-style: italic; }
   background: var(--panel-2); border: 1px solid var(--line); border-left: 3px solid var(--err);
   padding: .5rem .9rem; border-radius: 6px; font-size: .82rem; box-shadow: 0 8px 24px rgba(0,0,0,.4);
 }
+
+/* ── Tabs ─────────────────────────────────────────────────────────────── */
+.tabs { display: flex; gap: .3rem; }
+.tab {
+  background: transparent; border: 1px solid transparent; border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0; color: var(--muted); padding: .45rem .9rem;
+}
+.tab:hover { color: var(--ink); border-color: transparent; }
+.tab.active { color: var(--ink); border-bottom-color: var(--accent); background: var(--panel-2); }
+.tab .adv { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; margin-left: .35rem; }
+.view { flex: 1; display: flex; min-height: 0; }
+
+/* ── Editor view ──────────────────────────────────────────────────────── */
+.editor-nav {
+  width: 200px; flex: none; border-right: 1px solid var(--line); background: var(--panel);
+  display: flex; flex-direction: column; padding: .6rem .4rem; gap: .2rem;
+}
+.section-link {
+  text-align: left; background: transparent; border: 1px solid transparent;
+  color: var(--muted); padding: .45rem .6rem; border-radius: 6px;
+}
+.section-link:hover { background: var(--panel-2); color: var(--ink); border-color: transparent; }
+.section-link.active { background: var(--edit); color: var(--ink); }
+.editor-body { flex: 1; min-width: 0; overflow: auto; padding: 1rem 1.2rem; }
+.panel h2 { margin: 0 0 .2rem; font-size: 1rem; }
+.panel .panel-sub { color: var(--muted); font-size: .8rem; margin: 0 0 1rem; }
+
+.rows { display: flex; flex-direction: column; gap: .35rem; max-width: 720px; }
+.row {
+  display: grid; grid-template-columns: 1.4rem 1fr auto; align-items: center; gap: .7rem;
+  padding: .4rem .6rem; background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+}
+.row .cat-dot { width: .7rem; height: .7rem; border-radius: 50%; }
+.row .names { min-width: 0; }
+.row .iname { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .iname.unknown { color: var(--muted); }
+.row .icid { font-size: .68rem; color: var(--muted); font-family: ui-monospace, monospace; }
+.row .edit-label { visibility: hidden; margin-left: .4rem; font-size: .7rem; color: var(--accent); cursor: pointer; background: none; border: none; padding: 0; }
+.row:hover .edit-label { visibility: visible; }
+.qty { display: flex; align-items: center; gap: .25rem; }
+.qty button { width: 1.7rem; padding: .25rem 0; }
+.qty input {
+  width: 8rem; text-align: right; font-family: ui-monospace, monospace; font-size: .85rem;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--ink); padding: .3rem .5rem;
+}
+.qty input.saved { animation: flash .8s ease-out; }
+.group-title { margin: 1.2rem 0 .4rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+.group-title:first-child { margin-top: 0; }
+.cat-currency { background: var(--accent); }
+.cat-potion   { background: #5aa9e0; }
+.cat-food     { background: #6fcf7f; }
+.cat-material { background: #b98ce0; }
+.cat-misc     { background: var(--muted); }
