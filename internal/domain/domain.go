@@ -258,6 +258,133 @@ func (g *Game) Teams() ([]TeamPage, error) {
 	return out, rows.Err()
 }
 
+// Equipment is a resolved equipment row. Scalar fields are editable; stat CIDs
+// are references shown read-only (their names are not yet decoded).
+type Equipment struct {
+	Item
+	DBID         int64   `json:"dbid"`
+	EnchantLevel int64   `json:"enchantLevel"`
+	Exp          int64   `json:"exp"`
+	IsLock       bool    `json:"isLock"`
+	GemDBID      int64   `json:"gemDbid"`
+	MainStatCID  int64   `json:"mainStatCid"`
+	SubStatCIDs  []int64 `json:"subStatCids"`
+}
+
+// Equipments lists active (non-deleted) equipment.
+func (g *Game) Equipments() ([]Equipment, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT ITEM_DBID, ITEM_CID, ENCHANT_LEVEL, EXP, IS_LOCK, GEM_DBID,
+		        MAIN_STAT_CID, SUB_STAT_CID1, SUB_STAT_CID2, SUB_STAT_CID3, SUB_STAT_CID4, SUB_STAT_CID5
+		   FROM tb_equipment WHERE USER_DBID=? AND DELETED_DATE=0 ORDER BY ITEM_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Equipment
+	for rows.Next() {
+		var (
+			e         Equipment
+			cid, lock int64
+			sub       [5]int64
+		)
+		if err := rows.Scan(&e.DBID, &cid, &e.EnchantLevel, &e.Exp, &lock, &e.GemDBID,
+			&e.MainStatCID, &sub[0], &sub[1], &sub[2], &sub[3], &sub[4]); err != nil {
+			return nil, err
+		}
+		e.Item = g.cat.LookupCtx(cid, "gear")
+		e.IsLock = lock != 0
+		for _, s := range sub {
+			if s != 0 {
+				e.SubStatCIDs = append(e.SubStatCIDs, s)
+			}
+		}
+		out = append(out, e)
+	}
+	return out, rows.Err()
+}
+
+// SetEnchant sets an equipment's enchant level.
+func (g *Game) SetEnchant(dbid, level int64) error {
+	return g.setEquip(dbid, "ENCHANT_LEVEL", level)
+}
+
+// SetEquipExp sets an equipment's experience.
+func (g *Game) SetEquipExp(dbid, exp int64) error {
+	return g.setEquip(dbid, "EXP", exp)
+}
+
+// SetEquipLock locks or unlocks an equipment.
+func (g *Game) SetEquipLock(dbid int64, locked bool) error {
+	return g.setEquip(dbid, "IS_LOCK", boolToInt(locked))
+}
+
+func (g *Game) setEquip(dbid int64, column string, value int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	// column is a fixed internal constant, never user input.
+	return exactlyOne(g.s.Exec(
+		"UPDATE tb_equipment SET "+column+"=? WHERE USER_DBID=? AND ITEM_DBID=?", value, uid, dbid))
+}
+
+// Gem is a resolved gem row. Only the lock is editable.
+type Gem struct {
+	Item
+	DBID        int64 `json:"dbid"`
+	StatInfoCID int64 `json:"statInfoCid"`
+	IsLock      bool  `json:"isLock"`
+}
+
+// Gems lists active (non-deleted) gems. May be empty.
+func (g *Game) Gems() ([]Gem, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT ITEM_DBID, ITEM_CID, STAT_INFO_CID, IS_LOCK
+		   FROM tb_gem WHERE USER_DBID=? AND DELETED_DATE=0 ORDER BY ITEM_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := []Gem{}
+	for rows.Next() {
+		var gm Gem
+		var cid, lock int64
+		if err := rows.Scan(&gm.DBID, &cid, &gm.StatInfoCID, &lock); err != nil {
+			return nil, err
+		}
+		gm.Item = g.cat.Lookup(cid)
+		gm.IsLock = lock != 0
+		out = append(out, gm)
+	}
+	return out, rows.Err()
+}
+
+// SetGemLock locks or unlocks a gem.
+func (g *Game) SetGemLock(dbid int64, locked bool) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	return exactlyOne(g.s.Exec(
+		`UPDATE tb_gem SET IS_LOCK=? WHERE USER_DBID=? AND ITEM_DBID=?`, boolToInt(locked), uid, dbid))
+}
+
+func boolToInt(b bool) int64 {
+	if b {
+		return 1
+	}
+	return 0
+}
+
 func exactlyOne(res sql.Result, err error) error {
 	if err != nil {
 		return err

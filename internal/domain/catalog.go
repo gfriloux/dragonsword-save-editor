@@ -132,9 +132,11 @@ func inferCategory(cid int64) string {
 		return "food"
 	case "143", "144", "145", "146", "147":
 		return "material"
-	default:
-		return "misc"
 	}
+	if prefixN(cid, 2) == "13" { // weapons/armour item CIDs
+		return "gear"
+	}
+	return "misc"
 }
 
 func fallbackName(category string, cid int64) string {
@@ -153,10 +155,12 @@ func fallbackName(category string, cid int64) string {
 	return fmt.Sprintf("%s %d", title, cid)
 }
 
-func prefix3(cid int64) string {
+func prefix3(cid int64) string { return prefixN(cid, 3) }
+
+func prefixN(cid int64, n int) string {
 	s := strconv.FormatInt(cid, 10)
-	if len(s) >= 3 {
-		return s[:3]
+	if len(s) >= n {
+		return s[:n]
 	}
 	return s
 }
