@@ -139,11 +139,13 @@ func inferCategory(cid int64) string {
 
 func fallbackName(category string, cid int64) string {
 	title := map[string]string{
-		"currency": "Currency",
-		"potion":   "Potion",
-		"food":     "Food",
-		"material": "Material",
-		"misc":     "Item",
+		"currency":  "Currency",
+		"potion":    "Potion",
+		"food":      "Food",
+		"material":  "Material",
+		"gear":      "Gear",
+		"character": "Character",
+		"misc":      "Item",
 	}[category]
 	if title == "" {
 		title = "Item"

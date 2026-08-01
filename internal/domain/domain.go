@@ -154,6 +154,110 @@ func (g *Game) SetStack(kind string, id, count int64) error {
 	}
 }
 
+// Character is a resolved, read-only character row.
+type Character struct {
+	Item
+	Level        int64 `json:"level"`
+	Exp          int64 `json:"exp"`
+	Ascend       int64 `json:"ascend"`
+	HP           int64 `json:"hp"`
+	Transcend    int64 `json:"transcend"`
+	SoldierGrade int64 `json:"soldierGrade"`
+}
+
+// Characters lists the owned characters (read-only).
+func (g *Game) Characters() ([]Character, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT CHARACTER_CID, LEVEL, EXP, ASCEND, HP, TRANSCEND, SOLDIER_GRADE
+		   FROM tb_character WHERE USER_DBID=? ORDER BY CHARACTER_CID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Character
+	for rows.Next() {
+		var c Character
+		var cid int64
+		if err := rows.Scan(&cid, &c.Level, &c.Exp, &c.Ascend, &c.HP, &c.Transcend, &c.SoldierGrade); err != nil {
+			return nil, err
+		}
+		c.Item = g.cat.LookupCtx(cid, "character")
+		out = append(out, c)
+	}
+	return out, rows.Err()
+}
+
+// characterLevels maps character CID to level, for annotating team slots.
+func (g *Game) characterLevels(uid int64) (map[int64]int64, error) {
+	rows, err := g.s.DB().Query(`SELECT CHARACTER_CID, LEVEL FROM tb_character WHERE USER_DBID=?`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	m := map[int64]int64{}
+	for rows.Next() {
+		var cid, lvl int64
+		if err := rows.Scan(&cid, &lvl); err != nil {
+			return nil, err
+		}
+		m[cid] = lvl
+	}
+	return m, rows.Err()
+}
+
+// TeamSlot is one character slot of a team page (read-only).
+type TeamSlot struct {
+	Item
+	Level int64 `json:"level"`
+	Empty bool  `json:"empty"`
+}
+
+// TeamPage is a saved team composition (read-only).
+type TeamPage struct {
+	PageID int64      `json:"pageId"`
+	Slots  []TeamSlot `json:"slots"`
+}
+
+// Teams lists the saved team pages with their three character slots (read-only).
+func (g *Game) Teams() ([]TeamPage, error) {
+	uid, err := g.UserID()
+	if err != nil {
+		return nil, err
+	}
+	levels, err := g.characterLevels(uid)
+	if err != nil {
+		return nil, err
+	}
+	rows, err := g.s.DB().Query(
+		`SELECT PAGE_ID, SLOT1_CHARACTER_CID, SLOT2_CHARACTER_CID, SLOT3_CHARACTER_CID
+		   FROM tb_team WHERE USER_DBID=? ORDER BY PAGE_ID`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []TeamPage
+	for rows.Next() {
+		var page TeamPage
+		var s [3]int64
+		if err := rows.Scan(&page.PageID, &s[0], &s[1], &s[2]); err != nil {
+			return nil, err
+		}
+		for _, cid := range s {
+			if cid == 0 {
+				page.Slots = append(page.Slots, TeamSlot{Empty: true})
+				continue
+			}
+			page.Slots = append(page.Slots, TeamSlot{Item: g.cat.LookupCtx(cid, "character"), Level: levels[cid]})
+		}
+		out = append(out, page)
+	}
+	return out, rows.Err()
+}
+
 func exactlyOne(res sql.Result, err error) error {
 	if err != nil {
 		return err

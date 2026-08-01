@@ -114,3 +114,43 @@ func TestConsumablesAndSetStack(t *testing.T) {
 		}
 	}
 }
+
+func TestCharactersRead(t *testing.T) {
+	g := openGame(t)
+	chars, err := g.Characters()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(chars) == 0 {
+		t.Fatal("no characters")
+	}
+	for _, c := range chars {
+		if c.Category != "character" {
+			t.Errorf("char %d category %q, want character", c.CID, c.Category)
+		}
+		if c.Level < 1 {
+			t.Errorf("char %d level %d", c.CID, c.Level)
+		}
+	}
+}
+
+func TestTeamsRead(t *testing.T) {
+	g := openGame(t)
+	teams, err := g.Teams()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(teams) == 0 {
+		t.Fatal("no team pages")
+	}
+	for _, p := range teams {
+		if len(p.Slots) != 3 {
+			t.Fatalf("page %d has %d slots, want 3", p.PageID, len(p.Slots))
+		}
+		for _, s := range p.Slots {
+			if !s.Empty && s.Category != "character" {
+				t.Errorf("slot category %q, want character", s.Category)
+			}
+		}
+	}
+}
