@@ -1,4455 +1,6236 @@
 {
-  "_source": "Item and character names datamined by The Hidden Gaming Lair (th.gl). Regenerate with `just gen-catalog`.",
+  "_source": "Item and character names + icons datamined by The Hidden Gaming Lair (th.gl). Regenerate with `just gen-catalog`.",
+  "iconSize": 64,
   "items": {
     "10001": {
       "fr": "Eileen",
       "en": "Eileen",
-      "category": "character"
+      "category": "character",
+      "x": -1190,
+      "y": -398
     },
     "10002": {
       "fr": "Lute",
       "en": "Lute",
-      "category": "character"
+      "category": "character",
+      "x": -1256,
+      "y": -398
     },
     "10003": {
       "fr": "Castella",
       "en": "Castella",
-      "category": "character"
+      "category": "character",
+      "x": -1322,
+      "y": -398
     },
     "10004": {
       "fr": "Reina",
       "en": "Reina",
-      "category": "character"
+      "category": "character",
+      "x": -1388,
+      "y": -398
     },
     "10005": {
       "fr": "Roxy",
       "en": "Roxy",
-      "category": "character"
+      "category": "character",
+      "x": -2,
+      "y": -464
     },
     "1000500": {
       "fr": "Invitation du Destin",
       "en": "Fate's Invitation",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1322
     },
     "1000501": {
       "fr": "Fragment de lumière sacrée",
       "en": "Fragment of Sacred Light",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1388
     },
     "10006": {
       "fr": "Aria",
       "en": "Aria",
-      "category": "character"
+      "category": "character",
+      "x": -68,
+      "y": -464
     },
     "1000600": {
       "fr": "Points de quête",
       "en": "Quest Points",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1388
     },
     "10007": {
       "fr": "Johnny",
       "en": "Johnny",
-      "category": "character"
+      "category": "character",
+      "x": -134,
+      "y": -464
     },
     "10008": {
       "fr": "Ornette",
       "en": "Ornette",
-      "category": "character"
+      "category": "character",
+      "x": 0,
+      "y": 0
     },
     "10009": {
       "fr": "Ropie",
       "en": "Ropie",
-      "category": "character"
+      "category": "character",
+      "x": -2,
+      "y": -530
     },
     "10010": {
       "fr": "Ysera",
       "en": "Ysera",
-      "category": "character"
+      "category": "character",
+      "x": -200,
+      "y": -464
     },
     "10011": {
       "fr": "Kalsion",
       "en": "Kalsion",
-      "category": "character"
+      "category": "character",
+      "x": -266,
+      "y": -464
     },
     "10013": {
       "fr": "Ewald",
       "en": "Ewald",
-      "category": "character"
+      "category": "character",
+      "x": -68,
+      "y": -530
     },
     "10014": {
       "fr": "Othello",
       "en": "Othello",
-      "category": "character"
+      "category": "character",
+      "x": -332,
+      "y": -464
     },
     "10015": {
       "fr": "Jerome",
       "en": "Jerome",
-      "category": "character"
+      "category": "character",
+      "x": -398,
+      "y": -464
     },
     "10016": {
       "fr": "Charlotte",
       "en": "Charlotte",
-      "category": "character"
+      "category": "character",
+      "x": -464,
+      "y": -464
     },
     "10017": {
       "fr": "Ryza",
       "en": "Ryza",
-      "category": "character"
+      "category": "character",
+      "x": -530,
+      "y": -464
     },
     "10019": {
       "fr": "Veronica",
       "en": "Veronica",
-      "category": "character"
+      "category": "character",
+      "x": -596,
+      "y": -464
     },
     "10020": {
       "fr": "Alex",
       "en": "Alex",
-      "category": "character"
+      "category": "character",
+      "x": -662,
+      "y": -464
     },
     "10021": {
       "fr": "Lyn (Legend) (#1)",
       "en": "Lyn (Legend) (#1)",
-      "category": "character"
+      "category": "character",
+      "x": -728,
+      "y": -464
     },
     "10022": {
       "fr": "Theresia",
       "en": "Theresia",
-      "category": "character"
+      "category": "character",
+      "x": -794,
+      "y": -464
     },
     "10023": {
       "fr": "Lyn (Legend) (#2)",
       "en": "Lyn (Legend) (#2)",
-      "category": "character"
+      "category": "character",
+      "x": -728,
+      "y": -464
     },
     "10025": {
       "fr": "Lyn (Legend) (#3)",
       "en": "Lyn (Legend) (#3)",
-      "category": "character"
+      "category": "character",
+      "x": -728,
+      "y": -464
     },
     "10026": {
       "fr": "Lute éveillé",
       "en": "Awakening Lute",
-      "category": "character"
+      "category": "character",
+      "x": -1256,
+      "y": -398
     },
     "10027": {
       "fr": "Lyn (Legend) (#4)",
       "en": "Lyn (Legend) (#4)",
-      "category": "character"
+      "category": "character",
+      "x": -728,
+      "y": -464
     },
     "10028": {
       "fr": "Tarte",
       "en": "Tarte",
-      "category": "character"
+      "category": "character",
+      "x": -860,
+      "y": -464
     },
     "10029": {
       "fr": "Cerese",
       "en": "Cerese",
-      "category": "character"
+      "category": "character",
+      "x": -926,
+      "y": -464
     },
     "10030": {
       "fr": "Sion",
       "en": "Sion",
-      "category": "character"
+      "category": "character",
+      "x": -266,
+      "y": -464
     },
     "10031": {
       "fr": "Bartz",
       "en": "Bartz",
-      "category": "character"
+      "category": "character",
+      "x": 0,
+      "y": 0
     },
     "10032": {
       "fr": "Astria",
       "en": "Astria",
-      "category": "character"
+      "category": "character",
+      "x": -992,
+      "y": -464
     },
     "10033": {
       "fr": "Logan",
       "en": "Logan",
-      "category": "character"
+      "category": "character",
+      "x": -1058,
+      "y": -464
     },
     "10034": {
       "fr": "Karina",
       "en": "Karina",
-      "category": "character"
+      "category": "character",
+      "x": -1124,
+      "y": -464
     },
     "10035": {
       "fr": "Viola",
       "en": "Viola",
-      "category": "character"
+      "category": "character",
+      "x": -1190,
+      "y": -464
     },
     "10036": {
       "fr": "Dana",
       "en": "Dana",
-      "category": "character"
+      "category": "character",
+      "x": -1256,
+      "y": -464
     },
     "10037": {
       "fr": "Kalien (Legend) (#1)",
       "en": "Kalien (Legend) (#1)",
-      "category": "character"
+      "category": "character",
+      "x": -1322,
+      "y": -464
     },
     "10038": {
       "fr": "Kalien (Legend) (#2)",
       "en": "Kalien (Legend) (#2)",
-      "category": "character"
+      "category": "character",
+      "x": -1322,
+      "y": -464
     },
     "10039": {
       "fr": "Lampi",
       "en": "Lampi",
-      "category": "character"
+      "category": "character",
+      "x": -1388,
+      "y": -464
     },
     "10040": {
       "fr": "Sabrina",
       "en": "Sabrina",
-      "category": "character"
+      "category": "character",
+      "x": 0,
+      "y": 0
     },
     "1310001": {
       "fr": "Rune de détermination endommagée",
       "en": "Damaged Rune of Determination",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -1124
     },
     "1310002": {
       "fr": "Rune de protection endommagée",
       "en": "Damaged Rune of Protection",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -1124
     },
     "1310003": {
       "fr": "Rune de vitalité endommagée",
       "en": "Damaged Rune of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -1124
     },
     "1310004": {
       "fr": "Rune de concentration endommagée",
       "en": "Damaged Rune of Focus",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -1124
     },
     "1310005": {
       "fr": "Rune d'amplification endommagée",
       "en": "Damaged Rune of Amplification",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -1124
     },
     "1310101": {
       "fr": "Rune de détermination intacte",
       "en": "Intact Rune of Determination",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -1322
     },
     "1310102": {
       "fr": "Rune de protection intacte",
       "en": "Intact Rune of Protection",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -1322
     },
     "1310103": {
       "fr": "Rune de vitalité intacte",
       "en": "Intact Rune of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1322
     },
     "1310104": {
       "fr": "Rune de concentration intacte",
       "en": "Intact Rune of Focus",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -1322
     },
     "1310105": {
       "fr": "Rune d'amplification intacte",
       "en": "Intact Rune of Amplification",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1322
     },
     "1310201": {
       "fr": "Rune de détermination raffinée",
       "en": "Refined Rune of Determination",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -1256
     },
     "1310202": {
       "fr": "Rune de protection raffinée",
       "en": "Refined Rune of Protection",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -1256
     },
     "1310203": {
       "fr": "Rune de vitalité raffinée",
       "en": "Refined Rune of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -1256
     },
     "1310204": {
       "fr": "Rune de concentration raffinée",
       "en": "Refined Rune of Focus",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -1256
     },
     "1310205": {
       "fr": "Rune d'amplification raffinée",
       "en": "Refined Rune of Amplification",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1256
     },
     "1310301": {
       "fr": "Rune de détermination resplendissante",
       "en": "Radiant Rune of Determination",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1388
     },
     "1310302": {
       "fr": "Rune de protection resplendissante",
       "en": "Radiant Rune of Protection",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1388
     },
     "1310303": {
       "fr": "Rune de vitalité resplendissante",
       "en": "Radiant Rune of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1388
     },
     "1310304": {
       "fr": "Rune de concentration resplendissante",
       "en": "Radiant Rune of Focus",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1388
     },
     "1310305": {
       "fr": "Rune d'amplification resplendissante",
       "en": "Radiant Rune of Amplification",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1388
     },
     "1310401": {
       "fr": "Rune de détermination parfaite",
       "en": "Perfect Rune of Determination",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1454
     },
     "1310402": {
       "fr": "Rune de protection parfaite",
       "en": "Perfect Rune of Protection",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1454
     },
     "1310403": {
       "fr": "Rune de vitalité parfaite",
       "en": "Perfect Rune of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1454
     },
     "1310404": {
       "fr": "Rune de concentration parfaite",
       "en": "Perfect Rune of Focus",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1454
     },
     "1310405": {
       "fr": "Rune d'amplification parfaite",
       "en": "Perfect Rune of Amplification",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1454
     },
     "1319002": {
       "fr": "Source de rune intacte",
       "en": "Source of an Intact Rune",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -1256
     },
     "1319003": {
       "fr": "Source de rune raffinée",
       "en": "Source of Refined Runes",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -1124
     },
     "1319004": {
       "fr": "Source de rune resplendissante",
       "en": "Source of a Radiant Rune",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1322
     },
     "1319005": {
       "fr": "Source de rune parfaite",
       "en": "Source of a Perfect Rune",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -1388
     },
     "1320000": {
       "fr": "Le cerf-volant vaillant",
       "en": "Robust Stag Beetle",
-      "category": "mount"
+      "category": "mount",
+      "x": -134,
+      "y": -530
     },
     "1320001": {
       "fr": "Coccinelle rouge",
       "en": "Red Ladybug",
-      "category": "mount"
+      "category": "mount",
+      "x": -200,
+      "y": -530
     },
     "1320002": {
       "fr": "La luciole peureuse",
       "en": "Cowardly Firefly",
-      "category": "mount"
+      "category": "mount",
+      "x": -266,
+      "y": -530
     },
     "1320003": {
       "fr": "Le scarabée-casque féroce",
       "en": "Fierce Rhinoceros Beetle",
-      "category": "mount"
+      "category": "mount",
+      "x": -332,
+      "y": -530
     },
     "1320004": {
       "fr": "Écureuil volant aux feuilles d'automne",
       "en": "Maple Flying Squirrel",
-      "category": "mount"
+      "category": "mount",
+      "x": -398,
+      "y": -530
     },
     "1320005": {
       "fr": "Écureuil volant violet",
       "en": "Viola Flying Squirrel",
-      "category": "mount"
+      "category": "mount",
+      "x": -464,
+      "y": -530
     },
     "1320006": {
       "fr": "Écureuil volant à glands",
       "en": "Acorn Flying Squirrel",
-      "category": "mount"
+      "category": "mount",
+      "x": -530,
+      "y": -530
     },
     "1320007": {
       "fr": "Écureuil volant coton",
       "en": "Cotton Flying Squirrel",
-      "category": "mount"
+      "category": "mount",
+      "x": -596,
+      "y": -530
     },
     "1320008": {
       "fr": "Chat aux ailes de l'aube",
       "en": "Dawn Wing Cat",
-      "category": "mount"
+      "category": "mount",
+      "x": -662,
+      "y": -530
     },
     "1320009": {
       "fr": "Chat aux ailes d'ombre",
       "en": "Shadow Wing Cat",
-      "category": "mount"
+      "category": "mount",
+      "x": -728,
+      "y": -530
     },
     "1320010": {
       "fr": "Chat aux ailes de brume",
       "en": "Mist Wing Cat",
-      "category": "mount"
+      "category": "mount",
+      "x": -794,
+      "y": -530
     },
     "1320011": {
       "fr": "Chat aux ailes d'orchidée",
       "en": "Orchid Wing Cat",
-      "category": "mount"
+      "category": "mount",
+      "x": -860,
+      "y": -530
     },
     "1320012": {
       "fr": "Mésange intelligente",
       "en": "Bright Crowtit",
-      "category": "mount"
+      "category": "mount",
+      "x": -926,
+      "y": -530
     },
     "1320013": {
       "fr": "Moineau travailleur",
       "en": "Diligent Sparrow",
-      "category": "mount"
+      "category": "mount",
+      "x": -992,
+      "y": -530
     },
     "1320014": {
       "fr": "Colibri timide",
       "en": "Timid Hummingbird",
-      "category": "mount"
+      "category": "mount",
+      "x": -1058,
+      "y": -530
     },
     "1320015": {
       "fr": "Canari pimpant",
       "en": "Refreshing Canary",
-      "category": "mount"
+      "category": "mount",
+      "x": -1124,
+      "y": -530
     },
     "1320016": {
       "fr": "Loup céleste de la tempête de neige",
       "en": "Snowstorm Sky Wolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -1190,
+      "y": -530
     },
     "1320017": {
       "fr": "Loup céleste de la rafale",
       "en": "Gale Sky Wolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -1256,
+      "y": -530
     },
     "1320018": {
       "fr": "Loup céleste du vent de sable",
       "en": "Sandstorm Sky Wolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -1322,
+      "y": -530
     },
     "1320019": {
       "fr": "Loup céleste du givre",
       "en": "Frost Sky Wolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -1388,
+      "y": -530
     },
     "1320020": {
       "fr": "Loup géant de guerre",
       "en": "War Direwolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -2,
+      "y": -596
     },
     "1320021": {
       "fr": "Renard esprit de flamme",
       "en": "Flame Spirit Fox",
-      "category": "mount"
+      "category": "mount",
+      "x": -68,
+      "y": -596
     },
     "1320022": {
       "fr": "Loup géant des Abysses",
       "en": "Abyssal Direwolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -134,
+      "y": -596
     },
     "1320023": {
       "fr": "Loup géant de la tempête",
       "en": "Stormy Direwolf",
-      "category": "mount"
+      "category": "mount",
+      "x": -200,
+      "y": -596
     },
     "1320028": {
       "fr": "Griffon de l'Ordre des Chevaliers",
       "en": "Knightage Griffon",
-      "category": "mount"
+      "category": "mount",
+      "x": -266,
+      "y": -596
     },
     "1320029": {
       "fr": "Griffon d'expédition",
       "en": "Exploration Squad Griffon",
-      "category": "mount"
+      "category": "mount",
+      "x": -332,
+      "y": -596
     },
     "1320030": {
       "fr": "Griffon de l'Ordre sacré",
       "en": "Holy Knightage Griffon",
-      "category": "mount"
+      "category": "mount",
+      "x": -398,
+      "y": -596
     },
     "1320031": {
       "fr": "Griffon de la garde",
       "en": "Guardian Gryphon",
-      "category": "mount"
+      "category": "mount",
+      "x": -464,
+      "y": -596
     },
     "1320032": {
       "fr": "Jeune dragon courageux",
       "en": "Brave Baby Dragon",
-      "category": "mount"
+      "category": "mount",
+      "x": -530,
+      "y": -596
     },
     "1320033": {
       "fr": "흉악한 새끼 용",
       "en": "흉악한 새끼 용",
-      "category": "mount"
+      "category": "mount",
+      "x": -530,
+      "y": -596
     },
     "1360001": {
       "fr": "Casque d'élève de l'Académie de magie",
       "en": "Magic Academy Student Helmet",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1360002": {
       "fr": "Haut d'élève de l'Académie de magie",
       "en": "Magic Academy Student Top",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1360003": {
       "fr": "Pantalon d'élève de l'Académie de magie",
       "en": "Magic Academy Student Pants",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1360004": {
       "fr": "Gants d'élève de l'Académie de magie",
       "en": "Magic Academy Student Gloves",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1360005": {
       "fr": "Chaussures d'élève de l'Académie de magie",
       "en": "Magic Academy Student Boots",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1360011": {
       "fr": "Casque d'apprenti mercenaire",
       "en": "Apprentice Mercenary Helmet",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -926
     },
     "1360012": {
       "fr": "Haut d'apprenti mercenaire",
       "en": "Apprentice Mercenary Top",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -926
     },
     "1360013": {
       "fr": "Pantalon d'apprenti mercenaire",
       "en": "Apprentice Mercenary Pants",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -926
     },
     "1360014": {
       "fr": "Gants d'apprenti mercenaire",
       "en": "Apprentice Mercenary Gloves",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -926
     },
     "1360015": {
       "fr": "Chaussures d'apprenti mercenaire",
       "en": "Apprentice Mercenary Boots",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -926
     },
     "1360021": {
       "fr": "Casque d'apprenti chevalier",
       "en": "Apprentice Knight Helmet",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -926
     },
     "1360022": {
       "fr": "Haut d'apprenti chevalier",
       "en": "Apprentice Knight Top",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -926
     },
     "1360023": {
       "fr": "Pantalon d'apprenti chevalier",
       "en": "Apprentice Knight Pants",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -926
     },
     "1360024": {
       "fr": "Gants d'apprenti chevalier",
       "en": "Apprentice Knight Gloves",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -926
     },
     "1360025": {
       "fr": "Chaussures d'apprenti chevalier",
       "en": "Apprentice Knight Boots",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -926
     },
     "1370001": {
       "fr": "Casque du Destructeur de forteresses (Rare Head)",
       "en": "Ruinsbreaker Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -926
     },
     "1370002": {
       "fr": "Haut du Destructeur de forteresses (Rare Chest)",
       "en": "Ruinsbreaker Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -926
     },
     "1370003": {
       "fr": "Pantalon du Destructeur de forteresses (Rare Leg)",
       "en": "Ruinsbreaker Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -926
     },
     "1370004": {
       "fr": "Gants du Destructeur de forteresses (Rare Hand)",
       "en": "Ruinsbreaker Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -926
     },
     "1370005": {
       "fr": "Chaussures du Destructeur de forteresses (Rare Foot)",
       "en": "Ruinsbreaker Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -926
     },
     "1370011": {
       "fr": "Casque du Juge sacré (Rare Head)",
       "en": "Holy Arbiter Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -926
     },
     "1370012": {
       "fr": "Haut du Juge sacré (Rare Chest)",
       "en": "Holy Arbiter Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -926
     },
     "1370013": {
       "fr": "Pantalon du Juge sacré (Rare Leg)",
       "en": "Holy Arbiter Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -926
     },
     "1370014": {
       "fr": "Gants du Juge sacré (Rare Hand)",
       "en": "Holy Arbiter Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -926
     },
     "1370015": {
       "fr": "Chaussures du Juge sacré (Rare Foot)",
       "en": "Holy Arbiter Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -992
     },
     "1370021": {
       "fr": "Casque du Broyeur de terre (Rare Head)",
       "en": "Earthshatterer Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -992
     },
     "1370022": {
       "fr": "Haut du Broyeur de terre (Rare Chest)",
       "en": "Earthshatterer Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -992
     },
     "1370023": {
       "fr": "Pantalon du Broyeur de terre (Rare Leg)",
       "en": "Earthshatterer Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -992
     },
     "1370024": {
       "fr": "Gants du Broyeur de terre (Rare Hand)",
       "en": "Earthshatterer Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -992
     },
     "1370025": {
       "fr": "Chaussures du Broyeur de terre (Rare Foot)",
       "en": "Earthshatterer Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -992
     },
     "1370031": {
       "fr": "Casque de la Rafale bleue (Rare Head)",
       "en": "Azure Gale Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -992
     },
     "1370032": {
       "fr": "Haut de la Rafale bleue (Rare Chest)",
       "en": "Azure Gale Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -992
     },
     "1370033": {
       "fr": "Pantalon de la Rafale bleue (Rare Leg)",
       "en": "Azure Gale Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -992
     },
     "1370034": {
       "fr": "Gants de la Rafale bleue (Rare Hand)",
       "en": "Azure Gale Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -992
     },
     "1370035": {
       "fr": "Chaussures de la Rafale bleue (Rare Foot)",
       "en": "Azure Gale Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -992
     },
     "1370041": {
       "fr": "Casque des flammes ardentes (Rare Head)",
       "en": "Blazing Flame Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -992
     },
     "1370042": {
       "fr": "Haut des flammes ardentes (Rare Chest)",
       "en": "Blazing Flame Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -992
     },
     "1370043": {
       "fr": "Pantalon des flammes ardentes (Rare Leg)",
       "en": "Blazing Flame Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -992
     },
     "1370044": {
       "fr": "Gants des flammes ardentes (Rare Hand)",
       "en": "Blazing Flame Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -992
     },
     "1370045": {
       "fr": "Chaussures des flammes ardentes (Rare Foot)",
       "en": "Blazing Flame Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -992
     },
     "1370051": {
       "fr": "Casque de la Tempête de givre (Rare Head)",
       "en": "Froststorm Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -992
     },
     "1370052": {
       "fr": "Haut de la Tempête de givre (Rare Chest)",
       "en": "Froststorm Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -992
     },
     "1370053": {
       "fr": "Pantalon de la Tempête de givre (Rare Leg)",
       "en": "Froststorm Leggings (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -992
     },
     "1370054": {
       "fr": "Gants de la Tempête de givre (Rare Hand)",
       "en": "Froststorm Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -992
     },
     "1370055": {
       "fr": "Chaussures de la Tempête de givre (Rare Foot)",
       "en": "Froststorm Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -992
     },
     "1370061": {
       "fr": "Casque de l'Éclair déferlant (Rare Head)",
       "en": "Thunderrush Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -992
     },
     "1370062": {
       "fr": "Haut de l'Éclair déferlant (Rare Chest)",
       "en": "Thunderrush Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1058
     },
     "1370063": {
       "fr": "Pantalon de l'Éclair déferlant (Rare Leg)",
       "en": "Thunderrush Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1058
     },
     "1370064": {
       "fr": "Gants de l'Éclair déferlant (Rare Hand)",
       "en": "Thunderrush Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1058
     },
     "1370065": {
       "fr": "Chaussures de l'Éclair déferlant (Rare Foot)",
       "en": "Thunderrush Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1058
     },
     "1370071": {
       "fr": "Casque de l'Ombre du brouillard toxique (Rare Head)",
       "en": "Venomfog Shade Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1058
     },
     "1370072": {
       "fr": "Haut de l'Ombre du brouillard toxique (Rare Chest)",
       "en": "Venomfog Shade Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1058
     },
     "1370073": {
       "fr": "Pantalon de l'Ombre du brouillard toxique (Rare Leg)",
       "en": "Venomfog Shade Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1058
     },
     "1370074": {
       "fr": "Gants de l'Ombre du brouillard toxique (Rare Hand)",
       "en": "Venomfog Shade Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -1058
     },
     "1370075": {
       "fr": "Chaussures de l'Ombre du brouillard toxique (Rare Foot)",
       "en": "Venomfog Shade Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -1058
     },
     "1370081": {
       "fr": "Casque du Poursuivant sanglant (Rare Head)",
       "en": "Bloodstained Chaser Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -1058
     },
     "1370082": {
       "fr": "Haut du Poursuivant sanglant (Rare Chest)",
       "en": "Bloodstained Chaser Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -1058
     },
     "1370083": {
       "fr": "Pantalon du Poursuivant sanglant (Rare Leg)",
       "en": "Bloodstained Chaser Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -1058
     },
     "1370084": {
       "fr": "Gants du Poursuivant sanglant (Rare Hand)",
       "en": "Bloodstained Chaser Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -1058
     },
     "1370085": {
       "fr": "Chaussures du Poursuivant sanglant (Rare Foot)",
       "en": "Bloodstained Chaser Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -1058
     },
     "1370101": {
       "fr": "Casque de la volonté de combat (Rare Head)",
       "en": "Battle Will Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -1058
     },
     "1370102": {
       "fr": "Haut de la volonté de combat (Rare Chest)",
       "en": "Battle Will Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -1058
     },
     "1370103": {
       "fr": "Pantalon de la volonté de combat (Rare Leg)",
       "en": "Battle Will Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -1058
     },
     "1370104": {
       "fr": "Gants de la volonté de combat (Rare Hand)",
       "en": "Battle Will Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -1058
     },
     "1370105": {
       "fr": "Chaussures de la volonté de combat (Rare Foot)",
       "en": "Battle Will Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -1058
     },
     "1370111": {
       "fr": "Casque du Serment d'acier (Rare Head)",
       "en": "Oath of Steel Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -926
     },
     "1370112": {
       "fr": "Haut du Serment d'acier (Rare Chest)",
       "en": "Oath of Steel Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -926
     },
     "1370113": {
       "fr": "Pantalon du Serment d'acier (Rare Leg)",
       "en": "Oath of Steel Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -926
     },
     "1370114": {
       "fr": "Gants du Serment d'acier (Rare Hand)",
       "en": "Oath of Steel Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -926
     },
     "1370115": {
       "fr": "Chaussures du Serment d'acier (Rare Foot)",
       "en": "Oath of Steel Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -926
     },
     "1370121": {
       "fr": "Casque de la Mélodie de la vie (Rare Head)",
       "en": "Ballad of Life Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -1058
     },
     "1370122": {
       "fr": "Haut de la Mélodie de la vie (Rare Chest)",
       "en": "Ballad of Life Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -1058
     },
     "1370123": {
       "fr": "Pantalon de la Mélodie de la vie (Rare Leg)",
       "en": "Ballad of Life Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -1058
     },
     "1370124": {
       "fr": "Gants de la Mélodie de la vie (Rare Hand)",
       "en": "Ballad of Life Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1124
     },
     "1370125": {
       "fr": "Chaussures de la Mélodie de la vie (Rare Foot)",
       "en": "Ballad of Life Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1124
     },
     "1370131": {
       "fr": "Casque de l'élan intense (Rare Head)",
       "en": "Fierce Presence Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1370132": {
       "fr": "Haut de l'élan intense (Rare Chest)",
       "en": "Fierce Presence Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1370133": {
       "fr": "Pantalon de l'élan intense (Rare Leg)",
       "en": "Fierce Presence Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1370134": {
       "fr": "Gants de l'élan intense (Rare Hand)",
       "en": "Fierce Presence Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1370135": {
       "fr": "Chaussures de l'élan intense (Rare Foot)",
       "en": "Fierce Presence Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1370141": {
       "fr": "Casque de l'Intrus (Rare Head)",
       "en": "Infiltrator Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1124
     },
     "1370142": {
       "fr": "Haut de l'Intrus (Rare Chest)",
       "en": "Infiltrator Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1124
     },
     "1370143": {
       "fr": "Pantalon de l'Intrus (Rare Leg)",
       "en": "Infiltrator Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1124
     },
     "1370144": {
       "fr": "Gants de l'Intrus (Rare Hand)",
       "en": "Infiltrator Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1124
     },
     "1370145": {
       "fr": "Chaussures de l'Intrus (Rare Foot)",
       "en": "Infiltrator Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1124
     },
     "1370151": {
       "fr": "Casque de la Frappe de la Colère (Rare Head)",
       "en": "Strike of Wrath Helmet (Rare Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1370152": {
       "fr": "Haut de la Frappe de la Colère (Rare Chest)",
       "en": "Strike of Wrath Top (Rare Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1370153": {
       "fr": "Pantalon de la Frappe de la Colère (Rare Leg)",
       "en": "Strike of Wrath Pants (Rare Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1370154": {
       "fr": "Gants de la Frappe de la Colère (Rare Hand)",
       "en": "Strike of Wrath Gloves (Rare Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1370155": {
       "fr": "Chaussures de la Frappe de la Colère (Rare Foot)",
       "en": "Strike of Wrath Boots (Rare Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1380001": {
       "fr": "Casque du Destructeur de forteresses (Epic Head)",
       "en": "Ruinsbreaker Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -926
     },
     "1380002": {
       "fr": "Haut du Destructeur de forteresses (Epic Chest)",
       "en": "Ruinsbreaker Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -926
     },
     "1380003": {
       "fr": "Pantalon du Destructeur de forteresses (Epic Leg)",
       "en": "Ruinsbreaker Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -926
     },
     "1380004": {
       "fr": "Gants du Destructeur de forteresses (Epic Hand)",
       "en": "Ruinsbreaker Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -926
     },
     "1380005": {
       "fr": "Chaussures du Destructeur de forteresses (Epic Foot)",
       "en": "Ruinsbreaker Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -926
     },
     "1380011": {
       "fr": "Casque du Juge sacré (Epic Head)",
       "en": "Holy Arbiter Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -926
     },
     "1380012": {
       "fr": "Haut du Juge sacré (Epic Chest)",
       "en": "Holy Arbiter Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -926
     },
     "1380013": {
       "fr": "Pantalon du Juge sacré (Epic Leg)",
       "en": "Holy Arbiter Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -926
     },
     "1380014": {
       "fr": "Gants du Juge sacré (Epic Hand)",
       "en": "Holy Arbiter Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -926
     },
     "1380015": {
       "fr": "Chaussures du Juge sacré (Epic Foot)",
       "en": "Holy Arbiter Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -992
     },
     "1380021": {
       "fr": "Casque du Broyeur de terre (Epic Head)",
       "en": "Earthshatterer Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -992
     },
     "1380022": {
       "fr": "Haut du Broyeur de terre (Epic Chest)",
       "en": "Earthshatterer Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -992
     },
     "1380023": {
       "fr": "Pantalon du Broyeur de terre (Epic Leg)",
       "en": "Earthshatterer Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -992
     },
     "1380024": {
       "fr": "Gants du Broyeur de terre (Epic Hand)",
       "en": "Earthshatterer Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -992
     },
     "1380025": {
       "fr": "Chaussures du Broyeur de terre (Epic Foot)",
       "en": "Earthshatterer Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -992
     },
     "1380031": {
       "fr": "Casque de la Rafale bleue (Epic Head)",
       "en": "Azure Gale Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -992
     },
     "1380032": {
       "fr": "Haut de la Rafale bleue (Epic Chest)",
       "en": "Azure Gale Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -992
     },
     "1380033": {
       "fr": "Pantalon de la Rafale bleue (Epic Leg)",
       "en": "Azure Gale Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -992
     },
     "1380034": {
       "fr": "Gants de la Rafale bleue (Epic Hand)",
       "en": "Azure Gale Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -992
     },
     "1380035": {
       "fr": "Chaussures de la Rafale bleue (Epic Foot)",
       "en": "Azure Gale Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -992
     },
     "1380041": {
       "fr": "Casque des flammes ardentes (Epic Head)",
       "en": "Blazing Flame Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -992
     },
     "1380042": {
       "fr": "Haut des flammes ardentes (Epic Chest)",
       "en": "Blazing Flame Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -992
     },
     "1380043": {
       "fr": "Pantalon des flammes ardentes (Epic Leg)",
       "en": "Blazing Flame Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -992
     },
     "1380044": {
       "fr": "Gants des flammes ardentes (Epic Hand)",
       "en": "Blazing Flame Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -992
     },
     "1380045": {
       "fr": "Chaussures des flammes ardentes (Epic Foot)",
       "en": "Blazing Flame Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -992
     },
     "1380051": {
       "fr": "Casque de la Tempête de givre (Epic Head)",
       "en": "Froststorm Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -992
     },
     "1380052": {
       "fr": "Haut de la Tempête de givre (Epic Chest)",
       "en": "Froststorm Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -992
     },
     "1380053": {
       "fr": "Pantalon de la Tempête de givre (Epic Leg)",
       "en": "Froststorm Leggings (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -992
     },
     "1380054": {
       "fr": "Gants de la Tempête de givre (Epic Hand)",
       "en": "Froststorm Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -992
     },
     "1380055": {
       "fr": "Chaussures de la Tempête de givre (Epic Foot)",
       "en": "Froststorm Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -992
     },
     "1380061": {
       "fr": "Casque de l'Éclair déferlant (Epic Head)",
       "en": "Thunderrush Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -992
     },
     "1380062": {
       "fr": "Haut de l'Éclair déferlant (Epic Chest)",
       "en": "Thunderrush Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1058
     },
     "1380063": {
       "fr": "Pantalon de l'Éclair déferlant (Epic Leg)",
       "en": "Thunderrush Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1058
     },
     "1380064": {
       "fr": "Gants de l'Éclair déferlant (Epic Hand)",
       "en": "Thunderrush Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1058
     },
     "1380065": {
       "fr": "Chaussures de l'Éclair déferlant (Epic Foot)",
       "en": "Thunderrush Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1058
     },
     "1380071": {
       "fr": "Casque de l'Ombre du brouillard toxique (Epic Head)",
       "en": "Venomfog Shade Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1058
     },
     "1380072": {
       "fr": "Haut de l'Ombre du brouillard toxique (Epic Chest)",
       "en": "Venomfog Shade Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1058
     },
     "1380073": {
       "fr": "Pantalon de l'Ombre du brouillard toxique (Epic Leg)",
       "en": "Venomfog Shade Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1058
     },
     "1380074": {
       "fr": "Gants de l'Ombre du brouillard toxique (Epic Hand)",
       "en": "Venomfog Shade Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -1058
     },
     "1380075": {
       "fr": "Chaussures de l'Ombre du brouillard toxique (Epic Foot)",
       "en": "Venomfog Shade Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -1058
     },
     "1380081": {
       "fr": "Casque du Poursuivant sanglant (Epic Head)",
       "en": "Bloodstained Chaser Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -1058
     },
     "1380082": {
       "fr": "Haut du Poursuivant sanglant (Epic Chest)",
       "en": "Bloodstained Chaser Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -1058
     },
     "1380083": {
       "fr": "Pantalon du Poursuivant sanglant (Epic Leg)",
       "en": "Bloodstained Chaser Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -1058
     },
     "1380084": {
       "fr": "Gants du Poursuivant sanglant (Epic Hand)",
       "en": "Bloodstained Chaser Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -1058
     },
     "1380085": {
       "fr": "Chaussures du Poursuivant sanglant (Epic Foot)",
       "en": "Bloodstained Chaser Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -1058
     },
     "1380101": {
       "fr": "Casque de la volonté de combat (Epic Head)",
       "en": "Battle Will Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -1058
     },
     "1380102": {
       "fr": "Haut de la volonté de combat (Epic Chest)",
       "en": "Battle Will Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -1058
     },
     "1380103": {
       "fr": "Pantalon de la volonté de combat (Epic Leg)",
       "en": "Battle Will Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -1058
     },
     "1380104": {
       "fr": "Gants de la volonté de combat (Epic Hand)",
       "en": "Battle Will Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -1058
     },
     "1380105": {
       "fr": "Chaussures de la volonté de combat (Epic Foot)",
       "en": "Battle Will Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -1058
     },
     "1380111": {
       "fr": "Casque du Serment d'acier (Epic Head)",
       "en": "Oath of Steel Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -926
     },
     "1380112": {
       "fr": "Haut du Serment d'acier (Epic Chest)",
       "en": "Oath of Steel Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -926
     },
     "1380113": {
       "fr": "Pantalon du Serment d'acier (Epic Leg)",
       "en": "Oath of Steel Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -926
     },
     "1380114": {
       "fr": "Gants du Serment d'acier (Epic Hand)",
       "en": "Oath of Steel Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -926
     },
     "1380115": {
       "fr": "Chaussures du Serment d'acier (Epic Foot)",
       "en": "Oath of Steel Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -926
     },
     "1380121": {
       "fr": "Casque de la Mélodie de la vie (Epic Head)",
       "en": "Ballad of Life Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -1058
     },
     "1380122": {
       "fr": "Haut de la Mélodie de la vie (Epic Chest)",
       "en": "Ballad of Life Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -1058
     },
     "1380123": {
       "fr": "Pantalon de la Mélodie de la vie (Epic Leg)",
       "en": "Ballad of Life Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -1058
     },
     "1380124": {
       "fr": "Gants de la Mélodie de la vie (Epic Hand)",
       "en": "Ballad of Life Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1124
     },
     "1380125": {
       "fr": "Chaussures de la Mélodie de la vie (Epic Foot)",
       "en": "Ballad of Life Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1124
     },
     "1380131": {
       "fr": "Casque de l'élan intense (Epic Head)",
       "en": "Fierce Presence Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1380132": {
       "fr": "Haut de l'élan intense (Epic Chest)",
       "en": "Fierce Presence Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1380133": {
       "fr": "Pantalon de l'élan intense (Epic Leg)",
       "en": "Fierce Presence Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1380134": {
       "fr": "Gants de l'élan intense (Epic Hand)",
       "en": "Fierce Presence Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1380135": {
       "fr": "Chaussures de l'élan intense (Epic Foot)",
       "en": "Fierce Presence Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1380141": {
       "fr": "Casque de l'Intrus (Epic Head)",
       "en": "Infiltrator Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1124
     },
     "1380142": {
       "fr": "Haut de l'Intrus (Epic Chest)",
       "en": "Infiltrator Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1124
     },
     "1380143": {
       "fr": "Pantalon de l'Intrus (Epic Leg)",
       "en": "Infiltrator Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1124
     },
     "1380144": {
       "fr": "Gants de l'Intrus (Epic Hand)",
       "en": "Infiltrator Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1124
     },
     "1380145": {
       "fr": "Chaussures de l'Intrus (Epic Foot)",
       "en": "Infiltrator Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1124
     },
     "1380151": {
       "fr": "Casque de la Frappe de la Colère (Epic Head)",
       "en": "Strike of Wrath Helmet (Epic Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1380152": {
       "fr": "Haut de la Frappe de la Colère (Epic Chest)",
       "en": "Strike of Wrath Top (Epic Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1380153": {
       "fr": "Pantalon de la Frappe de la Colère (Epic Leg)",
       "en": "Strike of Wrath Pants (Epic Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1380154": {
       "fr": "Gants de la Frappe de la Colère (Epic Hand)",
       "en": "Strike of Wrath Gloves (Epic Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1380155": {
       "fr": "Chaussures de la Frappe de la Colère (Epic Foot)",
       "en": "Strike of Wrath Boots (Epic Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1390001": {
       "fr": "Casque du Destructeur de forteresses (Legendary Head)",
       "en": "Ruinsbreaker Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -926
     },
     "1390002": {
       "fr": "Haut du Destructeur de forteresses (Legendary Chest)",
       "en": "Ruinsbreaker Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -926
     },
     "1390003": {
       "fr": "Pantalon du Destructeur de forteresses (Legendary Leg)",
       "en": "Ruinsbreaker Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -926
     },
     "1390004": {
       "fr": "Gants du Destructeur de forteresses (Legendary Hand)",
       "en": "Ruinsbreaker Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -926
     },
     "1390005": {
       "fr": "Chaussures du Destructeur de forteresses (Legendary Foot)",
       "en": "Ruinsbreaker Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -926
     },
     "1390011": {
       "fr": "Casque du Juge sacré (Legendary Head)",
       "en": "Holy Arbiter Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -926
     },
     "1390012": {
       "fr": "Haut du Juge sacré (Legendary Chest)",
       "en": "Holy Arbiter Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -926
     },
     "1390013": {
       "fr": "Pantalon du Juge sacré (Legendary Leg)",
       "en": "Holy Arbiter Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -926
     },
     "1390014": {
       "fr": "Gants du Juge sacré (Legendary Hand)",
       "en": "Holy Arbiter Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -926
     },
     "1390015": {
       "fr": "Chaussures du Juge sacré (Legendary Foot)",
       "en": "Holy Arbiter Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -992
     },
     "1390021": {
       "fr": "Casque du Broyeur de terre (Legendary Head)",
       "en": "Earthshatterer Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -992
     },
     "1390022": {
       "fr": "Haut du Broyeur de terre (Legendary Chest)",
       "en": "Earthshatterer Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -992
     },
     "1390023": {
       "fr": "Pantalon du Broyeur de terre (Legendary Leg)",
       "en": "Earthshatterer Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -992
     },
     "1390024": {
       "fr": "Gants du Broyeur de terre (Legendary Hand)",
       "en": "Earthshatterer Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -992
     },
     "1390025": {
       "fr": "Chaussures du Broyeur de terre (Legendary Foot)",
       "en": "Earthshatterer Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -992
     },
     "1390031": {
       "fr": "Casque de la Rafale bleue (Legendary Head)",
       "en": "Azure Gale Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -992
     },
     "1390032": {
       "fr": "Haut de la Rafale bleue (Legendary Chest)",
       "en": "Azure Gale Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -992
     },
     "1390033": {
       "fr": "Pantalon de la Rafale bleue (Legendary Leg)",
       "en": "Azure Gale Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -992
     },
     "1390034": {
       "fr": "Gants de la Rafale bleue (Legendary Hand)",
       "en": "Azure Gale Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -992
     },
     "1390035": {
       "fr": "Chaussures de la Rafale bleue (Legendary Foot)",
       "en": "Azure Gale Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -992
     },
     "1390041": {
       "fr": "Casque des flammes ardentes (Legendary Head)",
       "en": "Blazing Flame Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -992
     },
     "1390042": {
       "fr": "Haut des flammes ardentes (Legendary Chest)",
       "en": "Blazing Flame Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -992
     },
     "1390043": {
       "fr": "Pantalon des flammes ardentes (Legendary Leg)",
       "en": "Blazing Flame Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -992
     },
     "1390044": {
       "fr": "Gants des flammes ardentes (Legendary Hand)",
       "en": "Blazing Flame Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -992
     },
     "1390045": {
       "fr": "Chaussures des flammes ardentes (Legendary Foot)",
       "en": "Blazing Flame Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -992
     },
     "1390051": {
       "fr": "Casque de la Tempête de givre (Legendary Head)",
       "en": "Froststorm Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -992
     },
     "1390052": {
       "fr": "Haut de la Tempête de givre (Legendary Chest)",
       "en": "Froststorm Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -992
     },
     "1390053": {
       "fr": "Pantalon de la Tempête de givre (Legendary Leg)",
       "en": "Froststorm Leggings (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -992
     },
     "1390054": {
       "fr": "Gants de la Tempête de givre (Legendary Hand)",
       "en": "Froststorm Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -992
     },
     "1390055": {
       "fr": "Chaussures de la Tempête de givre (Legendary Foot)",
       "en": "Froststorm Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -992
     },
     "1390061": {
       "fr": "Casque de l'Éclair déferlant (Legendary Head)",
       "en": "Thunderrush Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -992
     },
     "1390062": {
       "fr": "Haut de l'Éclair déferlant (Legendary Chest)",
       "en": "Thunderrush Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1058
     },
     "1390063": {
       "fr": "Pantalon de l'Éclair déferlant (Legendary Leg)",
       "en": "Thunderrush Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1058
     },
     "1390064": {
       "fr": "Gants de l'Éclair déferlant (Legendary Hand)",
       "en": "Thunderrush Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1058
     },
     "1390065": {
       "fr": "Chaussures de l'Éclair déferlant (Legendary Foot)",
       "en": "Thunderrush Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1058
     },
     "1390071": {
       "fr": "Casque de l'Ombre du brouillard toxique (Legendary Head)",
       "en": "Venomfog Shade Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1058
     },
     "1390072": {
       "fr": "Haut de l'Ombre du brouillard toxique (Legendary Chest)",
       "en": "Venomfog Shade Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1058
     },
     "1390073": {
       "fr": "Pantalon de l'Ombre du brouillard toxique (Legendary Leg)",
       "en": "Venomfog Shade Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1058
     },
     "1390074": {
       "fr": "Gants de l'Ombre du brouillard toxique (Legendary Hand)",
       "en": "Venomfog Shade Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -1058
     },
     "1390075": {
       "fr": "Chaussures de l'Ombre du brouillard toxique (Legendary Foot)",
       "en": "Venomfog Shade Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -530,
+      "y": -1058
     },
     "1390081": {
       "fr": "Casque du Poursuivant sanglant (Legendary Head)",
       "en": "Bloodstained Chaser Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -596,
+      "y": -1058
     },
     "1390082": {
       "fr": "Haut du Poursuivant sanglant (Legendary Chest)",
       "en": "Bloodstained Chaser Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -662,
+      "y": -1058
     },
     "1390083": {
       "fr": "Pantalon du Poursuivant sanglant (Legendary Leg)",
       "en": "Bloodstained Chaser Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -728,
+      "y": -1058
     },
     "1390084": {
       "fr": "Gants du Poursuivant sanglant (Legendary Hand)",
       "en": "Bloodstained Chaser Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -794,
+      "y": -1058
     },
     "1390085": {
       "fr": "Chaussures du Poursuivant sanglant (Legendary Foot)",
       "en": "Bloodstained Chaser Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -860,
+      "y": -1058
     },
     "1390101": {
       "fr": "Casque de la volonté de combat (Legendary Head)",
       "en": "Battle Will Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -926,
+      "y": -1058
     },
     "1390102": {
       "fr": "Haut de la volonté de combat (Legendary Chest)",
       "en": "Battle Will Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -992,
+      "y": -1058
     },
     "1390103": {
       "fr": "Pantalon de la volonté de combat (Legendary Leg)",
       "en": "Battle Will Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1058,
+      "y": -1058
     },
     "1390104": {
       "fr": "Gants de la volonté de combat (Legendary Hand)",
       "en": "Battle Will Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1124,
+      "y": -1058
     },
     "1390105": {
       "fr": "Chaussures de la volonté de combat (Legendary Foot)",
       "en": "Battle Will Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1190,
+      "y": -1058
     },
     "1390111": {
       "fr": "Casque du Serment d'acier (Legendary Head)",
       "en": "Oath of Steel Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -926
     },
     "1390112": {
       "fr": "Haut du Serment d'acier (Legendary Chest)",
       "en": "Oath of Steel Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -926
     },
     "1390113": {
       "fr": "Pantalon du Serment d'acier (Legendary Leg)",
       "en": "Oath of Steel Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -926
     },
     "1390114": {
       "fr": "Gants du Serment d'acier (Legendary Hand)",
       "en": "Oath of Steel Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -926
     },
     "1390115": {
       "fr": "Chaussures du Serment d'acier (Legendary Foot)",
       "en": "Oath of Steel Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -464,
+      "y": -926
     },
     "1390121": {
       "fr": "Casque de la Mélodie de la vie (Legendary Head)",
       "en": "Ballad of Life Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1256,
+      "y": -1058
     },
     "1390122": {
       "fr": "Haut de la Mélodie de la vie (Legendary Chest)",
       "en": "Ballad of Life Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -1058
     },
     "1390123": {
       "fr": "Pantalon de la Mélodie de la vie (Legendary Leg)",
       "en": "Ballad of Life Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -1058
     },
     "1390124": {
       "fr": "Gants de la Mélodie de la vie (Legendary Hand)",
       "en": "Ballad of Life Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -1124
     },
     "1390125": {
       "fr": "Chaussures de la Mélodie de la vie (Legendary Foot)",
       "en": "Ballad of Life Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -1124
     },
     "1390131": {
       "fr": "Casque de l'élan intense (Legendary Head)",
       "en": "Fierce Presence Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1390132": {
       "fr": "Haut de l'élan intense (Legendary Chest)",
       "en": "Fierce Presence Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1390133": {
       "fr": "Pantalon de l'élan intense (Legendary Leg)",
       "en": "Fierce Presence Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1390134": {
       "fr": "Gants de l'élan intense (Legendary Hand)",
       "en": "Fierce Presence Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1390135": {
       "fr": "Chaussures de l'élan intense (Legendary Foot)",
       "en": "Fierce Presence Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1390141": {
       "fr": "Casque de l'Intrus (Legendary Head)",
       "en": "Infiltrator Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -1124
     },
     "1390142": {
       "fr": "Haut de l'Intrus (Legendary Chest)",
       "en": "Infiltrator Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -200,
+      "y": -1124
     },
     "1390143": {
       "fr": "Pantalon de l'Intrus (Legendary Leg)",
       "en": "Infiltrator Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -266,
+      "y": -1124
     },
     "1390144": {
       "fr": "Gants de l'Intrus (Legendary Hand)",
       "en": "Infiltrator Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -332,
+      "y": -1124
     },
     "1390145": {
       "fr": "Chaussures de l'Intrus (Legendary Foot)",
       "en": "Infiltrator Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -398,
+      "y": -1124
     },
     "1390151": {
       "fr": "Casque de la Frappe de la Colère (Legendary Head)",
       "en": "Strike of Wrath Helmet (Legendary Head)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1322,
+      "y": -860
     },
     "1390152": {
       "fr": "Haut de la Frappe de la Colère (Legendary Chest)",
       "en": "Strike of Wrath Top (Legendary Chest)",
-      "category": "gear"
+      "category": "gear",
+      "x": -1388,
+      "y": -860
     },
     "1390153": {
       "fr": "Pantalon de la Frappe de la Colère (Legendary Leg)",
       "en": "Strike of Wrath Pants (Legendary Leg)",
-      "category": "gear"
+      "category": "gear",
+      "x": -2,
+      "y": -926
     },
     "1390154": {
       "fr": "Gants de la Frappe de la Colère (Legendary Hand)",
       "en": "Strike of Wrath Gloves (Legendary Hand)",
-      "category": "gear"
+      "category": "gear",
+      "x": -68,
+      "y": -926
     },
     "1390155": {
       "fr": "Chaussures de la Frappe de la Colère (Legendary Foot)",
       "en": "Strike of Wrath Boots (Legendary Foot)",
-      "category": "gear"
+      "category": "gear",
+      "x": -134,
+      "y": -926
     },
     "1420101": {
       "fr": "Viande grillée (Normal)",
       "en": "Grilled Meat (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -596
     },
     "1420102": {
       "fr": "Poisson grillé (Normal)",
       "en": "Grilled Fish (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -596
     },
     "1420103": {
       "fr": "Fruits de mer grillés (Normal)",
       "en": "Grilled seafood (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -596
     },
     "1420104": {
       "fr": "Légumes grillés (Normal)",
       "en": "Roasted Vegetables (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -596
     },
     "1420105": {
       "fr": "Champignons grillés (Normal)",
       "en": "Grilled Mushrooms (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -596
     },
     "1420106": {
       "fr": "Riz sauté (Normal)",
       "en": "Fried Rice (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -596
     },
     "1420107": {
       "fr": "Œuf au plat (Normal)",
       "en": "Fried Egg (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -596
     },
     "1420108": {
       "fr": "Double steak (Normal)",
       "en": "Double Steak (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -596
     },
     "1420109": {
       "fr": "Assortiment de viandes grillées (Normal)",
       "en": "Assorted Grilled Meats (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -596
     },
     "1420110": {
       "fr": "Bol de riz à la viande (Normal)",
       "en": "Meat Bowl (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -596
     },
     "1420111": {
       "fr": "Assortiment de poissons grillés (Normal)",
       "en": "Assorted Grilled Fish (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -596
     },
     "1420112": {
       "fr": "Plateau de fruits de mer (Normal)",
       "en": "Seafood Platter (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -596
     },
     "1420113": {
       "fr": "Bol de riz au poisson grillé (Normal)",
       "en": "Grilled Fish Bowl (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -596
     },
     "1420114": {
       "fr": "Pâtes aux fruits de mer (Normal)",
       "en": "Seafood Pasta (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -662
     },
     "1420115": {
       "fr": "Sauté de champignons et légumes (Normal)",
       "en": "Stir-fried Mushrooms and Vegetables (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -662
     },
     "1420116": {
       "fr": "Omelette roulée (Normal)",
       "en": "Rolled Omelet (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -662
     },
     "1420117": {
       "fr": "Menu steak (Normal)",
       "en": "Steak Set Meal (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1420118": {
       "fr": "Steak haché (Normal)",
       "en": "Hamburger Steak (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -662
     },
     "1420119": {
       "fr": "Steak de poisson (Normal)",
       "en": "Fish Steak (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -662
     },
     "1420120": {
       "fr": "Fruits de mer grillés à la plancha (Normal)",
       "en": "Seafood Teppanyaki (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -662
     },
     "1420121": {
       "fr": "Omelette (Normal)",
       "en": "Omelet (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -662
     },
     "1420122": {
       "fr": "Grillade aux herbes (Normal)",
       "en": "Herb Grill (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -662
     },
     "1420123": {
       "fr": "Raviolis frits (Normal)",
       "en": "Pan-fried Dumplings (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -662
     },
     "1420124": {
       "fr": "Spaghetti à la tomate (Normal)",
       "en": "Tomato Spaghetti (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -662
     },
     "1420125": {
       "fr": "Fish and chips (Normal)",
       "en": "Fish and Chips (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -662
     },
     "1420126": {
       "fr": "Pizza classique (Normal)",
       "en": "Classic Pizza (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -662
     },
     "1420127": {
       "fr": "Pizza aux pommes de terre (Normal)",
       "en": "Potato Pizza (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -662
     },
     "1420128": {
       "fr": "Nougat (Normal)",
       "en": "Nougat (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -662
     },
     "1420129": {
       "fr": "Coquillages grillés (Normal)",
       "en": "Grilled Clams (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -662
     },
     "1420201": {
       "fr": "Viande grillée (Superior)",
       "en": "Grilled Meat (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -596
     },
     "1420202": {
       "fr": "Poisson grillé (Superior)",
       "en": "Grilled Fish (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -596
     },
     "1420203": {
       "fr": "Fruits de mer grillés (Superior)",
       "en": "Grilled seafood (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -596
     },
     "1420204": {
       "fr": "Légumes grillés (Superior)",
       "en": "Roasted Vegetables (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -596
     },
     "1420205": {
       "fr": "Champignons grillés (Superior)",
       "en": "Grilled Mushrooms (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -596
     },
     "1420206": {
       "fr": "Riz sauté (Superior)",
       "en": "Fried Rice (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -596
     },
     "1420207": {
       "fr": "Œuf au plat (Superior)",
       "en": "Fried Egg (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -596
     },
     "1420208": {
       "fr": "Double steak (Superior)",
       "en": "Double Steak (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -596
     },
     "1420209": {
       "fr": "Assortiment de viandes grillées (Superior)",
       "en": "Assorted Grilled Meats (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -596
     },
     "1420210": {
       "fr": "Bol de riz à la viande (Superior)",
       "en": "Meat Bowl (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -596
     },
     "1420211": {
       "fr": "Assortiment de poissons grillés (Superior)",
       "en": "Assorted Grilled Fish (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -596
     },
     "1420212": {
       "fr": "Plateau de fruits de mer (Superior)",
       "en": "Seafood Platter (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -596
     },
     "1420213": {
       "fr": "Bol de riz au poisson grillé (Superior)",
       "en": "Grilled Fish Bowl (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -596
     },
     "1420214": {
       "fr": "Pâtes aux fruits de mer (Superior)",
       "en": "Seafood Pasta (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -662
     },
     "1420215": {
       "fr": "Sauté de champignons et légumes (Superior)",
       "en": "Stir-fried Mushrooms and Vegetables (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -662
     },
     "1420216": {
       "fr": "Omelette roulée (Superior)",
       "en": "Rolled Omelet (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -662
     },
     "1420217": {
       "fr": "Menu steak (Superior)",
       "en": "Steak Set Meal (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1420218": {
       "fr": "Steak haché (Superior)",
       "en": "Hamburger Steak (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -662
     },
     "1420219": {
       "fr": "Steak de poisson (Superior)",
       "en": "Fish Steak (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -662
     },
     "1420220": {
       "fr": "Fruits de mer grillés à la plancha (Superior)",
       "en": "Seafood Teppanyaki (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -662
     },
     "1420221": {
       "fr": "Omelette (Superior)",
       "en": "Omelet (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -662
     },
     "1420222": {
       "fr": "Grillade aux herbes (Superior)",
       "en": "Herb Grill (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -662
     },
     "1420223": {
       "fr": "Raviolis frits (Superior)",
       "en": "Pan-fried Dumplings (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -662
     },
     "1420224": {
       "fr": "Spaghetti à la tomate (Superior)",
       "en": "Tomato Spaghetti (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -662
     },
     "1420225": {
       "fr": "Fish and chips (Superior)",
       "en": "Fish and Chips (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -662
     },
     "1420226": {
       "fr": "Pizza classique (Superior)",
       "en": "Classic Pizza (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -662
     },
     "1420227": {
       "fr": "Pizza aux pommes de terre (Superior)",
       "en": "Potato Pizza (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -662
     },
     "1420228": {
       "fr": "Nougat (Superior)",
       "en": "Nougat (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -662
     },
     "1420229": {
       "fr": "Coquillages grillés (Superior)",
       "en": "Grilled Clams (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -662
     },
     "1420301": {
       "fr": "Viande grillée (Rare)",
       "en": "Grilled Meat (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -596
     },
     "1420302": {
       "fr": "Poisson grillé (Rare)",
       "en": "Grilled Fish (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -596
     },
     "1420303": {
       "fr": "Fruits de mer grillés (Rare)",
       "en": "Grilled seafood (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -596
     },
     "1420304": {
       "fr": "Légumes grillés (Rare)",
       "en": "Roasted Vegetables (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -596
     },
     "1420305": {
       "fr": "Champignons grillés (Rare)",
       "en": "Grilled Mushrooms (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -596
     },
     "1420306": {
       "fr": "Riz sauté (Rare)",
       "en": "Fried Rice (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -596
     },
     "1420307": {
       "fr": "Œuf au plat (Rare)",
       "en": "Fried Egg (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -596
     },
     "1420308": {
       "fr": "Double steak (Rare)",
       "en": "Double Steak (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -596
     },
     "1420309": {
       "fr": "Assortiment de viandes grillées (Rare)",
       "en": "Assorted Grilled Meats (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -596
     },
     "1420310": {
       "fr": "Bol de riz à la viande (Rare)",
       "en": "Meat Bowl (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -596
     },
     "1420311": {
       "fr": "Assortiment de poissons grillés (Rare)",
       "en": "Assorted Grilled Fish (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -596
     },
     "1420312": {
       "fr": "Plateau de fruits de mer (Rare)",
       "en": "Seafood Platter (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -596
     },
     "1420313": {
       "fr": "Bol de riz au poisson grillé (Rare)",
       "en": "Grilled Fish Bowl (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -596
     },
     "1420314": {
       "fr": "Pâtes aux fruits de mer (Rare)",
       "en": "Seafood Pasta (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -662
     },
     "1420315": {
       "fr": "Sauté de champignons et légumes (Rare)",
       "en": "Stir-fried Mushrooms and Vegetables (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -662
     },
     "1420316": {
       "fr": "Omelette roulée (Rare)",
       "en": "Rolled Omelet (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -662
     },
     "1420317": {
       "fr": "Menu steak (Rare)",
       "en": "Steak Set Meal (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1420318": {
       "fr": "Steak haché (Rare)",
       "en": "Hamburger Steak (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -662
     },
     "1420319": {
       "fr": "Steak de poisson (Rare)",
       "en": "Fish Steak (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -662
     },
     "1420320": {
       "fr": "Fruits de mer grillés à la plancha (Rare)",
       "en": "Seafood Teppanyaki (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -662
     },
     "1420321": {
       "fr": "Omelette (Rare)",
       "en": "Omelet (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -662
     },
     "1420322": {
       "fr": "Grillade aux herbes (Rare)",
       "en": "Herb Grill (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -662
     },
     "1420323": {
       "fr": "Raviolis frits (Rare)",
       "en": "Pan-fried Dumplings (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -662
     },
     "1420324": {
       "fr": "Spaghetti à la tomate (Rare)",
       "en": "Tomato Spaghetti (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -662
     },
     "1420325": {
       "fr": "Fish and chips (Rare)",
       "en": "Fish and Chips (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -662
     },
     "1420326": {
       "fr": "Pizza classique (Rare)",
       "en": "Classic Pizza (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -662
     },
     "1420327": {
       "fr": "Pizza aux pommes de terre (Rare)",
       "en": "Potato Pizza (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -662
     },
     "1420328": {
       "fr": "Nougat (Rare)",
       "en": "Nougat (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -662
     },
     "1420329": {
       "fr": "Coquillages grillés (Rare)",
       "en": "Grilled Clams (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -662
     },
     "1420401": {
       "fr": "Viande grillée (Epic)",
       "en": "Grilled Meat (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -596
     },
     "1420402": {
       "fr": "Poisson grillé (Epic)",
       "en": "Grilled Fish (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -596
     },
     "1420403": {
       "fr": "Fruits de mer grillés (Epic)",
       "en": "Grilled seafood (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -596
     },
     "1420404": {
       "fr": "Légumes grillés (Epic)",
       "en": "Roasted Vegetables (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -596
     },
     "1420405": {
       "fr": "Champignons grillés (Epic)",
       "en": "Grilled Mushrooms (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -596
     },
     "1420406": {
       "fr": "Riz sauté (Epic)",
       "en": "Fried Rice (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -596
     },
     "1420407": {
       "fr": "Œuf au plat (Epic)",
       "en": "Fried Egg (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -596
     },
     "1420408": {
       "fr": "Double steak (Epic)",
       "en": "Double Steak (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -596
     },
     "1420409": {
       "fr": "Assortiment de viandes grillées (Epic)",
       "en": "Assorted Grilled Meats (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -596
     },
     "1420410": {
       "fr": "Bol de riz à la viande (Epic)",
       "en": "Meat Bowl (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -596
     },
     "1420411": {
       "fr": "Assortiment de poissons grillés (Epic)",
       "en": "Assorted Grilled Fish (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -596
     },
     "1420412": {
       "fr": "Plateau de fruits de mer (Epic)",
       "en": "Seafood Platter (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -596
     },
     "1420413": {
       "fr": "Bol de riz au poisson grillé (Epic)",
       "en": "Grilled Fish Bowl (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -596
     },
     "1420414": {
       "fr": "Pâtes aux fruits de mer (Epic)",
       "en": "Seafood Pasta (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -662
     },
     "1420415": {
       "fr": "Sauté de champignons et légumes (Epic)",
       "en": "Stir-fried Mushrooms and Vegetables (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -662
     },
     "1420416": {
       "fr": "Omelette roulée (Epic)",
       "en": "Rolled Omelet (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -662
     },
     "1420417": {
       "fr": "Menu steak (Epic)",
       "en": "Steak Set Meal (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1420418": {
       "fr": "Steak haché (Epic)",
       "en": "Hamburger Steak (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -662
     },
     "1420419": {
       "fr": "Steak de poisson (Epic)",
       "en": "Fish Steak (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -662
     },
     "1420420": {
       "fr": "Fruits de mer grillés à la plancha (Epic)",
       "en": "Seafood Teppanyaki (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -662
     },
     "1420421": {
       "fr": "Omelette (Epic)",
       "en": "Omelet (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -662
     },
     "1420422": {
       "fr": "Grillade aux herbes (Epic)",
       "en": "Herb Grill (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -662
     },
     "1420423": {
       "fr": "Raviolis frits (Epic)",
       "en": "Pan-fried Dumplings (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -662
     },
     "1420424": {
       "fr": "Spaghetti à la tomate (Epic)",
       "en": "Tomato Spaghetti (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -662
     },
     "1420425": {
       "fr": "Fish and chips (Epic)",
       "en": "Fish and Chips (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -662
     },
     "1420426": {
       "fr": "Pizza classique (Epic)",
       "en": "Classic Pizza (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -662
     },
     "1420427": {
       "fr": "Pizza aux pommes de terre (Epic)",
       "en": "Potato Pizza (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -662
     },
     "1420428": {
       "fr": "Nougat (Epic)",
       "en": "Nougat (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -662
     },
     "1420429": {
       "fr": "Coquillages grillés (Epic)",
       "en": "Grilled Clams (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -662
     },
     "1420501": {
       "fr": "Viande grillée (Legendary)",
       "en": "Grilled Meat (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -596
     },
     "1420502": {
       "fr": "Poisson grillé (Legendary)",
       "en": "Grilled Fish (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -596
     },
     "1420503": {
       "fr": "Fruits de mer grillés (Legendary)",
       "en": "Grilled seafood (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -596
     },
     "1420504": {
       "fr": "Légumes grillés (Legendary)",
       "en": "Roasted Vegetables (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -596
     },
     "1420505": {
       "fr": "Champignons grillés (Legendary)",
       "en": "Grilled Mushrooms (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -596
     },
     "1420506": {
       "fr": "Riz sauté (Legendary)",
       "en": "Fried Rice (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -596
     },
     "1420507": {
       "fr": "Œuf au plat (Legendary)",
       "en": "Fried Egg (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -596
     },
     "1420508": {
       "fr": "Double steak (Legendary)",
       "en": "Double Steak (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -596
     },
     "1420509": {
       "fr": "Assortiment de viandes grillées (Legendary)",
       "en": "Assorted Grilled Meats (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -596
     },
     "1420510": {
       "fr": "Bol de riz à la viande (Legendary)",
       "en": "Meat Bowl (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -596
     },
     "1420511": {
       "fr": "Assortiment de poissons grillés (Legendary)",
       "en": "Assorted Grilled Fish (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -596
     },
     "1420512": {
       "fr": "Plateau de fruits de mer (Legendary)",
       "en": "Seafood Platter (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -596
     },
     "1420513": {
       "fr": "Bol de riz au poisson grillé (Legendary)",
       "en": "Grilled Fish Bowl (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -596
     },
     "1420514": {
       "fr": "Pâtes aux fruits de mer (Legendary)",
       "en": "Seafood Pasta (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -662
     },
     "1420515": {
       "fr": "Sauté de champignons et légumes (Legendary)",
       "en": "Stir-fried Mushrooms and Vegetables (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -662
     },
     "1420516": {
       "fr": "Omelette roulée (Legendary)",
       "en": "Rolled Omelet (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -662
     },
     "1420517": {
       "fr": "Menu steak (Legendary)",
       "en": "Steak Set Meal (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1420518": {
       "fr": "Steak haché (Legendary)",
       "en": "Hamburger Steak (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -662
     },
     "1420519": {
       "fr": "Steak de poisson (Legendary)",
       "en": "Fish Steak (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -662
     },
     "1420520": {
       "fr": "Fruits de mer grillés à la plancha (Legendary)",
       "en": "Seafood Teppanyaki (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -662
     },
     "1420521": {
       "fr": "Omelette (Legendary)",
       "en": "Omelet (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -662
     },
     "1420522": {
       "fr": "Grillade aux herbes (Legendary)",
       "en": "Herb Grill (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -662
     },
     "1420523": {
       "fr": "Raviolis frits (Legendary)",
       "en": "Pan-fried Dumplings (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -662
     },
     "1420524": {
       "fr": "Spaghetti à la tomate (Legendary)",
       "en": "Tomato Spaghetti (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -662
     },
     "1420525": {
       "fr": "Fish and chips (Legendary)",
       "en": "Fish and Chips (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -662
     },
     "1420526": {
       "fr": "Pizza classique (Legendary)",
       "en": "Classic Pizza (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -662
     },
     "1420527": {
       "fr": "Pizza aux pommes de terre (Legendary)",
       "en": "Potato Pizza (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -662
     },
     "1420528": {
       "fr": "Nougat (Legendary)",
       "en": "Nougat (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -662
     },
     "1420529": {
       "fr": "Coquillages grillés (Legendary)",
       "en": "Grilled Clams (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -662
     },
     "1421101": {
       "fr": "Ragoût de viande (Normal)",
       "en": "Meat Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -662
     },
     "1421102": {
       "fr": "Bouillie de poisson (Normal)",
       "en": "Fish Porridge (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -662
     },
     "1421103": {
       "fr": "Soupe de fruits de mer (Normal)",
       "en": "Seafood Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -662
     },
     "1421104": {
       "fr": "Soupe aux légumes (Normal)",
       "en": "Vegetable Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -662
     },
     "1421105": {
       "fr": "Thé au miel (Normal)",
       "en": "Honey Tea (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -662
     },
     "1421106": {
       "fr": "Thé aux champignons (Normal)",
       "en": "Mushroom Tea (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -662
     },
     "1421107": {
       "fr": "Thé aux céréales (Normal)",
       "en": "Grain Tea (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -728
     },
     "1421108": {
       "fr": "Œuf dur (Normal)",
       "en": "Hard-boiled Egg (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -728
     },
     "1421109": {
       "fr": "Ragoût double à la manière d'Orbis (Normal)",
       "en": "Orbis-Style Double Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -728
     },
     "1421110": {
       "fr": "Ragoût à la manière d'Orbis (Normal)",
       "en": "Orbis-Style Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -728
     },
     "1421111": {
       "fr": "Consommé (Normal)",
       "en": "Consommé (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -728
     },
     "1421112": {
       "fr": "Ragoût de fruits de mer (Normal)",
       "en": "Seafood Hodgepodge (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -728
     },
     "1421113": {
       "fr": "Soupe de poisson (Normal)",
       "en": "Fish Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -728
     },
     "1421114": {
       "fr": "Thé servi à bord (Normal)",
       "en": "Shipboard Tea (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -728
     },
     "1421115": {
       "fr": "Bouillie aux fruits de mer (Normal)",
       "en": "Seafood Porridge (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -728
     },
     "1421116": {
       "fr": "Thé aux herbes (Normal)",
       "en": "Herbal Tea (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -728
     },
     "1421117": {
       "fr": "Soupe aux champignons (Normal)",
       "en": "Mushroom Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -728
     },
     "1421118": {
       "fr": "Bouillie aux champignons (Normal)",
       "en": "Mushroom Porridge (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -728
     },
     "1421119": {
       "fr": "Ragoût spécial Orbis (Normal)",
       "en": "Orbis-Style Special Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -728
     },
     "1421120": {
       "fr": "Soupe nutritive (Normal)",
       "en": "Nutritious Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -728
     },
     "1421121": {
       "fr": "Bouillon de boulettes de poisson (Normal)",
       "en": "Fishball Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -728
     },
     "1421122": {
       "fr": "Paella aux fruits de mer (Normal)",
       "en": "Seafood Paella (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -728
     },
     "1421123": {
       "fr": "Bouillie revigorante (Normal)",
       "en": "Restorative Porridge (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -728
     },
     "1421124": {
       "fr": "Ragoût de tomates (Normal)",
       "en": "Tomato Stew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -728
     },
     "1421125": {
       "fr": "Risotto (Normal)",
       "en": "Risotto (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -728
     },
     "1421126": {
       "fr": "Soupe au radis (Normal)",
       "en": "Radish Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -728
     },
     "1421127": {
       "fr": "Soupe de palourdes (Normal)",
       "en": "Clam Soup (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -728
     },
     "1421201": {
       "fr": "Ragoût de viande (Superior)",
       "en": "Meat Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -662
     },
     "1421202": {
       "fr": "Bouillie de poisson (Superior)",
       "en": "Fish Porridge (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -662
     },
     "1421203": {
       "fr": "Soupe de fruits de mer (Superior)",
       "en": "Seafood Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -662
     },
     "1421204": {
       "fr": "Soupe aux légumes (Superior)",
       "en": "Vegetable Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -662
     },
     "1421205": {
       "fr": "Thé au miel (Superior)",
       "en": "Honey Tea (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -662
     },
     "1421206": {
       "fr": "Thé aux champignons (Superior)",
       "en": "Mushroom Tea (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -662
     },
     "1421207": {
       "fr": "Thé aux céréales (Superior)",
       "en": "Grain Tea (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -728
     },
     "1421208": {
       "fr": "Œuf dur (Superior)",
       "en": "Hard-boiled Egg (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -728
     },
     "1421209": {
       "fr": "Ragoût double à la manière d'Orbis (Superior)",
       "en": "Orbis-Style Double Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -728
     },
     "1421210": {
       "fr": "Ragoût à la manière d'Orbis (Superior)",
       "en": "Orbis-Style Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -728
     },
     "1421211": {
       "fr": "Consommé (Superior)",
       "en": "Consommé (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -728
     },
     "1421212": {
       "fr": "Ragoût de fruits de mer (Superior)",
       "en": "Seafood Hodgepodge (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -728
     },
     "1421213": {
       "fr": "Soupe de poisson (Superior)",
       "en": "Fish Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -728
     },
     "1421214": {
       "fr": "Thé servi à bord (Superior)",
       "en": "Shipboard Tea (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -728
     },
     "1421215": {
       "fr": "Bouillie aux fruits de mer (Superior)",
       "en": "Seafood Porridge (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -728
     },
     "1421216": {
       "fr": "Thé aux herbes (Superior)",
       "en": "Herbal Tea (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -728
     },
     "1421217": {
       "fr": "Soupe aux champignons (Superior)",
       "en": "Mushroom Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -728
     },
     "1421218": {
       "fr": "Bouillie aux champignons (Superior)",
       "en": "Mushroom Porridge (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -728
     },
     "1421219": {
       "fr": "Ragoût spécial Orbis (Superior)",
       "en": "Orbis-Style Special Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -728
     },
     "1421220": {
       "fr": "Soupe nutritive (Superior)",
       "en": "Nutritious Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -728
     },
     "1421221": {
       "fr": "Bouillon de boulettes de poisson (Superior)",
       "en": "Fishball Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -728
     },
     "1421222": {
       "fr": "Paella aux fruits de mer (Superior)",
       "en": "Seafood Paella (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -728
     },
     "1421223": {
       "fr": "Bouillie revigorante (Superior)",
       "en": "Restorative Porridge (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -728
     },
     "1421224": {
       "fr": "Ragoût de tomates (Superior)",
       "en": "Tomato Stew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -728
     },
     "1421225": {
       "fr": "Risotto (Superior)",
       "en": "Risotto (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -728
     },
     "1421226": {
       "fr": "Soupe au radis (Superior)",
       "en": "Radish Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -728
     },
     "1421227": {
       "fr": "Soupe de palourdes (Superior)",
       "en": "Clam Soup (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -728
     },
     "1421301": {
       "fr": "Ragoût de viande (Rare)",
       "en": "Meat Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -662
     },
     "1421302": {
       "fr": "Bouillie de poisson (Rare)",
       "en": "Fish Porridge (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -662
     },
     "1421303": {
       "fr": "Soupe de fruits de mer (Rare)",
       "en": "Seafood Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -662
     },
     "1421304": {
       "fr": "Soupe aux légumes (Rare)",
       "en": "Vegetable Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -662
     },
     "1421305": {
       "fr": "Thé au miel (Rare)",
       "en": "Honey Tea (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -662
     },
     "1421306": {
       "fr": "Thé aux champignons (Rare)",
       "en": "Mushroom Tea (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -662
     },
     "1421307": {
       "fr": "Thé aux céréales (Rare)",
       "en": "Grain Tea (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -728
     },
     "1421308": {
       "fr": "Œuf dur (Rare)",
       "en": "Hard-boiled Egg (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -728
     },
     "1421309": {
       "fr": "Ragoût double à la manière d'Orbis (Rare)",
       "en": "Orbis-Style Double Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -728
     },
     "1421310": {
       "fr": "Ragoût à la manière d'Orbis (Rare)",
       "en": "Orbis-Style Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -728
     },
     "1421311": {
       "fr": "Consommé (Rare)",
       "en": "Consommé (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -728
     },
     "1421312": {
       "fr": "Ragoût de fruits de mer (Rare)",
       "en": "Seafood Hodgepodge (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -728
     },
     "1421313": {
       "fr": "Soupe de poisson (Rare)",
       "en": "Fish Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -728
     },
     "1421314": {
       "fr": "Thé servi à bord (Rare)",
       "en": "Shipboard Tea (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -728
     },
     "1421315": {
       "fr": "Bouillie aux fruits de mer (Rare)",
       "en": "Seafood Porridge (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -728
     },
     "1421316": {
       "fr": "Thé aux herbes (Rare)",
       "en": "Herbal Tea (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -728
     },
     "1421317": {
       "fr": "Soupe aux champignons (Rare)",
       "en": "Mushroom Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -728
     },
     "1421318": {
       "fr": "Bouillie aux champignons (Rare)",
       "en": "Mushroom Porridge (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -728
     },
     "1421319": {
       "fr": "Ragoût spécial Orbis (Rare)",
       "en": "Orbis-Style Special Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -728
     },
     "1421320": {
       "fr": "Soupe nutritive (Rare)",
       "en": "Nutritious Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -728
     },
     "1421321": {
       "fr": "Bouillon de boulettes de poisson (Rare)",
       "en": "Fishball Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -728
     },
     "1421322": {
       "fr": "Paella aux fruits de mer (Rare)",
       "en": "Seafood Paella (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -728
     },
     "1421323": {
       "fr": "Bouillie revigorante (Rare)",
       "en": "Restorative Porridge (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -728
     },
     "1421324": {
       "fr": "Ragoût de tomates (Rare)",
       "en": "Tomato Stew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -728
     },
     "1421325": {
       "fr": "Risotto (Rare)",
       "en": "Risotto (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -728
     },
     "1421326": {
       "fr": "Soupe au radis (Rare)",
       "en": "Radish Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -728
     },
     "1421327": {
       "fr": "Soupe de palourdes (Rare)",
       "en": "Clam Soup (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -728
     },
     "1421401": {
       "fr": "Ragoût de viande (Epic)",
       "en": "Meat Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -662
     },
     "1421402": {
       "fr": "Bouillie de poisson (Epic)",
       "en": "Fish Porridge (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -662
     },
     "1421403": {
       "fr": "Soupe de fruits de mer (Epic)",
       "en": "Seafood Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -662
     },
     "1421404": {
       "fr": "Soupe aux légumes (Epic)",
       "en": "Vegetable Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -662
     },
     "1421405": {
       "fr": "Thé au miel (Epic)",
       "en": "Honey Tea (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -662
     },
     "1421406": {
       "fr": "Thé aux champignons (Epic)",
       "en": "Mushroom Tea (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -662
     },
     "1421407": {
       "fr": "Thé aux céréales (Epic)",
       "en": "Grain Tea (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -728
     },
     "1421408": {
       "fr": "Œuf dur (Epic)",
       "en": "Hard-boiled Egg (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -728
     },
     "1421409": {
       "fr": "Ragoût double à la manière d'Orbis (Epic)",
       "en": "Orbis-Style Double Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -728
     },
     "1421410": {
       "fr": "Ragoût à la manière d'Orbis (Epic)",
       "en": "Orbis-Style Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -728
     },
     "1421411": {
       "fr": "Consommé (Epic)",
       "en": "Consommé (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -728
     },
     "1421412": {
       "fr": "Ragoût de fruits de mer (Epic)",
       "en": "Seafood Hodgepodge (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -728
     },
     "1421413": {
       "fr": "Soupe de poisson (Epic)",
       "en": "Fish Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -728
     },
     "1421414": {
       "fr": "Thé servi à bord (Epic)",
       "en": "Shipboard Tea (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -728
     },
     "1421415": {
       "fr": "Bouillie aux fruits de mer (Epic)",
       "en": "Seafood Porridge (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -728
     },
     "1421416": {
       "fr": "Thé aux herbes (Epic)",
       "en": "Herbal Tea (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -728
     },
     "1421417": {
       "fr": "Soupe aux champignons (Epic)",
       "en": "Mushroom Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -728
     },
     "1421418": {
       "fr": "Bouillie aux champignons (Epic)",
       "en": "Mushroom Porridge (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -728
     },
     "1421419": {
       "fr": "Ragoût spécial Orbis (Epic)",
       "en": "Orbis-Style Special Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -728
     },
     "1421420": {
       "fr": "Soupe nutritive (Epic)",
       "en": "Nutritious Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -728
     },
     "1421421": {
       "fr": "Bouillon de boulettes de poisson (Epic)",
       "en": "Fishball Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -728
     },
     "1421422": {
       "fr": "Paella aux fruits de mer (Epic)",
       "en": "Seafood Paella (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -728
     },
     "1421423": {
       "fr": "Bouillie revigorante (Epic)",
       "en": "Restorative Porridge (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -728
     },
     "1421424": {
       "fr": "Ragoût de tomates (Epic)",
       "en": "Tomato Stew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -728
     },
     "1421425": {
       "fr": "Risotto (Epic)",
       "en": "Risotto (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -728
     },
     "1421426": {
       "fr": "Soupe au radis (Epic)",
       "en": "Radish Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -728
     },
     "1421427": {
       "fr": "Soupe de palourdes (Epic)",
       "en": "Clam Soup (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -728
     },
     "1421501": {
       "fr": "Ragoût de viande (Legendary)",
       "en": "Meat Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -662
     },
     "1421502": {
       "fr": "Bouillie de poisson (Legendary)",
       "en": "Fish Porridge (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -662
     },
     "1421503": {
       "fr": "Soupe de fruits de mer (Legendary)",
       "en": "Seafood Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -662
     },
     "1421504": {
       "fr": "Soupe aux légumes (Legendary)",
       "en": "Vegetable Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -662
     },
     "1421505": {
       "fr": "Thé au miel (Legendary)",
       "en": "Honey Tea (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -662
     },
     "1421506": {
       "fr": "Thé aux champignons (Legendary)",
       "en": "Mushroom Tea (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -662
     },
     "1421507": {
       "fr": "Thé aux céréales (Legendary)",
       "en": "Grain Tea (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -728
     },
     "1421508": {
       "fr": "Œuf dur (Legendary)",
       "en": "Hard-boiled Egg (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -728
     },
     "1421509": {
       "fr": "Ragoût double à la manière d'Orbis (Legendary)",
       "en": "Orbis-Style Double Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -728
     },
     "1421510": {
       "fr": "Ragoût à la manière d'Orbis (Legendary)",
       "en": "Orbis-Style Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -728
     },
     "1421511": {
       "fr": "Consommé (Legendary)",
       "en": "Consommé (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -728
     },
     "1421512": {
       "fr": "Ragoût de fruits de mer (Legendary)",
       "en": "Seafood Hodgepodge (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -728
     },
     "1421513": {
       "fr": "Soupe de poisson (Legendary)",
       "en": "Fish Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -728
     },
     "1421514": {
       "fr": "Thé servi à bord (Legendary)",
       "en": "Shipboard Tea (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -728
     },
     "1421515": {
       "fr": "Bouillie aux fruits de mer (Legendary)",
       "en": "Seafood Porridge (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -728
     },
     "1421516": {
       "fr": "Thé aux herbes (Legendary)",
       "en": "Herbal Tea (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -728
     },
     "1421517": {
       "fr": "Soupe aux champignons (Legendary)",
       "en": "Mushroom Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -728
     },
     "1421518": {
       "fr": "Bouillie aux champignons (Legendary)",
       "en": "Mushroom Porridge (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -728
     },
     "1421519": {
       "fr": "Ragoût spécial Orbis (Legendary)",
       "en": "Orbis-Style Special Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -728
     },
     "1421520": {
       "fr": "Soupe nutritive (Legendary)",
       "en": "Nutritious Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -728
     },
     "1421521": {
       "fr": "Bouillon de boulettes de poisson (Legendary)",
       "en": "Fishball Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -728
     },
     "1421522": {
       "fr": "Paella aux fruits de mer (Legendary)",
       "en": "Seafood Paella (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -728
     },
     "1421523": {
       "fr": "Bouillie revigorante (Legendary)",
       "en": "Restorative Porridge (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -728
     },
     "1421524": {
       "fr": "Ragoût de tomates (Legendary)",
       "en": "Tomato Stew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -728
     },
     "1421525": {
       "fr": "Risotto (Legendary)",
       "en": "Risotto (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -728
     },
     "1421526": {
       "fr": "Soupe au radis (Legendary)",
       "en": "Radish Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -728
     },
     "1421527": {
       "fr": "Soupe de palourdes (Legendary)",
       "en": "Clam Soup (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -728
     },
     "1421980": {
       "fr": "버프 제거용 요리",
       "en": "버프 제거용 요리",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -728
     },
     "1421981": {
       "fr": "20 레벨 기준 버프 요리",
       "en": "20 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421982": {
       "fr": "25 레벨 기준 버프 요리",
       "en": "25 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421983": {
       "fr": "30 레벨 기준 버프 요리",
       "en": "30 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421984": {
       "fr": "35 레벨 기준 버프 요리",
       "en": "35 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421985": {
       "fr": "40 레벨 기준 버프 요리",
       "en": "40 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421986": {
       "fr": "45 레벨 기준 버프 요리",
       "en": "45 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421987": {
       "fr": "50 레벨 기준 버프 요리",
       "en": "50 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421988": {
       "fr": "55 레벨 기준 버프 요리",
       "en": "55 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421989": {
       "fr": "60 레벨 기준 버프 요리",
       "en": "60 레벨 기준 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1421999": {
       "fr": "마스터 버프 요리",
       "en": "마스터 버프 요리",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -794
     },
     "1422101": {
       "fr": "Bœuf cru (Normal)",
       "en": "Beef Tartare (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -794
     },
     "1422102": {
       "fr": "Sashimi (Normal)",
       "en": "Sashimi (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -794
     },
     "1422103": {
       "fr": "Sashimi de coquilles Saint-Jacques (Normal)",
       "en": "Scallop sashimi (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -794
     },
     "1422104": {
       "fr": "Salade (Normal)",
       "en": "Salad (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -794
     },
     "1422105": {
       "fr": "Salade nutritive (Normal)",
       "en": "Nutritious Salad (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -794
     },
     "1422106": {
       "fr": "Morning Meal (Normal)",
       "en": "Morning Meal (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -794
     },
     "1422107": {
       "fr": "Egg Renew (Normal)",
       "en": "Egg Renew (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -794
     },
     "1422108": {
       "fr": "Assortiment de sashimi (Normal)",
       "en": "Assorted Sashimi (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -794
     },
     "1422109": {
       "fr": "Carpaccio (Normal)",
       "en": "Carpaccio (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -794
     },
     "1422110": {
       "fr": "Bibimbap au bœuf cru (Normal)",
       "en": "Beef Tartare Bibimbap (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -794
     },
     "1422111": {
       "fr": "Sauce aux fruits de mer (Normal)",
       "en": "Seafood Sauce (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -794
     },
     "1422112": {
       "fr": "Assortiment de sushis (Normal)",
       "en": "Assorted Sushi (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -794
     },
     "1422113": {
       "fr": "Ceviche de fruits de mer (Normal)",
       "en": "Seafood Ceviche (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -794
     },
     "1422114": {
       "fr": "Rouleaux de printemps (Normal)",
       "en": "Spring Rolls (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -794
     },
     "1422115": {
       "fr": "Assortiment de bols de riz (Normal)",
       "en": "Assorted Rice Bowls (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -794
     },
     "1422116": {
       "fr": "Assortiment de salades (Normal)",
       "en": "Assorted Salad (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -794
     },
     "1422117": {
       "fr": "Sculpture de champignons (Normal)",
       "en": "Mushroom Carving (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -794
     },
     "1422118": {
       "fr": "Céréales (Normal)",
       "en": "Cereal (Normal)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -794
     },
     "1422201": {
       "fr": "Bœuf cru (Superior)",
       "en": "Beef Tartare (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -794
     },
     "1422202": {
       "fr": "Sashimi (Superior)",
       "en": "Sashimi (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -794
     },
     "1422203": {
       "fr": "Sashimi de coquilles Saint-Jacques (Superior)",
       "en": "Scallop sashimi (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -794
     },
     "1422204": {
       "fr": "Salade (Superior)",
       "en": "Salad (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -794
     },
     "1422205": {
       "fr": "Salade nutritive (Superior)",
       "en": "Nutritious Salad (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -794
     },
     "1422206": {
       "fr": "Morning Meal (Superior)",
       "en": "Morning Meal (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -794
     },
     "1422207": {
       "fr": "Egg Renew (Superior)",
       "en": "Egg Renew (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -794
     },
     "1422208": {
       "fr": "Assortiment de sashimi (Superior)",
       "en": "Assorted Sashimi (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -794
     },
     "1422209": {
       "fr": "Carpaccio (Superior)",
       "en": "Carpaccio (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -794
     },
     "1422210": {
       "fr": "Bibimbap au bœuf cru (Superior)",
       "en": "Beef Tartare Bibimbap (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -794
     },
     "1422211": {
       "fr": "Sauce aux fruits de mer (Superior)",
       "en": "Seafood Sauce (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -794
     },
     "1422212": {
       "fr": "Assortiment de sushis (Superior)",
       "en": "Assorted Sushi (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -794
     },
     "1422213": {
       "fr": "Ceviche de fruits de mer (Superior)",
       "en": "Seafood Ceviche (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -794
     },
     "1422214": {
       "fr": "Rouleaux de printemps (Superior)",
       "en": "Spring Rolls (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -794
     },
     "1422215": {
       "fr": "Assortiment de bols de riz (Superior)",
       "en": "Assorted Rice Bowls (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -794
     },
     "1422216": {
       "fr": "Assortiment de salades (Superior)",
       "en": "Assorted Salad (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -794
     },
     "1422217": {
       "fr": "Sculpture de champignons (Superior)",
       "en": "Mushroom Carving (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -794
     },
     "1422218": {
       "fr": "Céréales (Superior)",
       "en": "Cereal (Superior)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -794
     },
     "1422301": {
       "fr": "Bœuf cru (Rare)",
       "en": "Beef Tartare (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -794
     },
     "1422302": {
       "fr": "Sashimi (Rare)",
       "en": "Sashimi (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -794
     },
     "1422303": {
       "fr": "Sashimi de coquilles Saint-Jacques (Rare)",
       "en": "Scallop sashimi (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -794
     },
     "1422304": {
       "fr": "Salade (Rare)",
       "en": "Salad (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -794
     },
     "1422305": {
       "fr": "Salade nutritive (Rare)",
       "en": "Nutritious Salad (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -794
     },
     "1422306": {
       "fr": "Morning Meal (Rare)",
       "en": "Morning Meal (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -794
     },
     "1422307": {
       "fr": "Egg Renew (Rare)",
       "en": "Egg Renew (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -794
     },
     "1422308": {
       "fr": "Assortiment de sashimi (Rare)",
       "en": "Assorted Sashimi (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -794
     },
     "1422309": {
       "fr": "Carpaccio (Rare)",
       "en": "Carpaccio (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -794
     },
     "1422310": {
       "fr": "Bibimbap au bœuf cru (Rare)",
       "en": "Beef Tartare Bibimbap (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -794
     },
     "1422311": {
       "fr": "Sauce aux fruits de mer (Rare)",
       "en": "Seafood Sauce (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -794
     },
     "1422312": {
       "fr": "Assortiment de sushis (Rare)",
       "en": "Assorted Sushi (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -794
     },
     "1422313": {
       "fr": "Ceviche de fruits de mer (Rare)",
       "en": "Seafood Ceviche (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -794
     },
     "1422314": {
       "fr": "Rouleaux de printemps (Rare)",
       "en": "Spring Rolls (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -794
     },
     "1422315": {
       "fr": "Assortiment de bols de riz (Rare)",
       "en": "Assorted Rice Bowls (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -794
     },
     "1422316": {
       "fr": "Assortiment de salades (Rare)",
       "en": "Assorted Salad (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -794
     },
     "1422317": {
       "fr": "Sculpture de champignons (Rare)",
       "en": "Mushroom Carving (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -794
     },
     "1422318": {
       "fr": "Céréales (Rare)",
       "en": "Cereal (Rare)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -794
     },
     "1422401": {
       "fr": "Bœuf cru (Epic)",
       "en": "Beef Tartare (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -794
     },
     "1422402": {
       "fr": "Sashimi (Epic)",
       "en": "Sashimi (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -794
     },
     "1422403": {
       "fr": "Sashimi de coquilles Saint-Jacques (Epic)",
       "en": "Scallop sashimi (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -794
     },
     "1422404": {
       "fr": "Salade (Epic)",
       "en": "Salad (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -794
     },
     "1422405": {
       "fr": "Salade nutritive (Epic)",
       "en": "Nutritious Salad (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -794
     },
     "1422406": {
       "fr": "Morning Meal (Epic)",
       "en": "Morning Meal (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -794
     },
     "1422407": {
       "fr": "Egg Renew (Epic)",
       "en": "Egg Renew (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -794
     },
     "1422408": {
       "fr": "Assortiment de sashimi (Epic)",
       "en": "Assorted Sashimi (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -794
     },
     "1422409": {
       "fr": "Carpaccio (Epic)",
       "en": "Carpaccio (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -794
     },
     "1422410": {
       "fr": "Bibimbap au bœuf cru (Epic)",
       "en": "Beef Tartare Bibimbap (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -794
     },
     "1422411": {
       "fr": "Sauce aux fruits de mer (Epic)",
       "en": "Seafood Sauce (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -794
     },
     "1422412": {
       "fr": "Assortiment de sushis (Epic)",
       "en": "Assorted Sushi (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -794
     },
     "1422413": {
       "fr": "Ceviche de fruits de mer (Epic)",
       "en": "Seafood Ceviche (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -794
     },
     "1422414": {
       "fr": "Rouleaux de printemps (Epic)",
       "en": "Spring Rolls (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -794
     },
     "1422415": {
       "fr": "Assortiment de bols de riz (Epic)",
       "en": "Assorted Rice Bowls (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -794
     },
     "1422416": {
       "fr": "Assortiment de salades (Epic)",
       "en": "Assorted Salad (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -794
     },
     "1422417": {
       "fr": "Sculpture de champignons (Epic)",
       "en": "Mushroom Carving (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -794
     },
     "1422418": {
       "fr": "Céréales (Epic)",
       "en": "Cereal (Epic)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -794
     },
     "1422501": {
       "fr": "Bœuf cru (Legendary)",
       "en": "Beef Tartare (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -794
     },
     "1422502": {
       "fr": "Sashimi (Legendary)",
       "en": "Sashimi (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -134,
+      "y": -794
     },
     "1422503": {
       "fr": "Sashimi de coquilles Saint-Jacques (Legendary)",
       "en": "Scallop sashimi (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -794
     },
     "1422504": {
       "fr": "Salade (Legendary)",
       "en": "Salad (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -266,
+      "y": -794
     },
     "1422505": {
       "fr": "Salade nutritive (Legendary)",
       "en": "Nutritious Salad (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -332,
+      "y": -794
     },
     "1422506": {
       "fr": "Morning Meal (Legendary)",
       "en": "Morning Meal (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -398,
+      "y": -794
     },
     "1422507": {
       "fr": "Egg Renew (Legendary)",
       "en": "Egg Renew (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -464,
+      "y": -794
     },
     "1422508": {
       "fr": "Assortiment de sashimi (Legendary)",
       "en": "Assorted Sashimi (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -530,
+      "y": -794
     },
     "1422509": {
       "fr": "Carpaccio (Legendary)",
       "en": "Carpaccio (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -596,
+      "y": -794
     },
     "1422510": {
       "fr": "Bibimbap au bœuf cru (Legendary)",
       "en": "Beef Tartare Bibimbap (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -662,
+      "y": -794
     },
     "1422511": {
       "fr": "Sauce aux fruits de mer (Legendary)",
       "en": "Seafood Sauce (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -728,
+      "y": -794
     },
     "1422512": {
       "fr": "Assortiment de sushis (Legendary)",
       "en": "Assorted Sushi (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -794,
+      "y": -794
     },
     "1422513": {
       "fr": "Ceviche de fruits de mer (Legendary)",
       "en": "Seafood Ceviche (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -860,
+      "y": -794
     },
     "1422514": {
       "fr": "Rouleaux de printemps (Legendary)",
       "en": "Spring Rolls (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -926,
+      "y": -794
     },
     "1422515": {
       "fr": "Assortiment de bols de riz (Legendary)",
       "en": "Assorted Rice Bowls (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -992,
+      "y": -794
     },
     "1422516": {
       "fr": "Assortiment de salades (Legendary)",
       "en": "Assorted Salad (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1058,
+      "y": -794
     },
     "1422517": {
       "fr": "Sculpture de champignons (Legendary)",
       "en": "Mushroom Carving (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1124,
+      "y": -794
     },
     "1422518": {
       "fr": "Céréales (Legendary)",
       "en": "Cereal (Legendary)",
-      "category": "food"
+      "category": "food",
+      "x": -1190,
+      "y": -794
     },
     "1423001": {
       "fr": "Plat d'origine inconnue",
       "en": "Mysterious Dish",
-      "category": "food"
+      "category": "food",
+      "x": -1256,
+      "y": -794
     },
     "1430003": {
       "fr": "Viande de bête",
       "en": "Beast Meat",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -860
     },
     "1430004": {
       "fr": "Viande d'oiseau",
       "en": "Bird Meat",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -860
     },
     "1430005": {
       "fr": "Viande de sanglier",
       "en": "Boar Meat",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -860
     },
     "1430006": {
       "fr": "Viande de renard",
       "en": "Fox Meat",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -860
     },
     "1430007": {
       "fr": "Saucisses",
       "en": "Sausage",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -860
     },
     "1430103": {
       "fr": "Filet de poisson",
       "en": "Fish Fillet",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -860
     },
     "1430104": {
       "fr": "Filet de truite",
       "en": "Trout Fillet",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -68
     },
     "1430105": {
       "fr": "Filet de Silverwing",
       "en": "Silverwing Fillet",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -2
     },
     "1430106": {
       "fr": "Filet de saumon",
       "en": "Salmon Fillet",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -2
     },
     "1430203": {
       "fr": "Crabe des sables",
       "en": "Sand Crab",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -68
     },
     "1430204": {
       "fr": "Chair de crevette",
       "en": "Shrimp Flesh",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -68
     },
     "1430303": {
       "fr": "Coquillages",
       "en": "Shellfish",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -68
     },
     "1430304": {
       "fr": "Conques",
       "en": "Conch",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -68
     },
     "1430403": {
       "fr": "Radis",
       "en": "Radish",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -134
     },
     "1430404": {
       "fr": "Lys d'eau",
       "en": "Aqualily",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -2
     },
     "1430405": {
       "fr": "Tomates feuillues",
       "en": "Leaflet Tomato",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -68
     },
     "1430406": {
       "fr": "Oignon sauvage doux",
       "en": "Wild Onion",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -68
     },
     "1430407": {
       "fr": "Chou ondulé",
       "en": "Waveleaf Cabbage",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -68
     },
     "1430408": {
       "fr": "Pommes de terre naines",
       "en": "Dwarf Potato",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -2
     },
     "1430409": {
       "fr": "Carottes à fleurs blanches",
       "en": "Whitebloom Carrot",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -68
     },
     "1430410": {
       "fr": "Piments des falaises",
       "en": "Cliff Pepper",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -860
     },
     "1430411": {
       "fr": "Courge lanterne",
       "en": "Lantern Gourd",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -68
     },
     "1430412": {
       "fr": "Aubergines rondes",
       "en": "Round Eggplant",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -68
     },
     "1430503": {
       "fr": "Champignon de roche",
       "en": "Rock Mushroom",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -68
     },
     "1430504": {
       "fr": "Champignons à sève",
       "en": "Tree Sap Mushroom",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -68
     },
     "1430505": {
       "fr": "Champignon des cavernes",
       "en": "Cave Mushroom",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -2
     },
     "1430506": {
       "fr": "Champignon de lotus bleu",
       "en": "Blue Lotus Mushroom",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -68
     },
     "1430602": {
       "fr": "Riz",
       "en": "Rice",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -2
     },
     "1430603": {
       "fr": "Blé",
       "en": "Wheat",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -2
     },
     "1430604": {
       "fr": "Riz blanchi",
       "en": "Polished Rice",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -860
     },
     "1430605": {
       "fr": "Cacahuètes",
       "en": "Peanuts",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -860
     },
     "1430606": {
       "fr": "Noix",
       "en": "Walnuts",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -860
     },
     "1430607": {
       "fr": "Amandes",
       "en": "Almonds",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -860
     },
     "1430608": {
       "fr": "Pistaches",
       "en": "Pistachios",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -860
     },
     "1430703": {
       "fr": "Lanterne de l'aube",
       "en": "Dawn Lanternleaf",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -2
     },
     "1430704": {
       "fr": "Campanule des cimetières",
       "en": "Grave Bellherb",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -2
     },
     "1430705": {
       "fr": "Fleur de crinière séchée",
       "en": "Dried Maneflower",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -2
     },
     "1430706": {
       "fr": "Fleur de rosée blanche",
       "en": "White Dewblossom",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -68
     },
     "1430803": {
       "fr": "Beurre",
       "en": "Butter",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -860
     },
     "1430804": {
       "fr": "Fromage",
       "en": "Cheese",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -860
     },
     "1430805": {
       "fr": "Lait",
       "en": "Milk",
-      "category": "food"
+      "category": "food",
+      "x": -1322,
+      "y": -794
     },
     "1430806": {
       "fr": "Poivre",
       "en": "Pepper",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -860
     },
     "1430807": {
       "fr": "Sel",
       "en": "Salt",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -860
     },
     "1430808": {
       "fr": "Sucre",
       "en": "Sugar",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -860
     },
     "1430809": {
       "fr": "Tofu",
       "en": "Tofu",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -860
     },
     "1430810": {
       "fr": "Miel",
       "en": "Honey",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -68
     },
     "1430901": {
       "fr": "Œufs d'oiseaux",
       "en": "Bird Eggs",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -68
     },
     "1430902": {
       "fr": "Œufs d'oie",
       "en": "Goose Eggs",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -68
     },
     "1430920": {
       "fr": "Champignons de l'ascension grillés",
       "en": "Grilled Ascension Mushrooms",
-      "category": "food"
+      "category": "food",
+      "x": -1388,
+      "y": -794
     },
     "1440802": {
       "fr": "Viande de bête affinée",
       "en": "Aged Game Meat",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -2
     },
     "1450001": {
       "fr": "Essence de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Essence",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1124
     },
     "1450002": {
       "fr": "Essence de monstre de niveau inférieur",
       "en": "Low-Grade Monster Essence",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1256
     },
     "1450003": {
       "fr": "Essence de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Essence",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -1124
     },
     "1450004": {
       "fr": "Peau de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Hide",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1124
     },
     "1450005": {
       "fr": "Peau de monstre de niveau inférieur",
       "en": "Low-grade Monster Hide",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1256
     },
     "1450006": {
       "fr": "Peau de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Hide",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -1190
     },
     "1450007": {
       "fr": "Fragment d'os de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Bone Fragment",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1124
     },
     "1450008": {
       "fr": "Fragment d'os de monstre de niveau inférieur",
       "en": "Low-grade Monster Bone Fragment",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1256
     },
     "1450009": {
       "fr": "Fragment d'os de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Bone Fragment",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -1190
     },
     "1450010": {
       "fr": "Carapace de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Carapace",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1124
     },
     "1450011": {
       "fr": "Carapace de monstre de niveau inférieur",
       "en": "Low-Grade Monster Carapace",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1256
     },
     "1450012": {
       "fr": "Carapace de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Carapace",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -1190
     },
     "1450013": {
       "fr": "Molaire de monstre de très bas niveau",
       "en": "Lowest-Tier Monster Molar",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1124
     },
     "1450014": {
       "fr": "Molaire de monstre de niveau inférieur",
       "en": "Low-Grade Monster Molar",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1256
     },
     "1450015": {
       "fr": "Molaire de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Molar",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -1190
     },
     "1450016": {
       "fr": "Griffe de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Claw",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1124
     },
     "1450017": {
       "fr": "Griffe de monstre de niveau inférieur",
       "en": "Low-Grade Monster Claw",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1256
     },
     "1450018": {
       "fr": "Griffe de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Claw",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -1190
     },
     "1450019": {
       "fr": "Sang de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Blood",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1124
     },
     "1450020": {
       "fr": "Sang de monstre de niveau inférieur",
       "en": "Low-Grade Monster Blood",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1256
     },
     "1450021": {
       "fr": "Sang de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Blood",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1190
     },
     "1450022": {
       "fr": "Plume de monstre de très bas niveau",
       "en": "Lowest-Grade Monster Feather",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1124
     },
     "1450023": {
       "fr": "Plume de monstre de niveau inférieur",
       "en": "Low-Grade Monster Feather",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1256
     },
     "1450024": {
       "fr": "Plume de monstre de niveau intermédiaire",
       "en": "Intermediate Monster Feather",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -1190
     },
     "1450101": {
       "fr": "Pierre d'amplification de niveau inférieur",
       "en": "Low-Grade Amplitude Stone",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -1256
     },
     "1450102": {
       "fr": "Pierre d'amplification de niveau intermédiaire",
       "en": "Intermediate Amplitude Stone",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1190
     },
     "1450103": {
       "fr": "Pierre d'amplification de niveau supérieur",
       "en": "High-Grade Amplitude Stone",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1322
     },
     "1450104": {
       "fr": "Pierre de concassage de niveau inférieur",
       "en": "Low-Grade Crushing Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -1256
     },
     "1450105": {
       "fr": "Pierre de concassage de niveau intermédiaire",
       "en": "Intermediate Crushing Stone",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1190
     },
     "1450106": {
       "fr": "Pierre de concassage de niveau supérieur",
       "en": "High-Grade Crushing Stone",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1322
     },
     "1450107": {
       "fr": "Pierre de rafale de niveau inférieur",
       "en": "Low-Grade Gale Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -1256
     },
     "1450108": {
       "fr": "Pierre de rafale de niveau intermédiaire",
       "en": "Intermediate Gale Stone",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1190
     },
     "1450109": {
       "fr": "Pierre de rafale de niveau supérieur",
       "en": "High-Grade Gale Stone",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1322
     },
     "1450110": {
       "fr": "Pierre de force brisante de niveau inférieur",
       "en": "Low-Grade Breaker Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -1256
     },
     "1450111": {
       "fr": "Pierre de force brisante de niveau intermédiaire",
       "en": "Intermediate Breaker Stone",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -1190
     },
     "1450112": {
       "fr": "Pierre de force brisante de niveau supérieur",
       "en": "High-Grade Breaker Stone",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1322
     },
     "1450113": {
       "fr": "Pierre hématite de niveau inférieur",
       "en": "Low-Grade Bloodburst Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -1256
     },
     "1450114": {
       "fr": "Pierre hématite de niveau intermédiaire",
       "en": "Intermediate Bloodburst Stone",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -1190
     },
     "1450115": {
       "fr": "Pierre hématite de niveau supérieur",
       "en": "High-Grade Bloodburst Stone",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1322
     },
     "1450116": {
       "fr": "Pierre de flamme rouge de niveau inférieur",
       "en": "Low-Grade Blazeflame Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -1256
     },
     "1450117": {
       "fr": "Pierre de flamme rouge de niveau intermédiaire",
       "en": "Intermediate Blazeflame Stone",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -1190
     },
     "1450118": {
       "fr": "Pierre de flamme rouge de niveau supérieur",
       "en": "High-Grade Blazeflame Stone",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -1322
     },
     "1450119": {
       "fr": "Pierre de glace de niveau inférieur",
       "en": "Low-Grade Frostbite Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -1256
     },
     "1450120": {
       "fr": "Pierre de glace de niveau intermédiaire",
       "en": "Intermediate Frostbite Stone",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -1190
     },
     "1450121": {
       "fr": "Pierre de glace de niveau supérieur",
       "en": "High-Grade Frostbite Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -1322
     },
     "1450122": {
       "fr": "Pierre de foudre de niveau inférieur",
       "en": "Low-Grade Thunderbolt Stone",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -1322
     },
     "1450123": {
       "fr": "Pierre de foudre de niveau intermédiaire",
       "en": "Intermediate Thunderbolt Stone",
-      "category": "material"
+      "category": "material",
+      "x": -926,
+      "y": -1190
     },
     "1450124": {
       "fr": "Pierre de foudre de niveau supérieur",
       "en": "High-Grade Thunderbolt Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -1322
     },
     "1450125": {
       "fr": "Pierre trouble de niveau inférieur",
       "en": "Low-Grade Venom Stone",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -1322
     },
     "1450126": {
       "fr": "Pierre trouble de niveau intermédiaire",
       "en": "Intermediate Venom Stone",
-      "category": "material"
+      "category": "material",
+      "x": -992,
+      "y": -1190
     },
     "1450127": {
       "fr": "Pierre trouble de niveau supérieur",
       "en": "High-Grade Venom Stone",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -1322
     },
     "1450201": {
       "fr": "Pièce d'Orbis",
       "en": "Orbis Coin",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -1190
     },
     "1450202": {
       "fr": "Insigne du royaume d'Orbis",
       "en": "Insignia of the Orbis Kingdom",
-      "category": "material"
+      "category": "material",
+      "x": -1058,
+      "y": -1388
     },
     "1450203": {
       "fr": "Insigne de l'Ordre d'Organa",
       "en": "Insignia of the Organa Order",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -1388
     },
     "1450204": {
       "fr": "Insigne du Corps de mercenaires de Johnny",
       "en": "Insignia of Johnny's Mercenaries",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -1388
     },
     "1450205": {
       "fr": "Insigne du Corps de mercenaires du Renard rouge",
       "en": "Insignia of the Red Fox Mercenaries",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -1388
     },
     "1450206": {
       "fr": "Insigne de la Guilde marchande Amber",
       "en": "Insignia of the Amber Trading Company",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -1388
     },
     "1450207": {
       "fr": "Insigne de l'Armée révolutionnaire de Lentus",
       "en": "Insignia of the Lentus Rebellion Army",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -1388
     },
     "1450208": {
       "fr": "Insigne de l'Ordre de Kalagon",
       "en": "Insignia of the Kalagon Order",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -1454
     },
     "1450209": {
       "fr": "Insigne de l'Armée de libération de Liberta",
       "en": "Insignia of the Liberta Liberation Army",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -1454
     },
     "1450210": {
       "fr": "Pièce de Velos",
       "en": "Velos Coin",
-      "category": "material"
+      "category": "material",
+      "x": -1124,
+      "y": -1190
     },
     "1450211": {
       "fr": "3월드 주화 (임시)",
       "en": "3월드 주화 (임시)",
-      "category": "material"
+      "category": "material",
+      "x": -1190,
+      "y": -1190
     },
     "1450301": {
       "fr": "Grimoire interdit",
       "en": "Forbidden Grimoire",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -1454
     },
     "1450302": {
       "fr": "Essence du Dragon Néfaste",
       "en": "Essence of the Demon Dragon",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -1454
     },
     "1450401": {
       "fr": "Grimoire de la perspicacité",
       "en": "Tome of Insight",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -1322
     },
     "1450402": {
       "fr": "Grimoire de la victoire",
       "en": "Secret Text of Victory",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -1322
     },
     "1450403": {
       "fr": "Fragments de mémoire",
       "en": "Fragment of Memory",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -1454
     },
     "1450411": {
       "fr": "Fragment de rémanence",
       "en": "Fragment of Afterimage",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1454
     },
     "1450501": {
       "fr": "Fruit de la vitalité",
       "en": "Fruit of Vitality",
-      "category": "material"
+      "category": "material",
+      "x": -794,
+      "y": -68
     },
     "1450502": {
       "fr": "Graine primordiale",
       "en": "Primordial Seed",
-      "category": "material"
+      "category": "material",
+      "x": -860,
+      "y": -68
     },
     "1450503": {
       "fr": "Goutte de pureté",
       "en": "Drop of Purity",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -68
     },
     "1450504": {
       "fr": "Feuille de vigueur",
       "en": "Leaf of Vigor",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -68
     },
     "1450601": {
       "fr": "Cristal de la mémoire",
       "en": "Crystal of Remembrance",
-      "category": "material"
+      "category": "material",
+      "x": -728,
+      "y": -2
     },
     "1450602": {
       "fr": "Cristal du souvenir",
       "en": "Crystal of Recollection",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -2
     },
     "1450603": {
       "fr": "Cristal de la réminiscence",
       "en": "Crystal of Reverie",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -2
     },
     "1450604": {
       "fr": "Cristal de l'oubli",
       "en": "Crystal of Oblivion",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -2
     },
     "1450701": {
       "fr": "Sceau de l'aventurier",
       "en": "Adventurer's Emblem",
-      "category": "material"
+      "category": "material",
+      "x": -1256,
+      "y": -1190
     },
     "1450801": {
       "fr": "Tableau du temps",
       "en": "Chronograph of Ages",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -1454
     },
     "1450811": {
       "fr": "Chronique de combat",
       "en": "Record of Battle",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -1322
     },
     "1450812": {
       "fr": "Grimoire du guerrier",
       "en": "Secret Text of the Warrior",
-      "category": "material"
+      "category": "material",
+      "x": -1322,
+      "y": -1190
     },
     "1450814": {
       "fr": "Pyroxène rouge",
       "en": "Red Pyroxene",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -1190
     },
     "1450815": {
       "fr": "Nageoire épineuse",
       "en": "Spiny Fin",
-      "category": "material"
+      "category": "material",
+      "x": -1388,
+      "y": -1322
     },
     "1450816": {
       "fr": "Crochet ensanglanté",
       "en": "Blood-stained Hook",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -1388
     },
     "1450817": {
       "fr": "Noyau ayant stoppé l'effondrement",
       "en": "Stilled Core of Collapse",
-      "category": "material"
+      "category": "material",
+      "x": -68,
+      "y": -1388
     },
     "1450818": {
       "fr": "Collier imprégné de cupidité",
       "en": "Necklace Soaked in Greed",
-      "category": "material"
+      "category": "material",
+      "x": -134,
+      "y": -1388
     },
     "1450819": {
       "fr": "Dent géante",
       "en": "Gigantic Tooth",
-      "category": "material"
+      "category": "material",
+      "x": -200,
+      "y": -1388
     },
     "1450820": {
       "fr": "Souvenirs et mémoires entremêlés",
       "en": "Tangled Memories and Reminiscences",
-      "category": "material"
+      "category": "material",
+      "x": -266,
+      "y": -1388
     },
     "1450821": {
       "fr": "Oubli et réminiscences entremêlés",
       "en": "Tangled Forgetfulness and Remembrance",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1454
     },
     "1450822": {
       "fr": "Pensées tourbillonnantes",
       "en": "Whirling Thoughts",
-      "category": "material"
+      "category": "material",
+      "x": -530,
+      "y": -1454
     },
     "1450823": {
       "fr": "Sang du sage",
       "en": "Sage's Blood",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1190
     },
     "1460101": {
       "fr": "Cristal de cohésion",
       "en": "Binding Crystal",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -2
     },
     "1460102": {
       "fr": "Cristal en forme de coin",
       "en": "Piercing Crystal",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -2
     },
     "1460103": {
       "fr": "Cristal de veine",
       "en": "Vein Crystal",
-      "category": "material"
+      "category": "material",
+      "x": -662,
+      "y": -2
     },
     "1460201": {
       "fr": "룬 조각",
       "en": "룬 조각",
-      "category": "material"
+      "category": "material",
+      "x": -2,
+      "y": -1256
     },
     "1470001": {
       "fr": "Clé de la lune",
       "en": "Moon Key",
-      "category": "material"
+      "category": "material",
+      "x": -332,
+      "y": -1388
     },
     "1470201": {
       "fr": "Moule d'affinage",
       "en": "Forging Mold",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1454
     },
     "1510033": {
       "fr": "Menu steak de Mardon",
       "en": "Mardon's Steak Special",
-      "category": "food"
+      "category": "food",
+      "x": -200,
+      "y": -662
     },
     "1900000": {
       "fr": "Panier porte-bonheur",
       "en": "Good Luck Basket",
-      "category": "material"
+      "category": "material",
+      "x": -398,
+      "y": -1388
     },
     "1901000": {
       "fr": "Branche de fleurs printanières",
       "en": "Spring Flower Branch",
-      "category": "material"
+      "category": "material",
+      "x": -464,
+      "y": -1388
     },
     "1999000": {
       "fr": "Biscuit moelleux au dragon",
       "en": "Dragon Chewy Cookie",
-      "category": "food"
+      "category": "food",
+      "x": -2,
+      "y": -860
     },
     "1999001": {
       "fr": "Orbicano glacé",
       "en": "Ice Orbicano",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -860
     },
     "1999002": {
       "fr": "Americano glacé décaféiné",
       "en": "Decaf Iced Americano",
-      "category": "food"
+      "category": "food",
+      "x": -68,
+      "y": -860
     },
     "2000000": {
       "fr": "Fragment d'échange de Karma exclusif",
       "en": "Exclusive Karma Exchange Shard",
-      "category": "material"
+      "category": "material",
+      "x": -596,
+      "y": -1454
     },
     "9990008": {
       "fr": "Le serment d'Ophelia",
       "en": "Ophelia's Oath",
-      "category": "costume"
+      "category": "costume",
+      "x": -992,
+      "y": -1454
     },
     "9990009": {
       "fr": "Le vœu de silence",
       "en": "Vow of Silence",
-      "category": "costume"
+      "category": "costume",
+      "x": -1058,
+      "y": -1454
     },
     "9990010": {
       "fr": "La Voleuse fantôme de l'aube",
       "en": "Phantom Thief of Dawn",
-      "category": "costume"
+      "category": "costume",
+      "x": -1124,
+      "y": -1454
     },
     "9990011": {
       "fr": "La veille de l'aube",
       "en": "Eve of Dawn",
-      "category": "costume"
+      "category": "costume",
+      "x": -1190,
+      "y": -1454
     },
     "9990012": {
       "fr": "Habit teint de noir",
       "en": "Black-Dyed Vestment",
-      "category": "costume"
+      "category": "costume",
+      "x": -1256,
+      "y": -1454
     },
     "9990013": {
       "fr": "Jugement brise-lumière",
       "en": "Light-Shattering Judgment",
-      "category": "costume"
+      "category": "costume",
+      "x": -1322,
+      "y": -1454
     },
     "9990022": {
       "fr": "Habit du Grand Esprit",
       "en": "Vestment of the Great Spirit",
-      "category": "costume"
+      "category": "costume",
+      "x": -1388,
+      "y": -1454
     },
     "9990023": {
       "fr": "Arme de l'habit du Grand Esprit",
       "en": "Great Spirit's Vestment Weapon",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990024": {
       "fr": "Serveuse aux framboises",
       "en": "Raspberry Waitress",
-      "category": "costume"
+      "category": "costume",
+      "x": -2,
+      "y": -1520
     },
     "9990025": {
       "fr": "Service sucré",
       "en": "Sweet Service",
-      "category": "costume"
+      "category": "costume",
+      "x": -68,
+      "y": -1520
     },
     "9990026": {
       "fr": "Uniforme royal de Roderic",
       "en": "Roderick Royal Uniform",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990027": {
       "fr": "Serment gravé",
       "en": "Engraved Oath",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990028": {
       "fr": "Espièglerie d'été couleur corail",
       "en": "Coral Summer Mischief",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990029": {
       "fr": "Tir au cœur ensoleillé",
       "en": "Sunshine Heartshot",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990030": {
       "fr": "Fleur blanche des vagues bleues",
       "en": "White Flower of the Blue Waves",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     },
     "9990031": {
       "fr": "Pétales à la crête des vagues",
       "en": "Petals at the Wave's Edge",
-      "category": "costume"
+      "category": "costume",
+      "x": 0,
+      "y": 0
     }
   }
 }
