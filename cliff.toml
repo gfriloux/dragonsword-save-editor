@@ -1,6 +1,13 @@
 # git-cliff configuration — CHANGELOG generated from Conventional Commits.
 # Regenerate with `just changelog` (review the diff). Groups match the commit
 # types used in this repo (see PROCEDURE_PLANS.md).
+#
+# The github remote enriches links (PRs/contributors); regenerating the changelog
+# then needs network access to the repository.
+
+[remote.github]
+owner = "gfriloux"
+repo = "dragonsword-save-editor"
 
 [changelog]
 header = """
