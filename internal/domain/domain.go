@@ -23,6 +23,9 @@ func New(s *save.Save, cat *Catalog) *Game {
 // Catalog exposes the underlying item catalog (for label edits).
 func (g *Game) Catalog() *Catalog { return g.cat }
 
+// Save exposes the underlying save (for the generic database view).
+func (g *Game) Save() *save.Save { return g.s }
+
 // UserID returns the (single) account id stored in the save, cached.
 func (g *Game) UserID() (int64, error) {
 	if g.uidSet {
@@ -61,7 +64,7 @@ func (g *Game) Currencies() ([]Currency, error) {
 		if err := rows.Scan(&cid, &amount); err != nil {
 			return nil, err
 		}
-		out = append(out, Currency{Item: g.cat.Lookup(cid), Amount: amount})
+		out = append(out, Currency{Item: g.cat.LookupCtx(cid, "currency"), Amount: amount})
 	}
 	return out, rows.Err()
 }
@@ -128,7 +131,7 @@ func (g *Game) Consumables() ([]Stack, error) {
 		if err := crows.Scan(&dbid, &cid, &cnt); err != nil {
 			return nil, err
 		}
-		out = append(out, Stack{Item: g.cat.Lookup(cid), Kind: KindCook, ID: dbid, Count: cnt})
+		out = append(out, Stack{Item: g.cat.LookupCtx(cid, "food"), Kind: KindCook, ID: dbid, Count: cnt})
 	}
 	return out, crows.Err()
 }

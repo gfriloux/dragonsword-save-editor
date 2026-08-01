@@ -7,7 +7,8 @@ import (
 
 func TestInferCategory(t *testing.T) {
 	cases := map[int64]string{
-		1000001: "currency",
+		1000001: "misc", // currency is asserted from context, not inferred
+		1000500: "misc", // stackable sharing the 100x prefix
 		1410002: "potion",
 		1420204: "food",
 		1430003: "material",
@@ -19,6 +20,18 @@ func TestInferCategory(t *testing.T) {
 		if got := inferCategory(cid); got != want {
 			t.Errorf("inferCategory(%d) = %q, want %q", cid, got, want)
 		}
+	}
+}
+
+func TestLookupCtxCategory(t *testing.T) {
+	c, err := LoadCatalog("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Context overrides inference for the fallback name and category.
+	it := c.LookupCtx(1000001, "currency")
+	if it.Category != "currency" || it.Name != "Currency 1000001" {
+		t.Fatalf("LookupCtx currency: category=%q name=%q", it.Category, it.Name)
 	}
 }
 

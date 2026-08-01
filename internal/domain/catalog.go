@@ -68,12 +68,20 @@ func LoadCatalog(overridesPath string) (*Catalog, error) {
 	return c, nil
 }
 
-// Lookup resolves a CID. Name precedence: user label > seed name > generated
-// fallback ("<Category> <cid>"). Category precedence: seed category > inference.
-func (c *Catalog) Lookup(cid int64) Item {
+// Lookup resolves a CID with category from the seed or CID inference.
+func (c *Catalog) Lookup(cid int64) Item { return c.LookupCtx(cid, "") }
+
+// LookupCtx resolves a CID, letting the caller assert a category it knows from
+// context (e.g. a row read from tb_currency is a currency regardless of its CID).
+// Name precedence: user label > seed name > generated fallback ("<Category> <cid>").
+// Category precedence: seed category > categoryHint > CID inference.
+func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 	key := strconv.FormatInt(cid, 10)
 	seed, hasSeed := c.seed[key]
 	category := seed.Category
+	if category == "" {
+		category = categoryHint
+	}
 	if category == "" {
 		category = inferCategory(cid)
 	}
@@ -113,11 +121,11 @@ func (c *Catalog) SetLabel(cid int64, name string) error {
 }
 
 // inferCategory maps the leading digits of a CID to a coarse category. Derived
-// from the save's item tables (see .claude/plans/v0.2.0/plan.md).
+// from the save's item tables (see .claude/plans/v0.2.0/plan.md). Note: "currency"
+// and "food" are asserted from context by the accessors, not inferred here — the
+// 100x prefix is shared by currencies and stackable consumables.
 func inferCategory(cid int64) string {
 	switch prefix3(cid) {
-	case "100":
-		return "currency"
 	case "141":
 		return "potion"
 	case "142":
