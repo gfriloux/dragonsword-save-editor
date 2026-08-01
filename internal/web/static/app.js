@@ -340,12 +340,12 @@ async function renderEquipment() {
 
 async function renderGems() {
   const el = $("#panel-gems");
-  el.innerHTML = `<h2>Gems</h2><p class="panel-sub">Lock is editable.</p>`;
+  el.innerHTML = `<h2>Gems</h2><p class="panel-sub">Socketed / instanced gems (the game's <code>tb_gem</code>). Lock is editable. Gems you hold as inventory items appear under <b>Consumables</b> (materials).</p>`;
   const { gems } = await api("/api/game/gems");
   if (!gems || gems.length === 0) {
     const p = document.createElement("p");
     p.className = "empty-note";
-    p.textContent = "No gems in this save.";
+    p.textContent = "No socketed gems here. Inventory gems are editable under Consumables.";
     el.appendChild(p);
     return;
   }
