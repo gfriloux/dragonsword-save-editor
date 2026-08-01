@@ -86,6 +86,19 @@ The crypto layer only depends on the Go standard library; editing uses the pure-
 [`modernc.org/sqlite`](https://pkg.go.dev/modernc.org/sqlite) driver. No component
 requires CGO.
 
+## Development
+
+```sh
+nix develop            # dev shell: go, staticcheck, just, nixfmt, pre-commit…
+just                   # list recipes
+just ci                # gofmt + vet + staticcheck + go test + go build
+just check             # nix flake check (build + go test + gofmt)
+pre-commit install     # run the gates automatically before each commit
+```
+
+`just` is the single source of truth for the gates; pre-commit and `nix flake
+check` reuse them. (No GitHub CI by choice.)
+
 ## Tests
 
 ```sh

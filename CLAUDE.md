@@ -33,13 +33,16 @@ Lower layers never import higher ones. Commit scopes: `sqlcipher`, `save`, `web`
 ## Verification
 
 ```bash
-nix develop --command just ci      # fmt-check + vet + lint + test + build
+nix develop                        # dev shell (go, staticcheck, just, nixfmt, pre-commit…)
+just ci                            # fmt-check + vet + lint + test + build (Go gates)
+just check                         # nix flake check (build + go test + gofmt)
 DSA_SAVE=/path/to/6144_Slot1.db just test   # also round-trips a real save
 just build-windows                 # release-time cross-compile gate (.exe)
+pre-commit install                 # run the gates automatically before each commit
 ```
 
-`just` is the single source of truth for the gates — pre-commit and CI call the
-same recipes.
+`just` is the single source of truth for the gates — pre-commit and `nix flake
+check` reuse the same recipes. There is no GitHub CI (by choice).
 
 ## Save safety
 
