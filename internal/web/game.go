@@ -50,7 +50,7 @@ func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
 	}
 	var req struct {
 		Kind  string `json:"kind"`
-		ID    int64  `json:"id"`
+		ID    int64  `json:"id,string"`
 		Count int64  `json:"count"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -113,7 +113,7 @@ func (s *Server) handleEquipment(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, 200, map[string]any{"equipment": eq})
 	case http.MethodPost:
 		var req struct {
-			DBID  int64  `json:"dbid"`
+			DBID  int64  `json:"dbid,string"`
 			Field string `json:"field"`
 			Value int64  `json:"value"`
 		}
@@ -157,7 +157,7 @@ func (s *Server) handleGem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var req struct {
-		DBID   int64 `json:"dbid"`
+		DBID   int64 `json:"dbid,string"`
 		Locked bool  `json:"locked"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

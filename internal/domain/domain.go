@@ -85,11 +85,12 @@ const (
 	KindCook      = "cook"      // tb_cook_item, keyed by ITEM_DBID (per-instance)
 )
 
-// Stack is a resolved consumable/stackable row.
+// Stack is a resolved consumable/stackable row. ID is sent as a JSON string
+// because cook ITEM_DBIDs exceed 2^53 and would lose precision in a JS number.
 type Stack struct {
 	Item
 	Kind  string `json:"kind"`
-	ID    int64  `json:"id"` // ITEM_CID for stackable, ITEM_DBID for cook
+	ID    int64  `json:"id,string"` // ITEM_CID for stackable, ITEM_DBID for cook
 	Count int64  `json:"count"`
 }
 
@@ -262,11 +263,11 @@ func (g *Game) Teams() ([]TeamPage, error) {
 // are references shown read-only (their names are not yet decoded).
 type Equipment struct {
 	Item
-	DBID         int64   `json:"dbid"`
+	DBID         int64   `json:"dbid,string"` // 64-bit; string to survive JS precision
 	EnchantLevel int64   `json:"enchantLevel"`
 	Exp          int64   `json:"exp"`
 	IsLock       bool    `json:"isLock"`
-	GemDBID      int64   `json:"gemDbid"`
+	GemDBID      int64   `json:"gemDbid,string"`
 	MainStatCID  int64   `json:"mainStatCid"`
 	SubStatCIDs  []int64 `json:"subStatCids"`
 }
@@ -336,7 +337,7 @@ func (g *Game) setEquip(dbid int64, column string, value int64) error {
 // Gem is a resolved gem row. Only the lock is editable.
 type Gem struct {
 	Item
-	DBID        int64 `json:"dbid"`
+	DBID        int64 `json:"dbid,string"` // 64-bit; string to survive JS precision
 	StatInfoCID int64 `json:"statInfoCid"`
 	IsLock      bool  `json:"isLock"`
 }
