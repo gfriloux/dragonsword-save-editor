@@ -45,6 +45,8 @@ implementation change.
         ▲
    internal/save        decrypt → edit via modernc.org/sqlite → re-encrypt (+ backup)
         ▲
+   internal/domain      typed game view (currencies, consumables…) + item catalog
+        ▲
    internal/web         embedded browser UI + JSON API
         ▲
    cmd/dsa-save-editor  CLI entry point
@@ -56,10 +58,23 @@ implementation change.
 | ------------------------ | --------------------------------------------------------- |
 | `internal/sqlcipher/`    | Pure-Go SQLCipher v4 decrypt/encrypt and key derivation.  |
 | `internal/save/`         | Open/edit/persist a save; schema introspection helpers.   |
-| `internal/web/`          | Embedded static UI (`go:embed`) + JSON API over a `Save`. |
+| `internal/domain/`       | Typed game view (currencies, consumables) + item catalog. |
+| `internal/web/`          | Embedded static UI (`go:embed`) + JSON API (`/api/*`, `/api/game/*`). |
 | `cmd/dsa-save-editor/`   | Flags, save auto-detection, HTTP server, browser launch.  |
 | `flake.nix`              | Dev shell + `packages.default` (Linux) + `packages.windows`. |
 | `.claude/plans/`         | Planning documents (see `PROCEDURE_PLANS.md`).            |
+
+## Two views
+
+The web UI has two tabs:
+
+- **Editor** (default) — a friendly, game-oriented view backed by `internal/domain`:
+  currencies, consumables (grouped by category), etc. Item names come from an
+  extensible embedded catalog (`internal/domain/data/items.json`) plus category
+  inference from the CID and user-editable labels (persisted in the OS config dir).
+  Currency and "food" categories are asserted from the source table, not the CID.
+- **Database (advanced)** — the generic `tb_*` table browser, kept as the power
+  user's escape hatch.
 
 ## Reverse-engineered facts
 
@@ -71,8 +86,10 @@ FNV-1a-64 derivation from the embedded seed) are documented in
 ## Out of scope (for now)
 
 - Server/online features — the save is treated as local single-player state only.
-- Decoding item/character CID → human-readable names (lives in the game's cooked
-  DataTables inside the `.pak` archives). A natural future feature, tracked as its
-  own plan when picked up.
+- **Authoritative** item/character names: the complete mapping lives in DataTables +
+  StringTables inside **custom-encrypted** `.pak` archives (bogus pak version, AES
+  index) — extracting it is a large, separate RE chantier. Until then the Editor uses
+  the embedded catalog + CID inference + user labels (see "Two views"); the full pak
+  pipeline auto-populates `items.json` when/if it lands.
 - Editing the companion `SPack_*.sav` (UE GVAS slot metadata); only the `.db` is
   edited.

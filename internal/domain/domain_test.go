@@ -1,0 +1,116 @@
+package domain
+
+import (
+	"os"
+	"testing"
+
+	"github.com/gfriloux/dragonsword-save-editor/internal/save"
+)
+
+// openGame copies the real save (DSA_SAVE) to a temp file and returns an editable
+// Game over it. Skips when DSA_SAVE is unset.
+func openGame(t *testing.T) *Game {
+	t.Helper()
+	src := os.Getenv("DSA_SAVE")
+	if src == "" {
+		t.Skip("set DSA_SAVE to a real .db to run this test")
+	}
+	raw, err := os.ReadFile(src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	work := t.TempDir() + "/save.db"
+	if err := os.WriteFile(work, raw, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s, err := save.Open(work, "")
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	t.Cleanup(func() { s.Close() })
+	cat, err := LoadCatalog("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	return New(s, cat)
+}
+
+func TestCurrenciesResolve(t *testing.T) {
+	g := openGame(t)
+	cur, err := g.Currencies()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(cur) == 0 {
+		t.Fatal("no currencies found")
+	}
+	for _, c := range cur {
+		if c.Category != "currency" {
+			t.Errorf("currency %d resolved to category %q", c.CID, c.Category)
+		}
+		if c.Name == "" {
+			t.Errorf("currency %d has empty name", c.CID)
+		}
+	}
+}
+
+func TestSetCurrencyRoundTrip(t *testing.T) {
+	g := openGame(t)
+	cur, err := g.Currencies()
+	if err != nil || len(cur) == 0 {
+		t.Fatalf("currencies: %v", err)
+	}
+	target := cur[0]
+	const want = 777001
+	if err := g.SetCurrency(target.CID, want); err != nil {
+		t.Fatalf("set: %v", err)
+	}
+	cur2, err := g.Currencies()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, c := range cur2 {
+		if c.CID == target.CID && c.Amount != want {
+			t.Fatalf("amount = %d, want %d", c.Amount, want)
+		}
+	}
+}
+
+func TestConsumablesAndSetStack(t *testing.T) {
+	g := openGame(t)
+	items, err := g.Consumables()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(items) == 0 {
+		t.Fatal("no consumables found")
+	}
+	var haveStackable, haveCook bool
+	for _, it := range items {
+		switch it.Kind {
+		case KindStackable:
+			haveStackable = true
+		case KindCook:
+			haveCook = true
+		default:
+			t.Fatalf("unexpected kind %q", it.Kind)
+		}
+	}
+	if !haveStackable || !haveCook {
+		t.Fatalf("expected both kinds, stackable=%v cook=%v", haveStackable, haveCook)
+	}
+
+	first := items[0]
+	if err := g.SetStack(first.Kind, first.ID, 99); err != nil {
+		t.Fatalf("set stack: %v", err)
+	}
+	items2, err := g.Consumables()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, it := range items2 {
+		if it.Kind == first.Kind && it.ID == first.ID && it.Count != 99 {
+			t.Fatalf("count = %d, want 99", it.Count)
+		}
+	}
+}

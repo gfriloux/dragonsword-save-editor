@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
 	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 	"github.com/gfriloux/dragonsword-save-editor/internal/web"
 )
@@ -50,13 +51,19 @@ func main() {
 	}
 	defer sv.Close()
 
+	cat, err := domain.LoadCatalog(domain.DefaultOverridesPath())
+	if err != nil {
+		log.Fatalf("cannot load item catalog: %v", err)
+	}
+	game := domain.New(sv, cat)
+
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {
 		log.Fatalf("listen: %v", err)
 	}
 	url := fmt.Sprintf("http://%s/", ln.Addr().String())
 
-	srv := &http.Server{Handler: web.New(sv)}
+	srv := &http.Server{Handler: web.New(game)}
 	go func() {
 		if err := srv.Serve(ln); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("serve: %v", err)

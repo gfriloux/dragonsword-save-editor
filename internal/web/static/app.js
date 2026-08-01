@@ -1,21 +1,15 @@
 "use strict";
 
 const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
 const api = async (url, opts) => {
   const r = await fetch(url, opts);
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || r.statusText);
   return j;
 };
-
-const state = {
-  table: null,
-  limit: 200,
-  offset: 0,
-  total: 0,
-  columns: [],
-  pkCols: [],
-};
+const postJSON = (url, body) =>
+  api(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
 
 function toast(msg) {
   const t = $("#toast");
@@ -25,18 +19,172 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
+const CATS = ["currency", "potion", "food", "material", "misc"];
+const catClass = (c) => "cat-" + (CATS.includes(c) ? c : "misc");
+
+// ── View & section switching ─────────────────────────────────────────────
+let dbLoaded = false;
+
+function initTabs() {
+  $$(".tab").forEach((t) => (t.onclick = () => showView(t.dataset.view)));
+  $$(".section-link").forEach((l) => (l.onclick = () => showSection(l.dataset.section)));
+}
+function showView(v) {
+  $$(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === v));
+  $("#view-editor").classList.toggle("hidden", v !== "editor");
+  $("#view-database").classList.toggle("hidden", v !== "database");
+  if (v === "database" && !dbLoaded) {
+    loadTables().catch((e) => toast("Load failed: " + e.message));
+    dbLoaded = true;
+  }
+}
+function showSection(s) {
+  $$(".section-link").forEach((l) => l.classList.toggle("active", l.dataset.section === s));
+  $("#panel-currency").classList.toggle("hidden", s !== "currency");
+  $("#panel-consumables").classList.toggle("hidden", s !== "consumables");
+}
+
+// ── Shared editor row: name + quantity stepper + optional label edit ───────
+function stepperRow({ cat, name, cid, known, value, onCommit, onLabel }) {
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const dot = document.createElement("span");
+  dot.className = "cat-dot " + catClass(cat);
+  row.appendChild(dot);
+
+  const names = document.createElement("div");
+  names.className = "names";
+  const iname = document.createElement("span");
+  iname.className = "iname" + (known ? "" : " unknown");
+  iname.textContent = name;
+  if (onLabel) {
+    const edit = document.createElement("button");
+    edit.className = "edit-label";
+    edit.textContent = "✎ name";
+    edit.onclick = () => {
+      const v = prompt(`Name for CID ${cid}`, known ? name : "");
+      if (v !== null) onLabel(v.trim());
+    };
+    iname.appendChild(edit);
+  }
+  const icid = document.createElement("span");
+  icid.className = "icid";
+  icid.textContent = "CID " + cid;
+  names.appendChild(iname);
+  names.appendChild(icid);
+  row.appendChild(names);
+
+  const qty = document.createElement("div");
+  qty.className = "qty";
+  const input = document.createElement("input");
+  input.type = "number";
+  input.value = value;
+  const commit = async () => {
+    const v = parseInt(input.value, 10);
+    if (!Number.isFinite(v) || String(v) === String(value)) return;
+    try {
+      await onCommit(v);
+      value = v;
+      input.classList.remove("saved");
+      void input.offsetWidth;
+      input.classList.add("saved");
+    } catch (e) {
+      input.value = value;
+      toast("Update failed: " + e.message);
+    }
+  };
+  const bump = (d) => {
+    input.value = Math.max(0, (parseInt(input.value, 10) || 0) + d);
+    commit();
+  };
+  const minus = document.createElement("button");
+  minus.textContent = "−";
+  minus.onclick = () => bump(-1);
+  const plus = document.createElement("button");
+  plus.textContent = "+";
+  plus.onclick = () => bump(1);
+  input.onchange = commit;
+  input.onkeydown = (e) => {
+    if (e.key === "Enter") input.blur();
+  };
+  qty.appendChild(minus);
+  qty.appendChild(input);
+  qty.appendChild(plus);
+  row.appendChild(qty);
+  return row;
+}
+
+// ── Editor: Currency panel ────────────────────────────────────────────────
+async function renderCurrency() {
+  const el = $("#panel-currency");
+  el.innerHTML = `<h2>Currency</h2><p class="panel-sub">Account currencies (gold, tokens…). Edit an amount and Enter, then Write to save file.</p>`;
+  const { currencies } = await api("/api/game/currency");
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  for (const c of currencies || []) {
+    rows.appendChild(
+      stepperRow({
+        cat: c.category, name: c.name, cid: c.cid, known: c.known, value: c.amount,
+        onCommit: (v) => postJSON("/api/game/currency", { cid: c.cid, amount: v }),
+        onLabel: (name) => postJSON("/api/game/label", { cid: c.cid, name }).then(renderCurrency),
+      })
+    );
+  }
+  el.appendChild(rows);
+}
+
+// ── Editor: Consumables panel ─────────────────────────────────────────────
+async function renderConsumables() {
+  const el = $("#panel-consumables");
+  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Potions, cooked food and materials. Grouped by category; names unknown until seeded or labelled (✎).</p>`;
+  const { items } = await api("/api/game/consumables");
+  const groups = {};
+  for (const it of items || []) (groups[it.category] ||= []).push(it);
+  const order = ["food", "potion", "material", "misc"];
+  for (const cat of order) {
+    if (!groups[cat]) continue;
+    const title = document.createElement("div");
+    title.className = "group-title";
+    title.textContent = cat + " (" + groups[cat].length + ")";
+    el.appendChild(title);
+    const rows = document.createElement("div");
+    rows.className = "rows";
+    for (const it of groups[cat]) {
+      rows.appendChild(
+        stepperRow({
+          cat: it.category, name: it.name, cid: it.cid, known: it.known, value: it.count,
+          onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
+          onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
+        })
+      );
+    }
+    el.appendChild(rows);
+  }
+}
+
+async function loadEditor() {
+  await Promise.all([renderCurrency(), renderConsumables()]);
+}
+
+// ── Database: generic table browser ───────────────────────────────────────
+const state = { table: null, limit: 200, offset: 0, total: 0, columns: [], pkCols: [], tables: [] };
+
 async function loadInfo() {
   const info = await api("/api/info");
   $("#path").textContent = info.path;
   $("#path").title = info.path;
-  renderTableList(info.tables || []);
+  state.tables = info.tables || [];
 }
-
-function renderTableList(tables) {
+async function loadTables() {
+  if (!state.tables.length) await loadInfo();
+  renderTableList();
+}
+function renderTableList() {
   const ul = $("#tables");
   const filter = $("#filter").value.toLowerCase();
   ul.innerHTML = "";
-  for (const name of tables) {
+  for (const name of state.tables) {
     if (filter && !name.toLowerCase().includes(filter)) continue;
     const li = document.createElement("li");
     li.textContent = name;
@@ -45,21 +193,16 @@ function renderTableList(tables) {
     li.onclick = () => openTable(name);
     ul.appendChild(li);
   }
-  renderTableList._all = tables;
 }
-
 async function openTable(name) {
   state.table = name;
   state.offset = 0;
-  renderTableList(renderTableList._all || []);
+  renderTableList();
   await loadPage();
 }
-
 async function loadPage() {
   const { table, limit, offset } = state;
-  const data = await api(
-    `/api/table?name=${encodeURIComponent(table)}&limit=${limit}&offset=${offset}`
-  );
+  const data = await api(`/api/table?name=${encodeURIComponent(table)}&limit=${limit}&offset=${offset}`);
   state.columns = data.columns;
   state.total = data.total;
   state.pkCols = data.columns.filter((c) => c.primaryKey).map((c) => c.name);
@@ -68,7 +211,6 @@ async function loadPage() {
   renderGrid(data.columns, data.rows);
   renderPager();
 }
-
 function renderPager() {
   const p = $("#pager");
   p.classList.remove("hidden");
@@ -78,7 +220,6 @@ function renderPager() {
   $("#prev").disabled = state.offset <= 0;
   $("#next").disabled = to >= state.total;
 }
-
 function renderGrid(columns, rows) {
   const grid = $("#grid");
   grid.innerHTML = "";
@@ -89,10 +230,14 @@ function renderGrid(columns, rows) {
     th.textContent = c.name;
     if (c.primaryKey) {
       const s = document.createElement("span");
-      s.className = "pk"; s.textContent = "KEY"; th.appendChild(s);
+      s.className = "pk";
+      s.textContent = "KEY";
+      th.appendChild(s);
     }
     const t = document.createElement("span");
-    t.className = "type"; t.textContent = c.type || ""; th.appendChild(t);
+    t.className = "type";
+    t.textContent = c.type || "";
+    th.appendChild(t);
     htr.appendChild(th);
   }
   thead.appendChild(htr);
@@ -102,11 +247,12 @@ function renderGrid(columns, rows) {
   for (const row of rows || []) {
     const tr = document.createElement("tr");
     const pk = {};
-    columns.forEach((c, i) => { if (c.primaryKey) pk[c.name] = row[i]; });
+    columns.forEach((c, i) => {
+      if (c.primaryKey) pk[c.name] = row[i];
+    });
     columns.forEach((c, i) => {
       const td = document.createElement("td");
-      const val = row[i];
-      setCellText(td, val);
+      setCellText(td, row[i]);
       if (c.primaryKey) {
         td.classList.add("pk");
       } else {
@@ -120,7 +266,6 @@ function renderGrid(columns, rows) {
   }
   grid.appendChild(tbody);
 }
-
 function setCellText(td, val) {
   if (val === null || val === undefined) {
     td.textContent = "NULL";
@@ -130,7 +275,6 @@ function setCellText(td, val) {
     td.classList.remove("null");
   }
 }
-
 function beginEdit(td, col, pk) {
   const original = td.classList.contains("null") ? "" : td.textContent;
   td.contentEditable = "true";
@@ -146,46 +290,64 @@ function beginEdit(td, col, pk) {
     td.removeEventListener("keydown", onKey);
     td.removeEventListener("blur", onBlur);
     const text = td.textContent;
-    if (!commit || text === original) { setCellText(td, original === "" && td.classList.contains("null") ? null : original); return; }
+    if (!commit || text === original) {
+      setCellText(td, original === "" && td.classList.contains("null") ? null : original);
+      return;
+    }
     try {
       let value = text;
       if (/^-?\d+$/.test(text)) value = parseInt(text, 10);
       else if (/^-?\d*\.\d+$/.test(text)) value = parseFloat(text);
-      await api("/api/update", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ table: state.table, pk, column: col.name, value }),
-      });
+      await postJSON("/api/update", { table: state.table, pk, column: col.name, value });
       setCellText(td, value);
-      td.classList.remove("saved"); void td.offsetWidth; td.classList.add("saved");
+      td.classList.remove("saved");
+      void td.offsetWidth;
+      td.classList.add("saved");
     } catch (e) {
       setCellText(td, original);
       toast("Update failed: " + e.message);
     }
   };
   const onKey = (e) => {
-    if (e.key === "Enter") { e.preventDefault(); finish(true); }
-    else if (e.key === "Escape") { e.preventDefault(); finish(false); }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      finish(true);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      finish(false);
+    }
   };
   const onBlur = () => finish(true);
   td.addEventListener("keydown", onKey);
   td.addEventListener("blur", onBlur);
 }
 
-$("#filter").addEventListener("input", () => renderTableList(renderTableList._all || []));
-$("#prev").onclick = () => { state.offset = Math.max(0, state.offset - state.limit); loadPage(); };
-$("#next").onclick = () => { state.offset += state.limit; loadPage(); };
+// ── Wiring ────────────────────────────────────────────────────────────────
+$("#filter").addEventListener("input", renderTableList);
+$("#prev").onclick = () => {
+  state.offset = Math.max(0, state.offset - state.limit);
+  loadPage();
+};
+$("#next").onclick = () => {
+  state.offset += state.limit;
+  loadPage();
+};
 $("#save-btn").onclick = async () => {
   const s = $("#save-status");
-  s.textContent = "Writing…"; s.className = "status";
+  s.textContent = "Writing…";
+  s.className = "status";
   try {
-    await api("/api/save", { method: "POST" });
-    s.textContent = "Saved ✓"; s.className = "status ok";
+    await postJSON("/api/save", {});
+    s.textContent = "Saved ✓";
+    s.className = "status ok";
   } catch (e) {
-    s.textContent = "Failed"; s.className = "status err";
+    s.textContent = "Failed";
+    s.className = "status err";
     toast("Save failed: " + e.message);
   }
-  setTimeout(() => { s.textContent = ""; }, 4000);
+  setTimeout(() => (s.textContent = ""), 4000);
 };
 
+initTabs();
 loadInfo().catch((e) => toast("Load failed: " + e.message));
+loadEditor().catch((e) => toast("Editor load failed: " + e.message));
