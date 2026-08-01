@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DragonSword Awakening — Save Editor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">
+    <span class="mark">⚔</span>
+    <div>
+      <h1>DragonSword Awakening</h1>
+      <p class="sub">Save Editor</p>
+    </div>
+  </div>
+  <div class="save-area">
+    <code id="path" title="save file"></code>
+    <button id="save-btn">Write to save file</button>
+    <span id="save-status" class="status"></span>
+  </div>
+</header>
+<main>
+  <aside>
+    <input id="filter" type="search" placeholder="Filter tables…" autocomplete="off">
+    <ul id="tables"></ul>
+  </aside>
+  <section id="content">
+    <div id="table-header">
+      <h2 id="table-name">Select a table</h2>
+      <div id="pager" class="pager hidden">
+        <button id="prev">‹ Prev</button>
+        <span id="range"></span>
+        <button id="next">Next ›</button>
+      </div>
+    </div>
+    <div id="grid-wrap"><table id="grid"></table></div>
+    <p id="hint" class="hint">Pick a table on the left. Edit any non-key cell (double values commit on Enter / blur), then <b>Write to save file</b>. A timestamped backup of the original is made automatically. Close the game before writing.</p>
+  </section>
+</main>
+<div id="toast" class="toast hidden"></div>
+<script src="app.js"></script>
+</body>
+</html>

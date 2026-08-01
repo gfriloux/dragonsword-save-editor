@@ -1,0 +1,13 @@
+/dsa-save-editor
+/dsa-save-editor.exe
+/result
+/result-*
+*.bak
+*.db
+*.db-journal
+/dist/
+
+# Local save data / test fixtures (never commit personal saves)
+/6144.original/
+*.sav
+ScreenShot_*.png
