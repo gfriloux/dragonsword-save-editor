@@ -10,27 +10,36 @@ import (
 	"math"
 	"net/http"
 
+	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
 	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 )
 
 //go:embed static
 var staticFS embed.FS
 
-// Server wires the API handlers to a Save.
+// Server wires the API handlers to a Game (domain view) and its underlying Save
+// (generic database view).
 type Server struct {
 	sv  *save.Save
+	g   *domain.Game
 	mux *http.ServeMux
 }
 
-// New returns an http.Handler serving the UI and API for sv.
-func New(sv *save.Save) *Server {
-	s := &Server{sv: sv, mux: http.NewServeMux()}
+// New returns an http.Handler serving the UI and API for g.
+func New(g *domain.Game) *Server {
+	s := &Server{sv: g.Save(), g: g, mux: http.NewServeMux()}
 	sub, _ := fs.Sub(staticFS, "static")
 	s.mux.Handle("/", http.FileServer(http.FS(sub)))
+	// Generic database view.
 	s.mux.HandleFunc("/api/info", s.handleInfo)
 	s.mux.HandleFunc("/api/table", s.handleTable)
 	s.mux.HandleFunc("/api/update", s.handleUpdate)
 	s.mux.HandleFunc("/api/save", s.handleSave)
+	// Game-oriented editor view.
+	s.mux.HandleFunc("/api/game/currency", s.handleCurrency)
+	s.mux.HandleFunc("/api/game/consumables", s.handleConsumables)
+	s.mux.HandleFunc("/api/game/stack", s.handleStack)
+	s.mux.HandleFunc("/api/game/label", s.handleLabel)
 	return s
 }
 
