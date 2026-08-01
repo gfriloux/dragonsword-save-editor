@@ -21,8 +21,15 @@ nix run .#default -- /path/to/6144_Slot1.db      # Linux
 nix build .#windows                              # produces a Windows .exe
 ```
 
-The editor opens `http://127.0.0.1:<port>/` in your browser: pick a table on the
-left, double-click a non-key cell to edit it, then **Write to save file**.
+The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
+
+- **Editor** — a friendly, game-oriented view: currencies and consumables (potions,
+  cooked food, materials) grouped by category, with quantity steppers. Item names
+  come from a small built-in catalog + category inference + your own labels (✎).
+- **Database (advanced)** — the raw `tb_*` table browser: double-click any non-key
+  cell to edit it.
+
+Make changes in either tab, then **Write to save file**.
 
 > **Close the game before writing.** The running game keeps the database open and
 > would overwrite your changes. A timestamped backup of the original
@@ -64,7 +71,8 @@ this derivation, so the key is documented rather than merely pasted.
 ```
 internal/sqlcipher/   pure-Go SQLCipher v4 decrypt/encrypt + key derivation
 internal/save/        decrypt → edit via modernc.org/sqlite → re-encrypt (+ backup)
-internal/web/         embedded browser UI + JSON API
+internal/domain/      typed game view (currencies, consumables) + item catalog
+internal/web/         embedded browser UI + JSON API (/api/*, /api/game/*)
 cmd/dsa-save-editor/  CLI entry point (opens the save, serves the UI)
 ```
 
