@@ -30,8 +30,9 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.
 
-  Item names come from a small built-in catalog + category inference + your own
-  labels (✎).
+  Item, character and equipment names come from a bundled catalog datamined by
+  [th.gl](https://dragonswordawakening.th.gl) — **French & English**, switchable with
+  the FR/EN toggle in the header — plus category inference and your own labels (✎).
 - **Database (advanced)** — the raw `tb_*` table browser: double-click any non-key
   cell to edit it.
 
@@ -108,6 +109,13 @@ DSA_SAVE=/path/to/6144_Slot1.db go test ./...   # also exercises a real save
 
 The `DSA_SAVE`-gated tests decrypt a real file, verify the plaintext is valid
 SQLite, and confirm an edit round-trips back through the encrypted format.
+
+## Credits
+
+Item, character and equipment names are datamined by
+[The Hidden Gaming Lair (th.gl)](https://dragonswordawakening.th.gl) and bundled as
+`internal/domain/data/items.json`. Regenerate them with `just gen-catalog`
+(`cmd/gen-catalog`). All names are © their respective owners.
 
 ## Disclaimer
 
