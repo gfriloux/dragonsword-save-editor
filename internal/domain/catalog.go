@@ -21,16 +21,22 @@ type Item struct {
 	NameEN   string `json:"nameEn"`
 	Category string `json:"category"` // currency | potion | food | material | gear | character | costume | mount | misc
 	Known    bool   `json:"known"`    // true if a seed name or a user label exists
+	Icon     bool   `json:"icon"`     // true if the item has a sprite cell
+	IconX    int    `json:"iconX"`    // sprite object-position (px), negative
+	IconY    int    `json:"iconY"`
 }
 
 type seedEntry struct {
 	FR       string `json:"fr"`
 	EN       string `json:"en"`
 	Category string `json:"category"`
+	X        int    `json:"x"`
+	Y        int    `json:"y"`
 }
 
 type seedFile struct {
-	Items map[string]seedEntry `json:"items"`
+	IconSize int                  `json:"iconSize"`
+	Items    map[string]seedEntry `json:"items"`
 }
 
 // Catalog resolves CIDs to bilingual names and categories, combining an embedded
@@ -39,7 +45,11 @@ type Catalog struct {
 	seed      map[string]seedEntry
 	overrides map[string]string // cid -> user label (applies to both languages)
 	ovrPath   string
+	iconSize  int
 }
+
+// IconSize is the sprite cell size in pixels (the icons live in sprite.webp).
+func (c *Catalog) IconSize() int { return c.iconSize }
 
 // LoadCatalog reads the embedded seed and, if present, the user overrides file at
 // overridesPath. A missing overrides file is not an error; pass "" to keep labels
@@ -56,7 +66,11 @@ func LoadCatalog(overridesPath string) (*Catalog, error) {
 	if sf.Items == nil {
 		sf.Items = map[string]seedEntry{}
 	}
-	c := &Catalog{seed: sf.Items, overrides: map[string]string{}, ovrPath: overridesPath}
+	iconSize := sf.IconSize
+	if iconSize == 0 {
+		iconSize = 64
+	}
+	c := &Catalog{seed: sf.Items, overrides: map[string]string{}, ovrPath: overridesPath, iconSize: iconSize}
 	if overridesPath != "" {
 		if b, err := os.ReadFile(overridesPath); err == nil {
 			if err := json.Unmarshal(b, &c.overrides); err != nil {
@@ -103,6 +117,9 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 		NameEN:   pick(seed.EN),
 		Category: category,
 		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
+		Icon:     hasSeed && (seed.X != 0 || seed.Y != 0),
+		IconX:    seed.X,
+		IconY:    seed.Y,
 	}
 }
 

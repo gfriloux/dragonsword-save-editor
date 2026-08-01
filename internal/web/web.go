@@ -70,8 +70,9 @@ func (s *Server) handleInfo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, 200, map[string]any{
-		"path":   s.sv.Path(),
-		"tables": tables,
+		"path":     s.sv.Path(),
+		"tables":   tables,
+		"iconSize": s.g.Catalog().IconSize(),
 	})
 }
 
