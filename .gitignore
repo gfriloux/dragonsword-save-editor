@@ -11,3 +11,6 @@
 /6144.original/
 *.sav
 ScreenShot_*.png
+
+# direnv
+/.direnv/

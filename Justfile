@@ -55,6 +55,10 @@ build-windows:
 run save:
     go run ./cmd/dsa-save-editor {{ save }}
 
+# Regenerate the bundled item catalog from th.gl (needs network). Review the diff.
+gen-catalog:
+    go run ./cmd/gen-catalog
+
 # Regenerate CHANGELOG.md from the Conventional Commits (git-cliff). Review the diff.
 changelog:
     git-cliff --output CHANGELOG.md

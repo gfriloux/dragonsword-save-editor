@@ -1,6 +1,3 @@
-// Package domain provides a game-oriented, typed view over a raw save: an item
-// catalog (names/categories) and accessors for currencies, consumables, etc. It
-// sits above internal/save and is consumed by internal/web's editor view.
 package domain
 
 import (
@@ -15,16 +12,19 @@ import (
 //go:embed data/items.json
 var seedFS embed.FS
 
-// Item is a resolved catalog entry for a content id (CID).
+// Item is a resolved catalog entry for a content id (CID). Names are provided in
+// both languages so the UI can switch without a round-trip.
 type Item struct {
 	CID      int64  `json:"cid"`
-	Name     string `json:"name"`     // human name, or a generated fallback
-	Category string `json:"category"` // currency | potion | food | material | misc
-	Known    bool   `json:"known"`    // true if the name comes from the seed or a user label
+	NameFR   string `json:"nameFr"`
+	NameEN   string `json:"nameEn"`
+	Category string `json:"category"` // currency | potion | food | material | gear | character | costume | mount | misc
+	Known    bool   `json:"known"`    // true if a seed name or a user label exists
 }
 
 type seedEntry struct {
-	Name     string `json:"name"`
+	FR       string `json:"fr"`
+	EN       string `json:"en"`
 	Category string `json:"category"`
 }
 
@@ -32,17 +32,17 @@ type seedFile struct {
 	Items map[string]seedEntry `json:"items"`
 }
 
-// Catalog resolves CIDs to names and categories, combining an embedded seed,
-// user-provided labels, and category inference from the CID structure.
+// Catalog resolves CIDs to bilingual names and categories, combining an embedded
+// seed (generated from th.gl), user-provided labels, and CID-based inference.
 type Catalog struct {
 	seed      map[string]seedEntry
-	overrides map[string]string // cid -> user label
+	overrides map[string]string // cid -> user label (applies to both languages)
 	ovrPath   string
 }
 
 // LoadCatalog reads the embedded seed and, if present, the user overrides file at
-// overridesPath. A missing overrides file is not an error; pass "" to disable
-// persistence (labels are then kept in memory only).
+// overridesPath. A missing overrides file is not an error; pass "" to keep labels
+// in memory only.
 func LoadCatalog(overridesPath string) (*Catalog, error) {
 	raw, err := seedFS.ReadFile("data/items.json")
 	if err != nil {
@@ -72,8 +72,8 @@ func LoadCatalog(overridesPath string) (*Catalog, error) {
 func (c *Catalog) Lookup(cid int64) Item { return c.LookupCtx(cid, "") }
 
 // LookupCtx resolves a CID, letting the caller assert a category it knows from
-// context (e.g. a row read from tb_currency is a currency regardless of its CID).
-// Name precedence: user label > seed name > generated fallback ("<Category> <cid>").
+// context (e.g. a row from tb_currency is a currency regardless of its CID).
+// Per language, name precedence is: user label > seed name > generated fallback.
 // Category precedence: seed category > categoryHint > CID inference.
 func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 	key := strconv.FormatInt(cid, 10)
@@ -87,19 +87,26 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 	}
 	label, hasLabel := c.overrides[key]
 
-	name := label
-	if name == "" {
-		name = seed.Name
+	pick := func(seedName string) string {
+		if label != "" {
+			return label
+		}
+		if seedName != "" {
+			return seedName
+		}
+		return fallbackName(category, cid)
 	}
-	known := hasLabel || (hasSeed && seed.Name != "")
-	if name == "" {
-		name = fallbackName(category, cid)
+	return Item{
+		CID:      cid,
+		NameFR:   pick(seed.FR),
+		NameEN:   pick(seed.EN),
+		Category: category,
+		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
 	}
-	return Item{CID: cid, Name: name, Category: category, Known: known}
 }
 
-// SetLabel records a user-provided name for a CID and persists it if the catalog
-// was loaded with an overrides path.
+// SetLabel records a user-provided name for a CID (both languages) and persists it
+// if the catalog was loaded with an overrides path.
 func (c *Catalog) SetLabel(cid int64, name string) error {
 	key := strconv.FormatInt(cid, 10)
 	if name == "" {
@@ -120,8 +127,7 @@ func (c *Catalog) SetLabel(cid int64, name string) error {
 	return os.WriteFile(c.ovrPath, b, 0o644)
 }
 
-// inferCategory maps the leading digits of a CID to a coarse category. Derived
-// from the save's item tables (see .claude/plans/v0.2.0/plan.md). Note: "currency"
+// inferCategory maps the leading digits of a CID to a coarse category. "currency"
 // and "food" are asserted from context by the accessors, not inferred here — the
 // 100x prefix is shared by currencies and stackable consumables.
 func inferCategory(cid int64) string {
@@ -147,6 +153,8 @@ func fallbackName(category string, cid int64) string {
 		"material":  "Material",
 		"gear":      "Gear",
 		"character": "Character",
+		"costume":   "Costume",
+		"mount":     "Mount",
 		"misc":      "Item",
 	}[category]
 	if title == "" {
