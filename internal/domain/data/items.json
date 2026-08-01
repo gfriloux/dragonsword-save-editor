@@ -1,0 +1,4 @@
+{
+  "_comment": "Item catalog seed: CID -> {name, category}. Grows over time. Names left empty are resolved by category inference; users can add labels from the editor. Categories: currency, potion, food, material, misc.",
+  "items": {}
+}
