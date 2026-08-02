@@ -73,3 +73,25 @@ func TestOodleUexpRejectsStoredRead(t *testing.T) {
 		t.Fatalf("expected compressed block ranges")
 	}
 }
+
+func TestCompressedBlocksCoverEntry(t *testing.T) {
+	pv := gameProvider(t)
+	e := pv.Find("Icon_Item/Common/Icon_Item_Common_Gold.uexp")
+	if e == nil {
+		t.Skip("Gold icon .uexp not found")
+	}
+	blocks, err := e.CompressedBlocks()
+	if err != nil {
+		t.Fatalf("CompressedBlocks: %v", err)
+	}
+	var sum int
+	for _, b := range blocks {
+		if len(b.Data) == 0 || b.RawSize == 0 {
+			t.Fatalf("empty block: %+v", b)
+		}
+		sum += b.RawSize
+	}
+	if int64(sum) != e.UncompressedSize {
+		t.Fatalf("block raw sizes sum to %d, want %d", sum, e.UncompressedSize)
+	}
+}

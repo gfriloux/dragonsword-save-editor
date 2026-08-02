@@ -382,6 +382,46 @@ func (e *Entry) rawBlocks() ([]byte, error) {
 	return out, nil
 }
 
+// CompBlock is one compression block's on-disk (still-compressed) bytes and the
+// size it decompresses to.
+type CompBlock struct {
+	Data    []byte // AES-decrypted if the record is encrypted; still Oodle-compressed
+	RawSize int    // uncompressed size of this block
+}
+
+// CompressedBlocks returns an entry's blocks with their target sizes, ready for
+// internal/oodle to decompress. Blocks are all BlockSize bytes except the last.
+func (e *Entry) CompressedBlocks() ([]CompBlock, error) {
+	f, err := os.Open(e.pak.path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	remaining := e.UncompressedSize
+	out := make([]CompBlock, 0, len(e.Blocks))
+	for _, b := range e.Blocks {
+		length := b.End - b.Start
+		rd := length
+		if e.Encrypted {
+			rd = align16(length)
+		}
+		buf := make([]byte, rd)
+		if _, err := f.ReadAt(buf, b.Start); err != nil {
+			return nil, err
+		}
+		if e.Encrypted {
+			ecbDecrypt(buf)
+		}
+		raw := int64(e.BlockSize)
+		if raw == 0 || raw > remaining {
+			raw = remaining
+		}
+		out = append(out, CompBlock{Data: buf[:length], RawSize: int(raw)})
+		remaining -= raw
+	}
+	return out, nil
+}
+
 // ReadStored returns the bytes of an uncompressed entry (decrypting it if the
 // record is AES-encrypted). It errors on compressed (Oodle) entries, which need
 // internal/oodle (wired in a later step).
