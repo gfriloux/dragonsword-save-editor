@@ -24,9 +24,11 @@ nix build .#windows                              # produces a Windows .exe
 The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
 
 - **Editor** — a friendly, game-oriented view:
-  - **Currency** and **Consumables** (potions, cooked food, materials) with quantity
-    steppers. Every material in the th.gl catalog is listed — owned or not — so any
-    can be set from 0 to X; a single control fills every stack at once.
+  - **Currency** and **Consumables** with quantity steppers. Consumables are grouped
+    into curated functional categories (Ingredients, Breakthrough, Runes, Crystals,
+    Gear XP, Potions, Cooked food, and an Unsorted catch-all) shown in a category
+    sidebar; each category lists every item — owned or not — so any can be set from 0
+    to X, with a per-category fill.
   - **Characters** and **Team** — read-only reference views (levels, squads).
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.

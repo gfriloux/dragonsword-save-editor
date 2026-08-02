@@ -166,6 +166,27 @@ td.null { color: var(--muted); font-style: italic; }
 .cat-character { background: #d75f8f; }
 .cat-misc      { background: var(--muted); }
 
+/* ── Consumables: category sidebar (direction B) ──────────────────────────── */
+.cons-layout { display: flex; gap: 1.1rem; align-items: flex-start; }
+.cons-cats { width: 190px; flex: none; display: flex; flex-direction: column; gap: .15rem; }
+.cons-cat {
+  display: flex; align-items: center; gap: .5rem; text-align: left;
+  background: transparent; border: 1px solid transparent; color: var(--muted);
+  padding: .4rem .55rem; border-radius: 6px;
+}
+.cons-cat:hover { background: var(--panel-2); color: var(--ink); border-color: transparent; }
+.cons-cat.active { background: var(--edit); color: var(--ink); }
+.cons-cat .cat-dot { width: .6rem; height: .6rem; flex: none; border-radius: 50%; }
+.cons-cat .cc-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cons-cat .cc-count { font-size: .7rem; color: var(--muted); font-family: ui-monospace, monospace; }
+.cons-pane { flex: 1; min-width: 0; }
+.cons-pane-head { display: flex; align-items: center; gap: .6rem; margin-bottom: .8rem; }
+.cons-pane-head h3 { margin: 0; font-size: .95rem; }
+.cons-pane-head .cc-stat { color: var(--muted); font-size: .78rem; }
+.cons-fill { margin-left: auto; display: flex; align-items: center; gap: .3rem; }
+.row.not-owned { opacity: .5; }
+.row.not-owned:hover { opacity: 1; }
+
 /* ── Characters (read-only cards) ─────────────────────────────────────── */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .7rem; }
 .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: .7rem .8rem; }

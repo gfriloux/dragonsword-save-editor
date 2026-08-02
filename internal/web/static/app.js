@@ -163,96 +163,174 @@ async function renderCurrency() {
   el.appendChild(rows);
 }
 
-// ── Editor: Consumables panel ─────────────────────────────────────────────
+// ── Editor: Consumables panel (direction B: curated category sidebar) ──────
 let catalogCache = null;
 async function catalog() {
   if (!catalogCache) catalogCache = (await api("/api/game/catalog")).items || [];
   return catalogCache;
 }
+let consCatsCache = null;
+async function consCategories() {
+  if (!consCatsCache) consCatsCache = (await api("/api/game/consumable-categories")).categories || [];
+  return consCatsCache;
+}
+let selectedConsCat = null; // persists across re-renders
 
-// Toolbar to set every stackable item to a single count at once. (Adding an
-// individual material is no longer needed here: the whole th.gl catalog is listed
-// below as editable rows.)
-function consumablesToolbar() {
-  const bar = document.createElement("div");
-  bar.className = "toolbar";
+const catLabel = (c) => (lang === "fr" ? c.labelFr : c.labelEn) || c.labelEn || c.key;
 
-  const label = document.createElement("span");
-  label.className = "tb-label";
-  label.textContent = "Set all stacks to";
+// Build the per-category editable model: merge owned stacks (fresh) with the full
+// th.gl catalog (not-owned → count 0), plus owned-only items absent from the catalog
+// (potions, mana, cooked food, off-catalog materials). Grouping is by the curated
+// functional category key (Item.group / ClassifyConsumable).
+async function buildConsumableModel() {
+  const [{ items: owned }, cat, cats] = await Promise.all([
+    api("/api/game/consumables"),
+    catalog(),
+    consCategories(),
+  ]);
+  const catByCid = {};
+  for (const it of cat) catByCid[it.cid] = it;
+
+  const entries = {}; // key -> [entry]
+  const push = (key, e) => (entries[key] ||= []).push(e);
+  const ownedStack = {}; // cid -> count, to fill catalog rows
+
+  for (const it of owned || []) {
+    if (it.kind === "cook") {
+      // cooked dishes are per-instance; edit via /api/game/stack
+      push(it.group, {
+        item: it, name: displayName(it), cid: it.cid, known: it.known,
+        value: it.count, owned: it.count > 0, stackable: false,
+        commit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
+      });
+    } else {
+      ownedStack[it.cid] = it.count;
+      if (!catByCid[it.cid]) {
+        // owned stackable the th.gl catalog does not list (potions, mana, …)
+        push(it.group, {
+          item: it, name: displayName(it), cid: it.cid, known: it.known,
+          value: it.count, owned: it.count > 0, stackable: true,
+          commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
+        });
+      }
+    }
+  }
+  // catalog stackables merged with owned counts (0 → X supported)
+  for (const it of cat) {
+    const c = ownedStack[it.cid] || 0;
+    push(it.group, {
+      item: it, name: displayName(it), cid: it.cid, known: it.known,
+      value: c, owned: c > 0, stackable: true,
+      commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
+    });
+  }
+  for (const k in entries) {
+    entries[k].sort((a, b) => (b.owned - a.owned) || a.name.localeCompare(b.name));
+  }
+  return { entries, cats };
+}
+
+async function renderConsumables() {
+  const el = $("#panel-consumables");
+  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Pick a category, then set any count — owned or not (0 → X). Not-owned items are dimmed.</p>`;
+  const model = await buildConsumableModel();
+
+  const layout = document.createElement("div");
+  layout.className = "cons-layout";
+  const rail = document.createElement("aside");
+  rail.className = "cons-cats";
+  const pane = document.createElement("div");
+  pane.className = "cons-pane";
+  layout.append(rail, pane);
+  el.appendChild(layout);
+
+  const cats = model.cats.filter((c) => (model.entries[c.key] || []).length);
+  if (!cats.length) {
+    pane.innerHTML = `<p class="empty-note">No consumables.</p>`;
+    return;
+  }
+  if (!selectedConsCat || !cats.some((c) => c.key === selectedConsCat)) {
+    selectedConsCat = cats[0].key;
+  }
+
+  for (const c of cats) {
+    const list = model.entries[c.key];
+    const ownedN = list.filter((e) => e.owned).length;
+    const b = document.createElement("button");
+    b.className = "cons-cat" + (c.key === selectedConsCat ? " active" : "");
+    b.dataset.key = c.key;
+    b.innerHTML =
+      `<span class="cat-dot" style="background:${c.color}"></span>` +
+      `<span class="cc-label">${escapeHtml(catLabel(c))}</span>` +
+      `<span class="cc-count">${ownedN}/${list.length}</span>`;
+    b.onclick = () => {
+      selectedConsCat = c.key;
+      $$(".cons-cat").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
+      renderConsPane(pane, model, c);
+    };
+    rail.appendChild(b);
+  }
+  renderConsPane(pane, model, cats.find((c) => c.key === selectedConsCat));
+}
+
+// renderConsPane fills the right-hand pane with the selected category's items.
+function renderConsPane(pane, model, cat) {
+  const list = model.entries[cat.key] || [];
+  const ownedN = list.filter((e) => e.owned).length;
+  pane.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.className = "cons-pane-head";
+  const h = document.createElement("h3");
+  h.textContent = catLabel(cat);
+  const stat = document.createElement("span");
+  stat.className = "cc-stat";
+  stat.textContent = `${ownedN} owned / ${list.length}`;
+  head.append(h, stat);
+
+  const fillWrap = document.createElement("div");
+  fillWrap.className = "cons-fill";
   const fillN = document.createElement("input");
   fillN.type = "number";
   fillN.value = 999;
   fillN.min = 0;
   fillN.className = "add-qty";
   const fill = document.createElement("button");
-  fill.textContent = "Fill";
+  fill.textContent = "Fill category";
   fill.onclick = async () => {
     const n = Math.max(0, parseInt(fillN.value, 10) || 0);
-    if (!confirm(`Set ALL stackable items to ${n}?`)) return;
+    const stacks = list.filter((e) => e.stackable);
+    if (!stacks.length) return toast("Nothing fillable in this category.");
+    if (!confirm(`Set all ${stacks.length} stackable items in "${catLabel(cat)}" to ${n}?`)) return;
     try {
-      await postJSON("/api/game/stackable/fill", { count: n });
+      for (const e of stacks) await postJSON("/api/game/stackable", { cid: e.cid, count: n });
       await renderConsumables();
-    } catch (e) {
-      toast("Fill failed: " + e.message);
+    } catch (err) {
+      toast("Fill failed: " + err.message);
     }
   };
+  fillWrap.append(fillN, fill);
+  head.appendChild(fillWrap);
+  pane.appendChild(head);
 
-  bar.append(label, fillN, fill);
-  return bar;
-}
-
-async function renderConsumables() {
-  const el = $("#panel-consumables");
-  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Cooked food and potions you own, plus every material in the th.gl catalog — set any count, owned or not (0 → X). Or set all stacks at once.</p>`;
-  el.appendChild(consumablesToolbar());
-  const { items } = await api("/api/game/consumables");
-  const groups = {};
-  for (const it of items || []) (groups[it.category] ||= []).push(it);
-
-  // Owned instances, listed as they are: cooked food, potions, and any misc stacks.
-  for (const cat of ["food", "potion", "misc"]) {
-    stackGroup(el, cat, groups[cat] || [], (it) => ({
-      value: it.count,
-      onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
-    }));
-  }
-
-  // Materials: the FULL th.gl catalog, merged with owned counts (0 when not owned),
-  // each editable and upserted via /api/game/stackable.
-  const owned = {};
-  for (const it of groups["material"] || []) owned[it.cid] = it.count;
-  const materials = (await catalog())
-    .filter((i) => i.category === "material")
-    .slice()
-    .sort((a, b) => displayName(a).localeCompare(displayName(b)));
-  stackGroup(el, "material", materials, (it) => ({
-    value: owned[it.cid] || 0,
-    onCommit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
-  }));
-}
-
-// stackGroup renders one titled group of stepper rows. mkRow(it) supplies the
-// row's current value and its commit handler; the label editor is shared.
-function stackGroup(el, cat, list, mkRow) {
-  if (!list.length) return;
-  const title = document.createElement("div");
-  title.className = "group-title";
-  title.textContent = cat + " (" + list.length + ")";
-  el.appendChild(title);
   const rows = document.createElement("div");
   rows.className = "rows";
-  for (const it of list) {
-    const { value, onCommit } = mkRow(it);
-    rows.appendChild(
-      stepperRow({
-        item: it, name: displayName(it), cid: it.cid, known: it.known, value,
-        onCommit,
-        onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
-      })
-    );
+  for (const e of list) {
+    let row;
+    row = stepperRow({
+      item: e.item, name: e.name, cid: e.cid, known: e.known, value: e.value,
+      onCommit: async (v) => {
+        await e.commit(v);
+        e.value = v;
+        e.owned = v > 0;
+        row.classList.toggle("not-owned", !e.owned);
+      },
+      onLabel: (name) => postJSON("/api/game/label", { cid: e.cid, name }).then(renderConsumables),
+    });
+    if (!e.owned) row.classList.add("not-owned");
+    rows.appendChild(row);
   }
-  el.appendChild(rows);
+  pane.appendChild(rows);
 }
 
 // ── Editor: Characters panel (read-only) ──────────────────────────────────
