@@ -50,6 +50,12 @@ Save files live at:
 .../DragonSword Awakening/DS/Saved/SaveGames/<accountId>/<accountId>_Slot<N>.db
 ```
 
+## Save format reference
+
+A full, community-oriented reference of the save format — file layout, encryption, the
+database schema, the content-ID scheme, and the switch/recipe encoding — lives under
+[`docs/`](docs/README.md).
+
 ## How the save format works
 
 The `.db` is an **SQLCipher v4** encrypted SQLite database
