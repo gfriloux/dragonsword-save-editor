@@ -364,7 +364,7 @@ RENDER.inv = async function () {
     const b = document.createElement("button");
     b.className = "cat-link" + (c.key === selectedCat ? " active" : "");
     b.dataset.key = c.key;
-    b.innerHTML = `<span>${escapeHtml(catLabel(c))}</span><span class="n">${ownedN}/${list.length}</span>`;
+    b.innerHTML = `<span title="${escapeHtml(catLabel(c))}">${escapeHtml(catLabel(c))}</span><span class="n">${ownedN}/${list.length}</span>`;
     b.onclick = () => {
       selectedCat = c.key;
       $$(".cat-link").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
