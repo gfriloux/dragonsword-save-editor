@@ -29,8 +29,15 @@ nix develop --command go run ./cmd/dsa-save-editor -no-open
 - [ ] **SQL brut** — table list filter, paging, double-click cell edit; edited cell flashes amber.
 - [ ] **Écrire dans la save** — toasts success, resets the modif badge; a `.bak` is created; the game must be closed.
 
+## Authentic icons (Phase 6)
+
+- [ ] With a game folder set, item icons across all screens render the **real
+      in-game art** (via `/api/icon?cid=`), extracted from the user's own paks and
+      cached under the OS cache dir (`~/.cache/dsa-save-editor/icons/`). First load
+      of a screen builds them (a brief pop-in); later loads are instant from cache.
+- [ ] Items with no authentic icon (or before a game folder is set) fall back to
+      the th.gl sprite, then a category dot — no broken images.
+
 ## Notes / known gaps (later phases)
 
-- Icons are still the th.gl sprite (authentic game icons = Phases 4–6).
-- Inventaire is a themed list, not yet the grid-of-cells + detail panel from the handoff.
-- Fonts fall back to system serif/sans/mono until the woff2 are embedded.
+- Recipe material details (Phase 3) not yet wired into Cuisine.

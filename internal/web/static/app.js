@@ -43,27 +43,57 @@ function bumpModif(n) {
 }
 function resetModif() { modifCount = 0; $("#modif-badge").classList.add("hidden"); }
 
-// ── Icons (sprite atlas) ───────────────────────────────────────────────────
+// ── Icons ──────────────────────────────────────────────────────────────────
+// Authentic in-game icons come from /api/icon?cid=…; on failure (no game folder,
+// no icon, extraction error) they fall back to the th.gl sprite atlas, then a
+// category dot.
 let iconSize = 64;
 const ICON_DISP = 40;
-const iconStyle = (it, disp = ICON_DISP) =>
+const spriteStyle = (it, disp) =>
   `object-fit:none;object-position:${it.iconX}px ${it.iconY}px;` +
   `width:${iconSize}px;height:${iconSize}px;zoom:${disp / iconSize}`;
-function iconEl(it, disp) {
-  if (!it.icon) {
+
+// iconFail swaps a failed authentic <img> to its sprite cell, or a dot.
+function iconFail(img) {
+  img.onerror = null;
+  if (img.dataset.sprite === "1") {
+    img.src = "/sprite.webp";
+    img.style.cssText =
+      `object-fit:none;object-position:${img.dataset.x}px ${img.dataset.y}px;` +
+      `width:${iconSize}px;height:${iconSize}px;zoom:${+img.dataset.disp / iconSize}`;
+  } else {
+    const s = document.createElement("span");
+    s.className = "cat-dot";
+    img.replaceWith(s);
+  }
+}
+window.iconFail = iconFail;
+
+function iconEl(it, disp = ICON_DISP) {
+  if (!it || !it.cid) {
     const d = document.createElement("span");
     d.className = "cat-dot";
     return d;
   }
   const img = document.createElement("img");
   img.className = "ic";
-  img.src = "/sprite.webp";
   img.alt = "";
-  img.style.cssText = iconStyle(it, disp);
+  img.width = img.height = disp;
+  img.style.objectFit = "contain";
+  img.src = "/api/icon?cid=" + it.cid;
+  img.dataset.sprite = it.icon ? "1" : "0";
+  img.dataset.x = it.iconX || 0;
+  img.dataset.y = it.iconY || 0;
+  img.dataset.disp = disp;
+  img.onerror = () => iconFail(img);
   return img;
 }
-const iconHTML = (it, disp) =>
-  it.icon ? `<img class="ic" src="/sprite.webp" alt="" style="${iconStyle(it, disp)}">` : `<span class="cat-dot"></span>`;
+const iconHTML = (it, disp = ICON_DISP) =>
+  it && it.cid
+    ? `<img class="ic" alt="" width="${disp}" height="${disp}" style="object-fit:contain" ` +
+      `src="/api/icon?cid=${it.cid}" data-sprite="${it.icon ? 1 : 0}" ` +
+      `data-x="${it.iconX || 0}" data-y="${it.iconY || 0}" data-disp="${disp}" onerror="iconFail(this)">`
+    : `<span class="cat-dot"></span>`;
 
 // ── Session state & view routing ───────────────────────────────────────────
 let saveOpen = false;
