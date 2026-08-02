@@ -29,6 +29,7 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
   - **Characters** and **Team** — read-only reference views (levels, squads).
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.
+  - **Cooking** — one click to unlock all normal cooking recipes.
 
   Item, character and equipment **names and icons** come from a bundled catalog
   datamined by [th.gl](https://dragonswordawakening.th.gl) — names in **French &
