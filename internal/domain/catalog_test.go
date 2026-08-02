@@ -28,9 +28,10 @@ func TestLookupCtxCategory(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// Context overrides inference for the fallback name and category.
-	it := c.LookupCtx(1000001, "currency")
-	if it.Category != "currency" || it.NameFR != "Currency 1000001" {
+	// Context overrides inference for the fallback name and category. Use an
+	// unseeded CID so the fallback name (not a real datamined name) is exercised.
+	it := c.LookupCtx(9999999, "currency")
+	if it.Category != "currency" || it.NameFR != "Currency 9999999" {
 		t.Fatalf("LookupCtx currency: category=%q name=%q", it.Category, it.NameFR)
 	}
 }
