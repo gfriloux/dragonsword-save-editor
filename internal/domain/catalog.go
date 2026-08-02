@@ -20,6 +20,7 @@ type Item struct {
 	NameFR   string `json:"nameFr"`
 	NameEN   string `json:"nameEn"`
 	Category string `json:"category"` // currency | potion | food | material | gear | character | costume | mount | misc
+	Group    string `json:"group"`    // curated functional consumable category (see ClassifyConsumable); "unsorted" for non-consumables
 	Known    bool   `json:"known"`    // true if a seed name or a user label exists
 	Icon     bool   `json:"icon"`     // true if the item has a sprite cell
 	IconX    int    `json:"iconX"`    // sprite object-position (px), negative
@@ -116,6 +117,7 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 		NameFR:   pick(seed.FR),
 		NameEN:   pick(seed.EN),
 		Category: category,
+		Group:    ClassifyConsumable(cid),
 		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
 		Icon:     hasSeed && (seed.X != 0 || seed.Y != 0),
 		IconX:    seed.X,

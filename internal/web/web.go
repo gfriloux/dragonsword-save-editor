@@ -38,6 +38,7 @@ func New(g *domain.Game) *Server {
 	// Game-oriented editor view.
 	s.mux.HandleFunc("/api/game/currency", s.handleCurrency)
 	s.mux.HandleFunc("/api/game/consumables", s.handleConsumables)
+	s.mux.HandleFunc("/api/game/consumable-categories", s.handleConsumableCategories)
 	s.mux.HandleFunc("/api/game/stack", s.handleStack)
 	s.mux.HandleFunc("/api/game/label", s.handleLabel)
 	s.mux.HandleFunc("/api/game/characters", s.handleCharacters)

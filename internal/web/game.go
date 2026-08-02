@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
 )
 
 func (s *Server) handleCurrency(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +43,12 @@ func (s *Server) handleConsumables(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, 200, map[string]any{"items": items})
+}
+
+// handleConsumableCategories returns the ordered curated functional categories used
+// to group the Consumables panel. Each item's category key is in its "group" field.
+func (s *Server) handleConsumableCategories(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, 200, map[string]any{"categories": domain.ConsumableCategories()})
 }
 
 func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {
