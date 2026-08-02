@@ -15,8 +15,7 @@ const (
 	CatBreakthrough = "breakthrough" // character breakthrough (percée) materials
 	CatAwakening    = "awakening"    // character awakening (éveil) materials
 	CatSkill        = "skill"        // skill-upgrade materials
-	CatCraft        = "craft"        // equipment-fabrication materials
-	CatCrystal      = "crystal"      // crafting crystals
+	CatCraft        = "craft"        // equipment-fabrication materials (incl. crystals)
 	CatRune         = "rune"         // equipment runes
 	CatEquipXP      = "equip_xp"     // equipment upgrade (mana) materials
 	CatExchange     = "exchange"     // character-exchange tokens (buy characters)
@@ -42,7 +41,6 @@ var consumableCategories = []ConsumableCategory{
 	{CatAwakening, "Éveil", "Awakening", "#b0d04a"},
 	{CatSkill, "Compétences", "Skill materials", "#d75f8f"},
 	{CatCraft, "Fabrication", "Crafting", "#d0b06a"},
-	{CatCrystal, "Cristaux", "Crystals", "#5aa9e0"},
 	{CatRune, "Runes", "Runes", "#b98ce0"},
 	{CatEquipXP, "XP équipement", "Gear XP", "#e0c14a"},
 	{CatExchange, "Échange", "Exchange", "#e0a44a"},
@@ -73,7 +71,7 @@ func ClassifyConsumable(cid int64) string {
 		return CatCraft
 	case cid == 1450820 || cid == 1450821: // Souvenirs.../Oubli... entremêlés
 		return CatCraft
-	case cid == 1460103: // Cristal de veine (checked before the 146x crystal range)
+	case cid >= 1460101 && cid <= 1460199: // Cristal de cohésion / coin / veine
 		return CatCraft
 	case cid == 1450811 || cid == 1450812 || cid == 1450815 || cid == 1450816 || cid == 1450823:
 		// Chronique de combat / Grimoire du guerrier / Nageoire épineuse /
@@ -91,8 +89,6 @@ func ClassifyConsumable(cid int64) string {
 		return CatBreakthrough
 	case cid >= 1450501 && cid <= 1450504: // Fruit/Graine/Goutte/Feuille
 		return CatBreakthrough
-	case cid >= 1460000 && cid <= 1469999:
-		return CatCrystal
 	case cid >= 1310000 && cid <= 1319999:
 		return CatRune
 	default:

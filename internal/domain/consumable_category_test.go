@@ -36,7 +36,10 @@ func TestClassifyConsumable(t *testing.T) {
 		{1450127, CatCraft, "Pierre trouble (last stone)"},
 		{1450820, CatCraft, "Souvenirs et mémoires entremêlés"},
 		{1450821, CatCraft, "Oubli et réminiscences entremêlés"},
+		{1460101, CatCraft, "Cristal de cohésion"},
+		{1460102, CatCraft, "Cristal en forme de coin"},
 		{1460103, CatCraft, "Cristal de veine"},
+		{1460201, CatUnsorted, "룬 조각 rune fragment (unconfirmed)"},
 		// The rest of the mixed 145x block stays unsorted.
 		{1450202, CatUnsorted, "Insigne d'Orbis (faction badge)"},
 		{1450401, CatUnsorted, "Grimoire de la perspicacité"},
@@ -53,8 +56,7 @@ func TestClassifyConsumable(t *testing.T) {
 		// Exchange token: buy characters.
 		{1000500, CatExchange, "Invitation du Destin"},
 		{1000501, CatUnsorted, "Fragment de lumière sacrée (unconfirmed)"},
-		// Crystals and runes.
-		{1460101, CatCrystal, "Cristal de cohésion"},
+		// Runes.
 		{1310001, CatRune, "Damaged Rune of Determination"},
 		// Off-th.gl XP-book candidates stay unsorted (unverified).
 		{1000800, CatUnsorted, "XP-book candidate, unverified"},
