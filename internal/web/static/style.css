@@ -1,3 +1,26 @@
+/* ── Embedded fonts (offline; latin subset) ─────────────────────────────── */
+@font-face {
+  font-family: "Marcellus";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/marcellus.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Karla"; /* variable */
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url(fonts/karla.woff2) format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono"; /* variable */
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url(fonts/jetbrains-mono.woff2) format("woff2");
+}
+
 /* ── Sang & acier (4d) — design tokens ──────────────────────────────────── */
 :root {
   --bg: #0c0d0f;
