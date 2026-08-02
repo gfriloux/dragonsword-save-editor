@@ -208,3 +208,31 @@ restate CGO invariant holds), README, `docs/paks.md` (deobf recipe), `docs/conte
 - [ ] `just build-windows` produces a single static `.exe` (CGO_ENABLED=0)
 - [ ] No game bytes committed (icons, textures, XML fixtures stay in `tmp/`/cache)
 - [ ] Docs synced in the same commit; atomic commits on a dedicated branch
+
+---
+
+## Delivered (v0.12.0)
+
+Phases 0–2, 4–7 shipped on `feat/ui-refonte`:
+
+- **First-run + save picker** (`internal/config`, `save.Discover`, web session model):
+  the game folder is asked once and remembered; saves are listed with screenshots; a
+  slot is opened on demand. No save path required on the CLI.
+- **"Sang & acier" refonte**: shell + own-line tab nav, Accueil, and the game screens
+  (Monnaies, **Inventaire grid + rarity cells + detail panel**, Personnages, Équipe,
+  Équipement, Gemmes, Cuisine, SQL brut); embedded woff2 fonts; item **rarity (grade)**
+  from the paks.
+- **Pure-Go pak + Oodle + texture stack**: `internal/pak` reads the custom version-101
+  paks; `internal/oodle` decodes Oodle by running an embedded `ooz.wasm` on wazero (no
+  CGO, cross-compiles to a static Windows .exe); `internal/texture` decodes DXT5.
+- **Authentic icons**: `internal/icons` extracts each item's real icon from the user's
+  paks on demand and caches it; the UI serves them via `/api/icon?cid=` with a th.gl
+  sprite fallback. No game art committed.
+- Docs (this file, DESIGN.md), `flake.nix` vendorHash for wazero.
+
+**Deferred → Phase 3, own follow-up (`feat/cooking-recipes`):** cooking **recipe
+details** (materials required / owned counts, per-recipe known state, precise unlock).
+The data is ready: `CookRecipeData.xml` is now pure-Go extractable, with
+`category = CookBook_SwitchData/64`, `bit = …%64`, `Cook_ID{1..5}` dish tiers, and
+ingredient conditions by item Category (see memory `dsa-cook-recipes`). Today Cuisine
+only offers the blanket "Tout débloquer".

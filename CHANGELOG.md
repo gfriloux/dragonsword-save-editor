@@ -7,7 +7,38 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
-## [Unreleased]
+## [0.12.0] - 2026-08-02
+
+### Features
+
+- **web**: Render authentic game icons with sprite fallback
+- **web**: Authentic item icons extracted from the user's paks (cached)
+- **domain**: Carry each item's icon asset path from the paks
+- **texture**: Decode cooked DXT5 UTexture2D icons to images
+- **oodle**: Pure-Go Oodle (Kraken) decoder via embedded WASM + wazero
+- **pak**: Expose per-block compressed data (CompressedBlocks)
+- **pak**: Pure-Go reader for the custom version-101 paks
+- **web**: Inventaire grid of rarity cells + item detail panel
+- **domain**: Carry item rarity (grade) from the paks
+- **web**: Embed the Sang & acier fonts (offline)
+- **web**: Sang & acier refonte — first-run picker + themed screens
+- **web**: First-run config + save-picker; open a slot on demand
+- **save**: Discover save slots + screenshots under a game folder
+- **config**: Persist the game folder in the OS config dir
+
+### Bug fixes
+
+- **web**: Widen the Inventaire category rail
+
+### Documentation
+
+- **plans**: V0.12.0 chantier — UI refonte + save picker + authentic icons
+
+### Build & tooling
+
+- **nix**: Update vendorHash for the wazero dependency
+
+## [0.11.0] - 2026-08-02
 
 ### Features
 
@@ -18,6 +49,7 @@ by git-cliff.
 
 ### Documentation
 
+- Update changelog for v0.11.0
 - **plans**: Mark v0.11.0 Phase 3 delivered (data-driven categories)
 - **plans**: Pak-extraction chantier + plan v0.11.0 (native item names)
 
