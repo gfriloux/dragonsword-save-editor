@@ -12,5 +12,8 @@
 *.sav
 ScreenShot_*.png
 
+# Scratch / work output — notes, handoffs, extracted pak fixtures (game-copyright)
+/tmp/
+
 # direnv
 /.direnv/
