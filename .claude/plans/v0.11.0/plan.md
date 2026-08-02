@@ -60,7 +60,20 @@ CHARACTER_EXP manuals, mana = EQUIPMENT_EXP). Confirm `just ci` + the domain cat
 - Extracted XML are **game-copyright fixtures** → stay in `tmp/` (gitignored), never committed.
 
 ### Quality gates
-- [ ] `just ci` passes
-- [ ] `TestEntries`/catalog tests green (characters preserved)
-- [ ] Spot-check: 1450410, 1410002, 1410202, 1360001, 1000001 resolve to correct FR/EN
-- [ ] Docs synced; atomic commits on `feat/pak-catalog`
+- [x] `just ci` passes
+- [x] `TestEntries`/catalog tests green (characters preserved)
+- [x] Spot-check: 1450410, 1410002, 1410202, 1360001, 1000001 resolve to correct FR/EN
+- [x] Docs synced; atomic commits on `feat/pak-catalog`
+
+### Phase 3 (delivered) — data-driven categories
+
+Went further than planned: the Consumables categories are now the **game's own item
+categories** (not a hand-curated map). `pak-catalog` emits `item_categories.json` (from
+`GameItemCategoryData` + `StringData`, localized) and tags each item with its game
+category id (`Item.group`); domain loads the list and reads the group from the seed;
+`ClassifyConsumable` + the curated consts/rules are **retired**, `items_extra.json` is
+emptied, and the web sidebar renders the game categories. Instance items (equipment /
+vehicles / costumes / characters) carry no consumable group and stay in their own panels.
+Commits `bdcd870` / `1d467a2` / `2d1d54c`. Taxonomy now matches the game (e.g. the
+awakening gem is "Matériaux d'échange" 1802; the `141xxxx` "potions" are character-XP
+manuals). A future nicety: a user override to re-file items into personal groups.
