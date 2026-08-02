@@ -77,7 +77,10 @@ type(scope): short imperative message
 
 Documentation is updated **in the same commit** as the code it describes. A
 structural change committed without updating `DESIGN.md` / `README.md` leaves the
-docs stale — that is a defect.
+docs stale — that is a defect. This extends to the **community save-format reference**
+under `docs/`: any newly confirmed fact about the format (a table understood, a CID
+range, a switch category, an encoding) updates the relevant `docs/` page in the same
+change.
 
 ---
 
