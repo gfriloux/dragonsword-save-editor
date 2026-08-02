@@ -42,6 +42,7 @@ fall through to **Non trié / Unsorted**. Confirmed groups:
 | ------------- | ----------------------------------------- | ----- |
 | Ingredients   | `143xxxx`, `144xxxx`                       | cooking ingredients |
 | Breakthrough  | `1450001`–`1450018`, `1450501`–`1450504`  | monster parts + plants (Fruit/Graine/Goutte/Feuille) |
+| Awakening     | `1450410`                                 | Gemme d'éveil — character awakening (off-th.gl, no catalog name) |
 | Skill         | `1450811`,`1450812`,`1450815`,`1450816`,`1450823` | skill-upgrade mats (Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage) |
 | Crystals      | `146xxxx`                                 | crafting crystals |
 | Runes         | `131xxxx`                                 | equipment runes |
@@ -66,9 +67,8 @@ are breakthrough. The rest stay Unsorted until confirmed:
 Off-th.gl items carry no catalog name (only a CID). The four misc ids
 `1000800`/`1000801`/`1000802`/`1000804` are the likely character-XP books (three combat
 manuals + Livre du Héros) but remain **unverified**, so they stay Unsorted for now.
-Likewise an **awakening gem** ("gemme d'éveil", character upgrade) is known to exist
-but is off-th.gl and was not present in the on-disk save when scanned, so its CID is
-not yet captured — pending a fully-flushed save.
+The **awakening gem** ("gemme d'éveil", character upgrade) is off-th.gl (no catalog
+name) and was identified as `1450410` by its stack count in a real save.
 
 ## Cooked-dish CIDs (`142·M·T·VV`)
 

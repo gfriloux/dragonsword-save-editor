@@ -40,6 +40,9 @@ func TestClassifyConsumable(t *testing.T) {
 		{1450815, CatSkill, "Nageoire épineuse"},
 		{1450816, CatSkill, "Crochet ensanglanté"},
 		{1450823, CatSkill, "Sang du sage"},
+		// Awakening material (off-th.gl, identified by count in a real save).
+		{1450410, CatAwakening, "Gemme d'éveil"},
+		{1450409, CatUnsorted, "neighbour of the awakening gem, unconfirmed"},
 		// Exchange token: buy characters.
 		{1000500, CatExchange, "Invitation du Destin"},
 		{1000501, CatUnsorted, "Fragment de lumière sacrée (unconfirmed)"},

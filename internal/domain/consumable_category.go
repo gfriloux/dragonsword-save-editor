@@ -13,6 +13,7 @@ package domain
 const (
 	CatIngredient   = "ingredient"   // cooking ingredients (meat, fish, vegetables…)
 	CatBreakthrough = "breakthrough" // character breakthrough (percée) materials
+	CatAwakening    = "awakening"    // character awakening (éveil) materials
 	CatSkill        = "skill"        // skill-upgrade materials
 	CatCrystal      = "crystal"      // crafting crystals
 	CatRune         = "rune"         // equipment runes
@@ -37,6 +38,7 @@ type ConsumableCategory struct {
 var consumableCategories = []ConsumableCategory{
 	{CatIngredient, "Ingrédients", "Ingredients", "#6fcf7f"},
 	{CatBreakthrough, "Percée", "Breakthrough", "#e08a5a"},
+	{CatAwakening, "Éveil", "Awakening", "#b0d04a"},
 	{CatSkill, "Compétences", "Skill materials", "#d75f8f"},
 	{CatCrystal, "Cristaux", "Crystals", "#5aa9e0"},
 	{CatRune, "Runes", "Runes", "#b98ce0"},
@@ -63,6 +65,8 @@ func ClassifyConsumable(cid int64) string {
 	// Explicit CID sets (confirmed in-game) take precedence over range rules.
 	case cid == 1000500: // Invitation du Destin — buy characters via the exchange
 		return CatExchange
+	case cid == 1450410: // Gemme d'éveil — character awakening material
+		return CatAwakening
 	case cid == 1450811 || cid == 1450812 || cid == 1450815 || cid == 1450816 || cid == 1450823:
 		// Chronique de combat / Grimoire du guerrier / Nageoire épineuse /
 		// Crochet ensanglanté / Sang du sage — skill-upgrade materials.
