@@ -37,50 +37,39 @@ Notes:
   (COOKING, COOKING_INGREDIENT, EQUIPMENT, EQUIPMENT_EXP, CHARACTER_EXP, GEM,
   CHARACTER_MASTER_SOUL, COMMON…), which will drive the functional categories below.
 
-## Consumable functional categories (curated)
+## Consumable functional categories (from the game's own data)
 
-th.gl publishes no functional sub-type for items, so the editor groups stackable
-consumables with a **hand-curated** map (`internal/domain/consumable_category.go`),
-kept deliberately prudent: only CIDs confirmed from a real save are assigned; the rest
-fall through to **Non trié / Unsorted**. Confirmed groups:
+The Consumables panel groups items by the **game's own item categories**, datamined from
+the paks (`GameItemData.ns:Category` → `GameItemCategoryData` → `StringData`) by
+`cmd/pak-catalog` into `internal/domain/data/item_categories.json`. Each item carries its
+category id in `Item.group`; the sidebar shows the localized category name. This replaced
+an earlier hand-curated CID map — the game taxonomy is authoritative and already localized.
 
-| Category      | Rule (CID)                                | Notes |
-| ------------- | ----------------------------------------- | ----- |
-| Ingredients   | `143xxxx`, `144xxxx`                       | cooking ingredients |
-| Breakthrough  | `1450001`–`1450018`, `1450501`–`1450504`  | monster parts + plants (Fruit/Graine/Goutte/Feuille) |
-| Awakening     | `1450410`                                 | Gemme d'éveil — character awakening (off-th.gl, no catalog name) |
-| Skill         | `1450811`,`1450812`,`1450815`,`1450816`,`1450823` | skill-upgrade mats (Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage) |
-| Crafting      | `1450101`–`1450127`, `1450820`, `1450821`, `1460101`–`1460199` | equipment-craft "Pierre de …" stones + entremêlés + crystals (cohésion, coin, veine) |
-| Runes         | `131xxxx`                                 | equipment runes |
-| Gear XP       | `1410202`–`1410204`                       | mana upgrade mats |
-| Exchange      | `1000500`                                 | Invitation du Destin — buy characters via the in-game exchange |
-| Potions       | `141xxxx` except `14102xx`                 | recovery potions |
-| Cooked food   | `142xxxx`                                 | cooked dishes |
+Each game category has a **CategoryType** (parent) and a numeric id. Only the
+consumable-relevant types are surfaced in the panel; equipment / vehicles / costumes /
+characters have their own panels (their items carry no consumable group).
 
-The `145xxxx` prefix is a **mixed bag**, not a single kind — only two of its sub-blocks
-are breakthrough. The rest stay Unsorted until confirmed:
+| CategoryType      | Example categories (id → name)                                   |
+| ----------------- | ---------------------------------------------------------------- |
+| `NORMAL_MATERIAL` | 1700 Viande, 1701 Poisson, 1704 Légumes, 1705 Champignons…       |
+| `GROW_MATERIAL`   | 1600 Amélioration des héros, 1602 …d'équipement, 1603 Matériaux de monstres, 1604 Ressources minières, 1605 Ressources de collecte, 1607 Pierres de caractéristiques, 1608 Fabrication d'équipement |
+| `GEM`             | 1500–1505 Runes (Détermination, Protection, Vitalité…)           |
+| `KARMA`           | 1400–1408 Karma (Amplitude, Écrasement, Rafale…)                 |
+| `COOK`            | 1200 Griller, 1201 Bouillir, 1202 Découper…                      |
+| `VALUABLE`        | 1800 Pierre d'invocation, 1802 Matériaux d'échange, 1803 Clés de trésor, 1900–1902 boîtes |
 
-| `145`·B·B | Contents (examples)                                   | Kind (unconfirmed) |
-| --------- | ----------------------------------------------------- | ------------------ |
-| `00`      | Essence/Peau/Os/Carapace/Molaire/Griffe de monstre    | **breakthrough** ✓ |
-| `01`      | Pierre d'amplification / concassage / rafale / force / hématite / flamme / glace / foudre / trouble | **crafting** ✓ (whole block) |
-| `02`      | Insignes (Orbis, Organa, mercenaires…)                | faction badges |
-| `04`      | Grimoires, Fragments de mémoire                        | skill/awakening? |
-| `05`      | Fruit de la vitalité, Graine primordiale, Goutte…     | **breakthrough** ✓ |
-| `06`      | Cristal de la mémoire / du souvenir / réminiscence    | reminiscence |
-| `08`      | Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage (**skill**); Souvenirs/Oubli entremêlés (**craft**); other boss drops | mixed — five **skill** ✓, two **craft** ✓ |
+Item-level facts settled by this data (things earlier guessed from CID prefixes):
+- `141xxxx` is **not** potions — `1410002`–`1410105` are **character-XP** texts
+  (`ItemType=CHARACTER_EXP`, e.g. `1410002` "Manuel des bases du combat"), `14102xx` are
+  the mana upgrade mats (`ItemType=EQUIPMENT_EXP`). Their game category is 1600 / 1602.
+- The awakening gem `1450410` ("Gemme d'éveil: Stigmate", `CHARACTER_MASTER_SOUL`) is filed
+  under 1802 "Matériaux d'échange" by the game.
+- The `1450101`–`1450127` "Pierre de …" stones are 1607 "Pierres de caractéristiques";
+  crystals `1460101`+ are 1604 "Ressources minières"; monster parts `1450001`+ are 1603.
 
-Off-th.gl items carry no catalog name (only a CID). The four misc ids
-`1000800`/`1000801`/`1000802`/`1000804` are the likely character-XP books (three combat
-manuals + Livre du Héros) but remain **unverified**, so they stay Unsorted for now.
-The **awakening gem** ("gemme d'éveil", character upgrade) is off-th.gl (no catalog
-name) and was identified as `1450410` by its stack count in a real save; its
-bilingual name (`Gemme d'éveil: Stigmate` / `Stigma Awaken Stone`) is curated in
-`internal/domain/data/items_extra.json`.
-
-Off-th.gl items get their bilingual names from **`items_extra.json`**, a hand-curated
-supplement merged into the catalog for CIDs `items.json` (the th.gl scrape) lacks. It
-is committed and, unlike `items.json`, is never overwritten by `just gen-catalog`.
+`items_extra.json` (a hand-curated bilingual name supplement) is retained as a fallback for
+the rare item the datamine can't name, but is now essentially empty — `pak-catalog` names
+virtually everything.
 
 ## Cooked-dish CIDs (`142·M·T·VV`)
 

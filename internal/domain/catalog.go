@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-//go:embed data/items.json data/items_extra.json
+//go:embed data/items.json data/items_extra.json data/item_categories.json
 var seedFS embed.FS
 
 // Item is a resolved catalog entry for a content id (CID). Names are provided in
@@ -20,7 +20,7 @@ type Item struct {
 	NameFR   string `json:"nameFr"`
 	NameEN   string `json:"nameEn"`
 	Category string `json:"category"` // currency | potion | food | material | gear | character | costume | mount | misc
-	Group    string `json:"group"`    // curated functional consumable category (see ClassifyConsumable); "unsorted" for non-consumables
+	Group    string `json:"group"`    // game item-category id (functional consumable grouping); "unsorted" if none
 	Known    bool   `json:"known"`    // true if a seed name or a user label exists
 	Icon     bool   `json:"icon"`     // true if the item has a sprite cell
 	IconX    int    `json:"iconX"`    // sprite object-position (px), negative
@@ -31,6 +31,7 @@ type seedEntry struct {
 	FR       string `json:"fr"`
 	EN       string `json:"en"`
 	Category string `json:"category"`
+	Group    string `json:"group"`
 	X        int    `json:"x"`
 	Y        int    `json:"y"`
 }
@@ -130,7 +131,7 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 		NameFR:   pick(seed.FR),
 		NameEN:   pick(seed.EN),
 		Category: category,
-		Group:    ClassifyConsumable(cid),
+		Group:    seed.Group, // "" for non-consumables / items without a game category
 		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
 		Icon:     hasSeed && (seed.X != 0 || seed.Y != 0),
 		IconX:    seed.X,

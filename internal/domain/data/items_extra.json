@@ -1,6 +1,4 @@
 {
-  "_note": "Curated bilingual names for items th.gl does not publish (off-catalog). Hand-maintained and committed; NOT overwritten by `just gen-catalog`. Merged into the catalog only for CIDs absent from items.json. No icons (no sprite cell).",
-  "items": {
-    "1450410": { "fr": "Gemme d'éveil: Stigmate", "en": "Stigma Awaken Stone", "category": "material" }
-  }
+  "_note": "Curated bilingual names for items the datamined catalog still lacks (e.g. a few CIDs with no resolvable string). Merged into the catalog only for CIDs absent from items.json; never overwritten by gen-catalog/pak-catalog. Currently empty — pak-catalog (GameItemData/StringData) now names virtually everything.",
+  "items": {}
 }

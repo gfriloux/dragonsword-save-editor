@@ -85,21 +85,18 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	}
 }
 
-func TestExtraCatalogNames(t *testing.T) {
+func TestDataminedNames(t *testing.T) {
 	c, err := LoadCatalog("")
 	if err != nil {
 		t.Fatal(err)
 	}
-	// 1450410 is off-th.gl; its bilingual name comes from items_extra.json.
+	// Off-th.gl items now get native names from the paks (merged into items.json).
 	it := c.Lookup(1450410)
 	if it.NameFR != "Gemme d'éveil: Stigmate" || it.NameEN != "Stigma Awaken Stone" {
-		t.Fatalf("extra name: fr=%q en=%q", it.NameFR, it.NameEN)
+		t.Fatalf("datamined name: fr=%q en=%q", it.NameFR, it.NameEN)
 	}
 	if !it.Known {
-		t.Error("expected Known=true for a curated extra item")
-	}
-	if it.Group != CatAwakening {
-		t.Errorf("group = %q, want %q", it.Group, CatAwakening)
+		t.Error("expected Known=true for a datamined item")
 	}
 }
 
