@@ -25,7 +25,8 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
 
 - **Editor** — a friendly, game-oriented view:
   - **Currency** and **Consumables** (potions, cooked food, materials) with quantity
-    steppers; add materials from the catalog by name and fill every stack at once.
+    steppers. Every material in the th.gl catalog is listed — owned or not — so any
+    can be set from 0 to X; a single control fills every stack at once.
   - **Characters** and **Team** — read-only reference views (levels, squads).
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.

@@ -170,44 +170,13 @@ async function catalog() {
   return catalogCache;
 }
 
-// Toolbar to add a material from the catalog and to fill every stack.
-async function consumablesToolbar() {
+// Toolbar to set every stackable item to a single count at once. (Adding an
+// individual material is no longer needed here: the whole th.gl catalog is listed
+// below as editable rows.)
+function consumablesToolbar() {
   const bar = document.createElement("div");
   bar.className = "toolbar";
 
-  const materials = (await catalog()).filter((i) => i.category === "material");
-  const dl = document.createElement("datalist");
-  dl.id = "cat-materials";
-  for (const i of materials) {
-    const o = document.createElement("option");
-    o.value = displayName(i) + " (" + i.cid + ")";
-    dl.appendChild(o);
-  }
-  const search = document.createElement("input");
-  search.setAttribute("list", "cat-materials");
-  search.placeholder = "Add a material by name…";
-  search.className = "add-search";
-  const qty = document.createElement("input");
-  qty.type = "number";
-  qty.value = 1;
-  qty.min = 1;
-  qty.className = "add-qty";
-  const add = document.createElement("button");
-  add.textContent = "Add";
-  add.onclick = async () => {
-    const m = /\((\d+)\)\s*$/.exec(search.value);
-    if (!m) return toast("Pick an item from the list.");
-    try {
-      await postJSON("/api/game/stackable", { cid: parseInt(m[1], 10), count: Math.max(1, parseInt(qty.value, 10) || 1) });
-      search.value = "";
-      await renderConsumables();
-    } catch (e) {
-      toast("Add failed: " + e.message);
-    }
-  };
-
-  const sep = document.createElement("span");
-  sep.className = "sep";
   const label = document.createElement("span");
   label.className = "tb-label";
   label.textContent = "Set all stacks to";
@@ -229,37 +198,61 @@ async function consumablesToolbar() {
     }
   };
 
-  bar.append(search, qty, add, dl, sep, label, fillN, fill);
+  bar.append(label, fillN, fill);
   return bar;
 }
 
 async function renderConsumables() {
   const el = $("#panel-consumables");
-  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Potions, cooked food and materials. Add a material from the catalog, or set all stacks at once.</p>`;
-  el.appendChild(await consumablesToolbar());
+  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Cooked food and potions you own, plus every material in the th.gl catalog — set any count, owned or not (0 → X). Or set all stacks at once.</p>`;
+  el.appendChild(consumablesToolbar());
   const { items } = await api("/api/game/consumables");
   const groups = {};
   for (const it of items || []) (groups[it.category] ||= []).push(it);
-  const order = ["food", "potion", "material", "misc"];
-  for (const cat of order) {
-    if (!groups[cat]) continue;
-    const title = document.createElement("div");
-    title.className = "group-title";
-    title.textContent = cat + " (" + groups[cat].length + ")";
-    el.appendChild(title);
-    const rows = document.createElement("div");
-    rows.className = "rows";
-    for (const it of groups[cat]) {
-      rows.appendChild(
-        stepperRow({
-          item: it, name: displayName(it), cid: it.cid, known: it.known, value: it.count,
-          onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
-          onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
-        })
-      );
-    }
-    el.appendChild(rows);
+
+  // Owned instances, listed as they are: cooked food, potions, and any misc stacks.
+  for (const cat of ["food", "potion", "misc"]) {
+    stackGroup(el, cat, groups[cat] || [], (it) => ({
+      value: it.count,
+      onCommit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
+    }));
   }
+
+  // Materials: the FULL th.gl catalog, merged with owned counts (0 when not owned),
+  // each editable and upserted via /api/game/stackable.
+  const owned = {};
+  for (const it of groups["material"] || []) owned[it.cid] = it.count;
+  const materials = (await catalog())
+    .filter((i) => i.category === "material")
+    .slice()
+    .sort((a, b) => displayName(a).localeCompare(displayName(b)));
+  stackGroup(el, "material", materials, (it) => ({
+    value: owned[it.cid] || 0,
+    onCommit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
+  }));
+}
+
+// stackGroup renders one titled group of stepper rows. mkRow(it) supplies the
+// row's current value and its commit handler; the label editor is shared.
+function stackGroup(el, cat, list, mkRow) {
+  if (!list.length) return;
+  const title = document.createElement("div");
+  title.className = "group-title";
+  title.textContent = cat + " (" + list.length + ")";
+  el.appendChild(title);
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  for (const it of list) {
+    const { value, onCommit } = mkRow(it);
+    rows.appendChild(
+      stepperRow({
+        item: it, name: displayName(it), cid: it.cid, known: it.known, value,
+        onCommit,
+        onLabel: (name) => postJSON("/api/game/label", { cid: it.cid, name }).then(renderConsumables),
+      })
+    );
+  }
+  el.appendChild(rows);
 }
 
 // ── Editor: Characters panel (read-only) ──────────────────────────────────
