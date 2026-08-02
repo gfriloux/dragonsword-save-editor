@@ -40,6 +40,7 @@ type item struct {
 	EN       string `json:"en,omitempty"`
 	Category string `json:"category"`
 	Type     string `json:"type,omitempty"`
+	Grade    string `json:"grade,omitempty"` // rarity: normal|rare|superior|epic|legendary
 	Group    string `json:"group,omitempty"` // game item-category id (functional grouping)
 	X        int    `json:"x"`
 	Y        int    `json:"y"`
@@ -119,6 +120,25 @@ type itemRow struct {
 	Name     string `xml:"Name,attr"`
 	ItemType string `xml:"ItemType,attr"`
 	Category string `xml:"Category,attr"`
+	Grade    string `xml:"Grade,attr"`
+}
+
+// normGrade maps the game's item Grade to a normalized rarity token, or "".
+func normGrade(g string) string {
+	switch g {
+	case "NORMAL":
+		return "normal"
+	case "RARE":
+		return "rare"
+	case "SUPERIOR":
+		return "superior"
+	case "EPIC":
+		return "epic"
+	case "LEGENDARY":
+		return "legendary"
+	default:
+		return ""
+	}
 }
 
 // streamRows decodes every element whose local name is `local` from an XML file into
@@ -213,6 +233,7 @@ func main() {
 			updated++
 		}
 		it.Type = r.ItemType
+		it.Grade = normGrade(r.Grade)
 		switch r.ItemType {
 		case "EQUIPMENT", "VEHICLE", "COSTUME", "CHARACTER":
 			it.Group = "" // instance items — shown in their own panels, not Consumables
