@@ -13,6 +13,7 @@ import (
 	"sync"
 
 	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
+	"github.com/gfriloux/dragonsword-save-editor/internal/icons"
 	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 )
 
@@ -30,9 +31,10 @@ type Server struct {
 	cat *domain.Catalog
 	mux *http.ServeMux
 
-	mu sync.Mutex
-	sv *save.Save   // nil until a save is opened
-	g  *domain.Game // nil until a save is opened
+	mu      sync.Mutex
+	sv      *save.Save     // nil until a save is opened
+	g       *domain.Game   // nil until a save is opened
+	iconSvc *icons.Service // nil until the first icon request
 }
 
 // New returns an http.Handler serving the UI and API. cat is the (save-agnostic)
@@ -48,6 +50,7 @@ func New(cat *domain.Catalog) *Server {
 	s.mux.HandleFunc("/api/saves", s.handleSaves)
 	s.mux.HandleFunc("/api/screenshot", s.handleScreenshot)
 	s.mux.HandleFunc("/api/open", s.handleOpen)
+	s.mux.HandleFunc("/api/icon", s.handleIcon)
 
 	// Generic database view (needs an open save).
 	s.mux.HandleFunc("/api/info", s.needSave(s.handleInfo))

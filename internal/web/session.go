@@ -37,6 +37,10 @@ func (s *Server) Close() error {
 	s.mu.Lock()
 	sv := s.sv
 	s.sv, s.g = nil, nil
+	if s.iconSvc != nil {
+		s.iconSvc.Close()
+		s.iconSvc = nil
+	}
 	s.mu.Unlock()
 	if sv != nil {
 		return sv.Close()
