@@ -26,8 +26,8 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
 - **Editor** — a friendly, game-oriented view:
   - **Currency** and **Consumables** with quantity steppers. Consumables are grouped
     into curated functional categories (Ingredients, Breakthrough, Awakening, Skill,
-    Runes, Crystals, Gear XP, Exchange, Potions, Cooked food, and an Unsorted
-    catch-all) shown in a category
+    Crafting, Crystals, Runes, Gear XP, Exchange, Potions, Cooked food, and an
+    Unsorted catch-all) shown in a category
     sidebar; each category lists every item — owned or not — so any can be set from 0
     to X, with a per-category fill.
   - **Characters** and **Team** — read-only reference views (levels, squads).

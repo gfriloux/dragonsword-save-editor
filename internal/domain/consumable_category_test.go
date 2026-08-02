@@ -26,14 +26,21 @@ func TestClassifyConsumable(t *testing.T) {
 		// Breakthrough: monster parts and plants only.
 		{1450001, CatBreakthrough, "Essence de monstre"},
 		{1450018, CatBreakthrough, "Griffe de monstre (last)"},
+		{1450003, CatBreakthrough, "Essence de monstre intermédiaire (percée)"},
 		{1450501, CatBreakthrough, "Fruit de la vitalité"},
 		{1450504, CatBreakthrough, "Feuille de vigueur"},
-		// The rest of the mixed 145x block must NOT be breakthrough → unsorted.
-		{1450101, CatUnsorted, "Pierre d'amplification (enhancement stone)"},
+		// Equipment-craft stones (whole 14501xx block) + entremêlés + Cristal de veine.
+		{1450101, CatCraft, "Pierre d'amplification"},
+		{1450104, CatCraft, "Pierre de concassage"},
+		{1450122, CatCraft, "Pierre de foudre"},
+		{1450127, CatCraft, "Pierre trouble (last stone)"},
+		{1450820, CatCraft, "Souvenirs et mémoires entremêlés"},
+		{1450821, CatCraft, "Oubli et réminiscences entremêlés"},
+		{1460103, CatCraft, "Cristal de veine"},
+		// The rest of the mixed 145x block stays unsorted.
 		{1450202, CatUnsorted, "Insigne d'Orbis (faction badge)"},
 		{1450401, CatUnsorted, "Grimoire de la perspicacité"},
 		{1450601, CatUnsorted, "Cristal de la mémoire (reminiscence)"},
-		{1450820, CatUnsorted, "Souvenirs et mémoires entremêlés (not a skill item)"},
 		// Skill-upgrade materials (confirmed in-game), curated explicitly.
 		{1450811, CatSkill, "Chronique de combat"},
 		{1450812, CatSkill, "Grimoire du guerrier"},

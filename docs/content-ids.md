@@ -44,7 +44,8 @@ fall through to **Non trié / Unsorted**. Confirmed groups:
 | Breakthrough  | `1450001`–`1450018`, `1450501`–`1450504`  | monster parts + plants (Fruit/Graine/Goutte/Feuille) |
 | Awakening     | `1450410`                                 | Gemme d'éveil — character awakening (off-th.gl, no catalog name) |
 | Skill         | `1450811`,`1450812`,`1450815`,`1450816`,`1450823` | skill-upgrade mats (Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage) |
-| Crystals      | `146xxxx`                                 | crafting crystals |
+| Crafting      | `1450101`–`1450127`, `1450820`, `1450821`, `1460103` | equipment-craft "Pierre de …" stones + entremêlés + Cristal de veine |
+| Crystals      | `146xxxx` except `1460103`                 | crafting crystals (Cristal de cohésion, en forme de coin…) |
 | Runes         | `131xxxx`                                 | equipment runes |
 | Gear XP       | `1410202`–`1410204`                       | mana upgrade mats |
 | Exchange      | `1000500`                                 | Invitation du Destin — buy characters via the in-game exchange |
@@ -57,12 +58,12 @@ are breakthrough. The rest stay Unsorted until confirmed:
 | `145`·B·B | Contents (examples)                                   | Kind (unconfirmed) |
 | --------- | ----------------------------------------------------- | ------------------ |
 | `00`      | Essence/Peau/Os/Carapace/Molaire/Griffe de monstre    | **breakthrough** ✓ |
-| `01`      | Pierre d'amplification / de rafale / hématite / glace | weapon enhancement stones |
+| `01`      | Pierre d'amplification / concassage / rafale / force / hématite / flamme / glace / foudre / trouble | **crafting** ✓ (whole block) |
 | `02`      | Insignes (Orbis, Organa, mercenaires…)                | faction badges |
 | `04`      | Grimoires, Fragments de mémoire                        | skill/awakening? |
 | `05`      | Fruit de la vitalité, Graine primordiale, Goutte…     | **breakthrough** ✓ |
 | `06`      | Cristal de la mémoire / du souvenir / réminiscence    | reminiscence |
-| `08`      | Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage (**skill**); other boss drops | mixed — five are **skill** ✓ |
+| `08`      | Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage (**skill**); Souvenirs/Oubli entremêlés (**craft**); other boss drops | mixed — five **skill** ✓, two **craft** ✓ |
 
 Off-th.gl items carry no catalog name (only a CID). The four misc ids
 `1000800`/`1000801`/`1000802`/`1000804` are the likely character-XP books (three combat
