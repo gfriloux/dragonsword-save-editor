@@ -15,8 +15,8 @@ Confirmed from real saves and the th.gl database:
 | Currency      | `1000xxx`              | `1000001`, `1000002`          | `tb_currency.ITEM_CID` |
 | Equipment     | `136xxxx`–`139xxxx`    | `1360001` … `1390155`         | `tb_equipment.ITEM_CID` |
 | Cooked dish   | `142xxxx`              | see below                     | `tb_cook_item.ITEM_CID` |
-| Potion        | `141xxxx` (**except** `14102xx`) | `1410002` … `1410105`  | `tb_stackable_item.ITEM_CID` |
-| Mana upgrade   | `14102xx`              | `1410202`/`1410203`/`1410204` | `tb_stackable_item.ITEM_CID` |
+| Character XP   | `141xxxx` (**except** `14102xx`) | `1410002` Manuel des bases du combat | `tb_stackable_item.ITEM_CID` |
+| Gear XP (mana) | `14102xx`              | `1410202`/`1410203`/`1410204` | `tb_stackable_item.ITEM_CID` |
 | Material      | `100x`,`131x`,`143x`–`147x`,`19xx`,`200x` | `1000500`, `1450001` … | `tb_stackable_item.ITEM_CID` |
 | Mount         | `132xxxx`              | `1320000` … `1320033`         | `tb_vehicle.VEHICLE_CID` |
 | Costume       | `999xxxx`              | `9990008` … `9990031`         | `tb_costume.COSTUME_CID` |
@@ -26,10 +26,16 @@ Notes:
   consumables (`tb_stackable_item`): the **table** decides the kind, not the CID alone.
 - `stat` references (`MAIN_STAT_CID`, `SUB_STAT_CID*`, `STAT_INFO_CID`) are a separate CID
   space (small 4–5 digit ids); their meaning is **not yet documented**.
-- The `141xxxx` range mixes two kinds: real potions (`1410002`–`1410105`) and the three
-  **mana upgrade** materials `14102xx` (`1410202` Fragment de mana, `1410203` Cristal de
-  mana, `1410204` Minéral de mana — confirmed against a real save's counts). The mana
-  ids are equipment-upgrade fuel, not potions.
+- The `141xxxx` range is **not** potions: `1410002`–`1410105` are **character-XP** training
+  texts (`ItemType=CHARACTER_EXP`, e.g. `1410002` "Manuel des bases du combat"), while
+  `14102xx` are the three **mana** upgrade mats (`ItemType=EQUIPMENT_EXP`: `1410202` Fragment
+  de mana, `1410203` Cristal de mana, `1410204` Minéral de mana). This was settled by the
+  paks' own data (`ItemType`), not guessed.
+- **Item names and types now come from the game's own data** (`GameItemData.xml` +
+  `StringData.xml`, extracted from the paks — see [Paks](paks.md)), merged into
+  `items.json` by `cmd/pak-catalog`. Each item carries its authoritative `ItemType`
+  (COOKING, COOKING_INGREDIENT, EQUIPMENT, EQUIPMENT_EXP, CHARACTER_EXP, GEM,
+  CHARACTER_MASTER_SOUL, COMMON…), which will drive the functional categories below.
 
 ## Consumable functional categories (curated)
 
