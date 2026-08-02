@@ -33,7 +33,16 @@ func TestClassifyConsumable(t *testing.T) {
 		{1450202, CatUnsorted, "Insigne d'Orbis (faction badge)"},
 		{1450401, CatUnsorted, "Grimoire de la perspicacité"},
 		{1450601, CatUnsorted, "Cristal de la mémoire (reminiscence)"},
-		{1450811, CatUnsorted, "Chronique de combat"},
+		{1450820, CatUnsorted, "Souvenirs et mémoires entremêlés (not a skill item)"},
+		// Skill-upgrade materials (confirmed in-game), curated explicitly.
+		{1450811, CatSkill, "Chronique de combat"},
+		{1450812, CatSkill, "Grimoire du guerrier"},
+		{1450815, CatSkill, "Nageoire épineuse"},
+		{1450816, CatSkill, "Crochet ensanglanté"},
+		{1450823, CatSkill, "Sang du sage"},
+		// Exchange token: buy characters.
+		{1000500, CatExchange, "Invitation du Destin"},
+		{1000501, CatUnsorted, "Fragment de lumière sacrée (unconfirmed)"},
 		// Crystals and runes.
 		{1460101, CatCrystal, "Cristal de cohésion"},
 		{1310001, CatRune, "Damaged Rune of Determination"},

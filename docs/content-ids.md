@@ -42,9 +42,11 @@ fall through to **Non trié / Unsorted**. Confirmed groups:
 | ------------- | ----------------------------------------- | ----- |
 | Ingredients   | `143xxxx`, `144xxxx`                       | cooking ingredients |
 | Breakthrough  | `1450001`–`1450018`, `1450501`–`1450504`  | monster parts + plants (Fruit/Graine/Goutte/Feuille) |
+| Skill         | `1450811`,`1450812`,`1450815`,`1450816`,`1450823` | skill-upgrade mats (Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage) |
 | Crystals      | `146xxxx`                                 | crafting crystals |
 | Runes         | `131xxxx`                                 | equipment runes |
 | Gear XP       | `1410202`–`1410204`                       | mana upgrade mats |
+| Exchange      | `1000500`                                 | Invitation du Destin — buy characters via the in-game exchange |
 | Potions       | `141xxxx` except `14102xx`                 | recovery potions |
 | Cooked food   | `142xxxx`                                 | cooked dishes |
 
@@ -59,11 +61,14 @@ are breakthrough. The rest stay Unsorted until confirmed:
 | `04`      | Grimoires, Fragments de mémoire                        | skill/awakening? |
 | `05`      | Fruit de la vitalité, Graine primordiale, Goutte…     | **breakthrough** ✓ |
 | `06`      | Cristal de la mémoire / du souvenir / réminiscence    | reminiscence |
-| `08`      | Chronique de combat, Grimoire du guerrier, boss drops | mixed |
+| `08`      | Chronique de combat, Grimoire du guerrier, Nageoire épineuse, Crochet ensanglanté, Sang du sage (**skill**); other boss drops | mixed — five are **skill** ✓ |
 
 Off-th.gl items carry no catalog name (only a CID). The four misc ids
 `1000800`/`1000801`/`1000802`/`1000804` are the likely character-XP books (three combat
 manuals + Livre du Héros) but remain **unverified**, so they stay Unsorted for now.
+Likewise an **awakening gem** ("gemme d'éveil", character upgrade) is known to exist
+but is off-th.gl and was not present in the on-disk save when scanned, so its CID is
+not yet captured — pending a fully-flushed save.
 
 ## Cooked-dish CIDs (`142·M·T·VV`)
 

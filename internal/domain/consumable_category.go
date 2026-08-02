@@ -13,9 +13,11 @@ package domain
 const (
 	CatIngredient   = "ingredient"   // cooking ingredients (meat, fish, vegetables…)
 	CatBreakthrough = "breakthrough" // character breakthrough (percée) materials
+	CatSkill        = "skill"        // skill-upgrade materials
 	CatCrystal      = "crystal"      // crafting crystals
 	CatRune         = "rune"         // equipment runes
 	CatEquipXP      = "equip_xp"     // equipment upgrade (mana) materials
+	CatExchange     = "exchange"     // character-exchange tokens (buy characters)
 	CatPotion       = "potion"       // potions
 	CatCooked       = "cooked"       // cooked dishes
 	CatUnsorted     = "unsorted"     // anything not yet curated
@@ -35,9 +37,11 @@ type ConsumableCategory struct {
 var consumableCategories = []ConsumableCategory{
 	{CatIngredient, "Ingrédients", "Ingredients", "#6fcf7f"},
 	{CatBreakthrough, "Percée", "Breakthrough", "#e08a5a"},
+	{CatSkill, "Compétences", "Skill materials", "#d75f8f"},
 	{CatCrystal, "Cristaux", "Crystals", "#5aa9e0"},
 	{CatRune, "Runes", "Runes", "#b98ce0"},
 	{CatEquipXP, "XP équipement", "Gear XP", "#e0c14a"},
+	{CatExchange, "Échange", "Exchange", "#e0a44a"},
 	{CatPotion, "Potions", "Potions", "#5ad0c0"},
 	{CatCooked, "Plats cuisinés", "Cooked food", "#cf8f6f"},
 	{CatUnsorted, "Non trié", "Unsorted", "#8a93a6"},
@@ -56,6 +60,13 @@ func ConsumableCategories() []ConsumableCategory {
 // CIDs return CatUnsorted.
 func ClassifyConsumable(cid int64) string {
 	switch {
+	// Explicit CID sets (confirmed in-game) take precedence over range rules.
+	case cid == 1000500: // Invitation du Destin — buy characters via the exchange
+		return CatExchange
+	case cid == 1450811 || cid == 1450812 || cid == 1450815 || cid == 1450816 || cid == 1450823:
+		// Chronique de combat / Grimoire du guerrier / Nageoire épineuse /
+		// Crochet ensanglanté / Sang du sage — skill-upgrade materials.
+		return CatSkill
 	case cid >= 1410202 && cid <= 1410204: // Fragment/Cristal/Minéral de mana
 		return CatEquipXP
 	case cid >= 1410000 && cid <= 1419999:
