@@ -181,7 +181,7 @@ const catLabel = (c) => (lang === "fr" ? c.labelFr : c.labelEn) || c.labelEn || 
 // Build the per-category editable model: merge owned stacks (fresh) with the full
 // th.gl catalog (not-owned → count 0), plus owned-only items absent from the catalog
 // (potions, mana, cooked food, off-catalog materials). Grouping is by the curated
-// functional category key (Item.group / ClassifyConsumable).
+// functional category key (Item.group = the game's item category).
 async function buildConsumableModel() {
   const [{ items: owned }, cat, cats] = await Promise.all([
     api("/api/game/consumables"),
@@ -198,7 +198,7 @@ async function buildConsumableModel() {
   for (const it of owned || []) {
     if (it.kind === "cook") {
       // cooked dishes are per-instance; edit via /api/game/stack
-      push(it.group, {
+      push(it.group || "unsorted", {
         item: it, name: displayName(it), cid: it.cid, known: it.known,
         value: it.count, owned: it.count > 0, stackable: false,
         commit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
@@ -207,7 +207,7 @@ async function buildConsumableModel() {
       ownedStack[it.cid] = it.count;
       if (!catByCid[it.cid]) {
         // owned stackable the th.gl catalog does not list (potions, mana, …)
-        push(it.group, {
+        push(it.group || "unsorted", {
           item: it, name: displayName(it), cid: it.cid, known: it.known,
           value: it.count, owned: it.count > 0, stackable: true,
           commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
@@ -215,8 +215,10 @@ async function buildConsumableModel() {
       }
     }
   }
-  // catalog stackables merged with owned counts (0 → X supported)
+  // catalog stackables merged with owned counts (0 → X supported). Items without a
+  // consumable group (equipment, costumes, characters…) belong to other panels — skip.
   for (const it of cat) {
+    if (!it.group) continue;
     const c = ownedStack[it.cid] || 0;
     push(it.group, {
       item: it, name: displayName(it), cid: it.cid, known: it.known,
