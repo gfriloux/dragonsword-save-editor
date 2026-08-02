@@ -84,6 +84,24 @@ func TestLabelPrecedenceAndPersistence(t *testing.T) {
 	}
 }
 
+func TestExtraCatalogNames(t *testing.T) {
+	c, err := LoadCatalog("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	// 1450410 is off-th.gl; its bilingual name comes from items_extra.json.
+	it := c.Lookup(1450410)
+	if it.NameFR != "Gemme d'éveil: Stigmate" || it.NameEN != "Stigma Awaken Stone" {
+		t.Fatalf("extra name: fr=%q en=%q", it.NameFR, it.NameEN)
+	}
+	if !it.Known {
+		t.Error("expected Known=true for a curated extra item")
+	}
+	if it.Group != CatAwakening {
+		t.Errorf("group = %q, want %q", it.Group, CatAwakening)
+	}
+}
+
 func TestEntries(t *testing.T) {
 	c, err := LoadCatalog("")
 	if err != nil {

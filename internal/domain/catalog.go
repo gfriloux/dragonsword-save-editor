@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-//go:embed data/items.json
+//go:embed data/items.json data/items_extra.json
 var seedFS embed.FS
 
 // Item is a resolved catalog entry for a content id (CID). Names are provided in
@@ -66,6 +66,19 @@ func LoadCatalog(overridesPath string) (*Catalog, error) {
 	}
 	if sf.Items == nil {
 		sf.Items = map[string]seedEntry{}
+	}
+	// Merge curated bilingual names for off-th.gl items (items_extra.json), only for
+	// CIDs the th.gl seed does not already cover so a regen never clobbers them.
+	if er, err := seedFS.ReadFile("data/items_extra.json"); err == nil {
+		var ef seedFile
+		if err := json.Unmarshal(er, &ef); err != nil {
+			return nil, fmt.Errorf("domain: parsing embedded items_extra.json: %w", err)
+		}
+		for cid, e := range ef.Items {
+			if _, ok := sf.Items[cid]; !ok {
+				sf.Items[cid] = e
+			}
+		}
 	}
 	iconSize := sf.IconSize
 	if iconSize == 0 {

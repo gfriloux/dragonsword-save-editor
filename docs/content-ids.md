@@ -68,7 +68,13 @@ Off-th.gl items carry no catalog name (only a CID). The four misc ids
 `1000800`/`1000801`/`1000802`/`1000804` are the likely character-XP books (three combat
 manuals + Livre du Héros) but remain **unverified**, so they stay Unsorted for now.
 The **awakening gem** ("gemme d'éveil", character upgrade) is off-th.gl (no catalog
-name) and was identified as `1450410` by its stack count in a real save.
+name) and was identified as `1450410` by its stack count in a real save; its
+bilingual name (`Gemme d'éveil: Stigmate` / `Stigma Awaken Stone`) is curated in
+`internal/domain/data/items_extra.json`.
+
+Off-th.gl items get their bilingual names from **`items_extra.json`**, a hand-curated
+supplement merged into the catalog for CIDs `items.json` (the th.gl scrape) lacks. It
+is committed and, unlike `items.json`, is never overwritten by `just gen-catalog`.
 
 ## Cooked-dish CIDs (`142·M·T·VV`)
 

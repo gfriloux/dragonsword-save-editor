@@ -14,6 +14,10 @@
 //
 //	just gen-catalog        # or: go run ./cmd/gen-catalog
 //
+// It overwrites only items.json; hand-curated bilingual names for off-th.gl items
+// live in the sibling internal/domain/data/items_extra.json, which this command does
+// not touch.
+//
 // Names and icons are © their respective owners; the mapping is courtesy of th.gl.
 package main
 

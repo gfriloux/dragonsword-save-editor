@@ -93,6 +93,7 @@ FNV-1a-64 derivation from the embedded seed) are documented in
   non-standard pak format (bogus version, AES index) that resisted a dynamic key-scan —
   a wall (see memory `dsa-pak-protection`). Instead, names come from the community
   datamine at th.gl via `cmd/gen-catalog`. CIDs th.gl lacks (some potions, currencies)
-  keep category inference + user labels.
+  keep category inference + user labels, or a curated bilingual name in
+  `internal/domain/data/items_extra.json` (merged in, never overwritten by a regen).
 - Editing the companion `SPack_*.sav` (UE GVAS slot metadata); only the `.db` is
   edited.
