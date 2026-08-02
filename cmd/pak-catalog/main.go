@@ -14,9 +14,11 @@
 //
 // It MERGES: pak FR/EN names override/augment the catalog, new CIDs are added, and
 // entries the paks do not list (characters live in a separate table) are preserved.
-// th.gl icon positions are kept; each item also gains its authoritative ItemType.
+// th.gl icon positions are kept; each item also gains its authoritative ItemType and a
+// functional `group` (the game's item-category id). It also emits item_categories.json —
+// the localized, ordered consumable-category list the Consumables sidebar renders.
 //
-//	go run ./cmd/pak-catalog   # defaults to tmp/pak/*.xml + internal/domain/data/items.json
+//	go run ./cmd/pak-catalog   # defaults to tmp/pak/*.xml + internal/domain/data/*.json
 package main
 
 import (
@@ -26,6 +28,9 @@ import (
 	"io"
 	"log"
 	"os"
+	"sort"
+	"strconv"
+	"strings"
 )
 
 const sourceNote = "Item names datamined from the game's own GameItemData/StringData (paks) and merged over the th.gl scrape; icons still courtesy of The Hidden Gaming Lair (th.gl). Regenerate with `just gen-catalog` (icons) then `go run ./cmd/pak-catalog` (names)."
@@ -35,6 +40,7 @@ type item struct {
 	EN       string `json:"en,omitempty"`
 	Category string `json:"category"`
 	Type     string `json:"type,omitempty"`
+	Group    string `json:"group,omitempty"` // game item-category id (functional grouping)
 	X        int    `json:"x"`
 	Y        int    `json:"y"`
 }
@@ -43,6 +49,40 @@ type catalog struct {
 	Source   string          `json:"_source"`
 	IconSize int             `json:"iconSize"`
 	Items    map[string]item `json:"items"`
+}
+
+// consumableCatColor maps the game's item-CategoryType to a UI dot colour. Only these
+// types are surfaced as Consumables-panel categories; items of other types (equipment,
+// costumes, vehicles, characters…) live in their own panels.
+var consumableCatColor = map[string]string{
+	"COOK":            "#cf8f6f",
+	"NORMAL_MATERIAL": "#6fcf7f",
+	"GROW_MATERIAL":   "#e08a5a",
+	"KARMA":           "#d75f8f",
+	"GEM":             "#b98ce0",
+	"VALUABLE":        "#e0a44a",
+}
+
+// consumableCategory is one entry of the emitted item_categories.json (consumed by
+// internal/domain to build the Consumables sidebar).
+type consumableCategory struct {
+	Key     string `json:"key"`
+	LabelFR string `json:"labelFr"`
+	LabelEN string `json:"labelEn"`
+	Color   string `json:"color"`
+	id      int    // for ordering only
+}
+
+type categoriesFile struct {
+	Source     string               `json:"_source"`
+	Categories []consumableCategory `json:"categories"`
+}
+
+type catRow struct {
+	ID           string `xml:"ID,attr"`
+	CategoryType string `xml:"CategoryType,attr"`
+	Name         string `xml:"Name,attr"`
+	Memo         string `xml:"Memo,attr"`
 }
 
 // coarseCategory maps an item's ItemType to the catalog's coarse category (used for
@@ -78,6 +118,7 @@ type itemRow struct {
 	ID       string `xml:"ID,attr"`
 	Name     string `xml:"Name,attr"`
 	ItemType string `xml:"ItemType,attr"`
+	Category string `xml:"Category,attr"`
 }
 
 // streamRows decodes every element whose local name is `local` from an XML file into
@@ -112,7 +153,9 @@ func main() {
 	log.SetFlags(0)
 	itemsXML := flag.String("items", "tmp/pak/GameItemData.xml", "GameItemData.xml extracted from the paks")
 	stringsXML := flag.String("strings", "tmp/pak/StringData.xml", "StringData.xml extracted from the paks")
+	categoriesXML := flag.String("categories", "tmp/pak/GameItemCategoryData.xml", "GameItemCategoryData.xml extracted from the paks")
 	catalogPath := flag.String("catalog", "internal/domain/data/items.json", "items.json to merge into (in place)")
+	categoriesOut := flag.String("categories-out", "internal/domain/data/item_categories.json", "item_categories.json to write")
 	flag.Parse()
 
 	raw, err := os.ReadFile(*catalogPath)
@@ -127,15 +170,41 @@ func main() {
 		cat.Items = map[string]item{}
 	}
 
-	strings := map[string]strRow{}
-	if err := streamRows(*stringsXML, "StringData", func(r strRow) { strings[r.ID] = r }); err != nil {
+	strs := map[string]strRow{}
+	if err := streamRows(*stringsXML, "StringData", func(r strRow) { strs[r.ID] = r }); err != nil {
 		log.Fatalf("parse strings: %v", err)
 	}
-	log.Printf("strings: %d", len(strings))
+	log.Printf("strings: %d", len(strs))
+
+	// Game item categories → the Consumables sidebar (localized, colour by type). Only
+	// consumable-relevant CategoryTypes are kept; others (equipment, costume…) are elided.
+	var cats []consumableCategory
+	consumable := map[string]bool{} // category id -> is a surfaced consumable category
+	err = streamRows(*categoriesXML, "GameItemCategoryData", func(r catRow) {
+		color, ok := consumableCatColor[r.CategoryType]
+		if !ok {
+			return
+		}
+		if strings.Contains(r.Memo, "임시") { // placeholder "temporary data" categories
+			return
+		}
+		s := strs[r.Name]
+		if s.FR == "" && s.EN == "" {
+			return
+		}
+		id, _ := strconv.Atoi(r.ID)
+		cats = append(cats, consumableCategory{Key: r.ID, LabelFR: s.FR, LabelEN: s.EN, Color: color, id: id})
+		consumable[r.ID] = true
+	})
+	if err != nil {
+		log.Fatalf("parse categories: %v", err)
+	}
+	sort.Slice(cats, func(i, j int) bool { return cats[i].id < cats[j].id })
+	cats = append(cats, consumableCategory{Key: "unsorted", LabelFR: "Non trié", LabelEN: "Unsorted", Color: "#8a93a6"})
 
 	var added, updated, noName int
 	err = streamRows(*itemsXML, "GameItemData", func(r itemRow) {
-		s := strings[r.Name]
+		s := strs[r.Name]
 		it, ok := cat.Items[r.ID]
 		if !ok {
 			it = item{Category: coarseCategory(r.ItemType)}
@@ -144,6 +213,16 @@ func main() {
 			updated++
 		}
 		it.Type = r.ItemType
+		switch r.ItemType {
+		case "EQUIPMENT", "VEHICLE", "COSTUME", "CHARACTER":
+			it.Group = "" // instance items — shown in their own panels, not Consumables
+		default:
+			if consumable[r.Category] {
+				it.Group = r.Category
+			} else {
+				it.Group = "unsorted"
+			}
+		}
 		if s.FR != "" {
 			it.FR = s.FR
 		}
@@ -160,13 +239,23 @@ func main() {
 	}
 
 	cat.Source = sourceNote
-	buf, err := json.MarshalIndent(cat, "", "  ")
+	writeJSON(*catalogPath, cat)
+	log.Printf("wrote %s: %d items (%d added, %d updated, %d without a resolvable name)",
+		*catalogPath, len(cat.Items), added, updated, noName)
+
+	writeJSON(*categoriesOut, categoriesFile{
+		Source:     "Item categories datamined from the game's GameItemCategoryData/StringData (paks). Regenerate with `go run ./cmd/pak-catalog`.",
+		Categories: cats,
+	})
+	log.Printf("wrote %s: %d consumable categories", *categoriesOut, len(cats))
+}
+
+func writeJSON(path string, v any) {
+	buf, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := os.WriteFile(*catalogPath, append(buf, '\n'), 0o644); err != nil {
+	if err := os.WriteFile(path, append(buf, '\n'), 0o644); err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("wrote %s: %d items (%d added, %d updated, %d without a resolvable name)",
-		*catalogPath, len(cat.Items), added, updated, noName)
 }
