@@ -22,7 +22,7 @@ nix develop --command go run ./cmd/dsa-save-editor -no-open
 ## Screens (with a save open)
 
 - [ ] **Monnaies** — cards with a stepper; gold steps by 10 000, others by 50; edits bump the modif badge.
-- [ ] **Inventaire** — category rail (counts) + list; "Remplir" sets a category; not-owned rows dimmed; FR/EN switches names.
+- [ ] **Inventaire** — category rail + **grid of rarity-bordered cells** + **detail panel**: click a cell → stepper + presets (0/99/999/MAX); cells show quantity, dim at 0, and an **amber dot** when changed from the save; the detail shows an `ancienne → nouvelle` diff with "Annuler cette modification"; "Remplir" sets a category; the amber dots clear after a write; FR/EN switches names + the rarity legend.
 - [ ] **Personnages** / **Équipe** — read-only cards / slots render.
 - [ ] **Équipement** / **Gemmes** — enchant/XP/lock editable; stat chips read-only.
 - [ ] **Cuisine** — "Tout débloquer" works (recipe material details come in Phase 3).

@@ -311,7 +311,19 @@ async function consCategories() {
   return consCatsCache;
 }
 let selectedCat = null;
+let selInvKey = null; // selected cell (detail panel)
+let invBaseline = {}; // key -> value read from the save (for the amber "modified" dot)
 const catLabel = (c) => (lang === "fr" ? c.labelFr : c.labelEn) || c.labelEn || c.key;
+
+const RARITY = [
+  { g: "normal", fr: "Commun", en: "Common" },
+  { g: "rare", fr: "Rare", en: "Rare" },
+  { g: "superior", fr: "Supérieur", en: "Superior" },
+  { g: "epic", fr: "Épique", en: "Epic" },
+  { g: "legendary", fr: "Légendaire", en: "Legendary" },
+];
+const entryKey = (e) => (e.stackable ? "c" + e.cid : "k" + (e.item.id || e.cid));
+const rarityClass = (e) => (e.item && e.item.grade ? "r-" + e.item.grade : "r-normal");
 
 async function buildConsumableModel() {
   const [{ items: owned }, cat, cats] = await Promise.all([api("/api/game/consumables"), catalog(), consCategories()]);
@@ -347,13 +359,21 @@ RENDER.inv = async function () {
   el.className = "screen inv";
   el.innerHTML = "";
   const model = await buildConsumableModel();
+  // Capture the save baseline once per item (drives the amber "modified" dot).
+  for (const k in model.entries) for (const e of model.entries[k]) {
+    const key = entryKey(e);
+    if (invBaseline[key] === undefined) invBaseline[key] = e.value;
+    e.saved = invBaseline[key];
+  }
   const cats = model.cats.filter((c) => (model.entries[c.key] || []).length);
 
   const rail = document.createElement("aside");
   rail.className = "inv-rail";
   const main = document.createElement("div");
   main.className = "inv-main";
-  el.append(rail, main);
+  const detail = document.createElement("div");
+  detail.className = "inv-detail empty";
+  el.append(rail, main, detail);
 
   if (!cats.length) { main.innerHTML = `<p class="empty-note">Aucun consommable.</p>`; return; }
   if (!selectedCat || !cats.some((c) => c.key === selectedCat)) selectedCat = cats[0].key;
@@ -367,21 +387,28 @@ RENDER.inv = async function () {
     b.innerHTML = `<span title="${escapeHtml(catLabel(c))}">${escapeHtml(catLabel(c))}</span><span class="n">${ownedN}/${list.length}</span>`;
     b.onclick = () => {
       selectedCat = c.key;
+      selInvKey = null;
       $$(".cat-link").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
-      fillInvMain(main, model, c);
+      renderInvCat(main, detail, model, c);
     };
     rail.appendChild(b);
   }
-  fillInvMain(main, model, cats.find((c) => c.key === selectedCat));
+  renderInvCat(main, detail, model, cats.find((c) => c.key === selectedCat));
 };
 
-function fillInvMain(main, model, cat) {
+function renderInvCat(main, detail, model, cat) {
   const list = model.entries[cat.key] || [];
-  const ownedN = list.filter((e) => e.owned).length;
   main.innerHTML = "";
   const bar = document.createElement("div");
   bar.className = "inv-toolbar";
-  bar.innerHTML = `<h2>${escapeHtml(catLabel(cat))}</h2><span class="count">${ownedN} possédés / ${list.length}</span>`;
+  const ownedN = () => list.filter((e) => e.owned).length;
+  const count = document.createElement("span");
+  count.className = "count";
+  const refreshCount = () => (count.textContent = `${ownedN()} possédés / ${list.length}`);
+  const h = document.createElement("h2");
+  h.textContent = catLabel(cat);
+  bar.append(h, count);
+  refreshCount();
   const fillWrap = document.createElement("div");
   fillWrap.className = "inv-fill";
   const fillN = document.createElement("input");
@@ -400,17 +427,105 @@ function fillInvMain(main, model, cat) {
   bar.appendChild(fillWrap);
   main.appendChild(bar);
 
-  const rows = document.createElement("div");
-  rows.className = "rows";
-  rows.style.overflow = "auto";
+  const grid = document.createElement("div");
+  grid.className = "inv-grid";
+  const cellOf = {};
   for (const e of list) {
-    const row = stepperRow({ item: e.item, name: e.name, cid: e.cid, known: e.known, value: e.value,
-      onCommit: async (v) => { await e.commit(v); e.value = v; e.owned = v > 0; row.classList.toggle("not-owned", !e.owned); },
-      onLabel: (name) => postJSON("/api/game/label", { cid: e.cid, name }).then(() => RENDER.inv()) });
-    if (!e.owned) row.classList.add("not-owned");
-    rows.appendChild(row);
+    const key = entryKey(e);
+    const cell = document.createElement("div");
+    cell.className = "cell " + rarityClass(e);
+    cell.appendChild(iconEl(e.item, 56));
+    const q = document.createElement("span");
+    q.className = "badge-q";
+    const dot = document.createElement("span");
+    dot.className = "dirty";
+    cell.append(q, dot);
+    const paint = () => {
+      q.textContent = e.value;
+      cell.classList.toggle("empty", e.value <= 0);
+      dot.style.display = e.value !== e.saved ? "block" : "none";
+    };
+    paint();
+    cell._paint = paint;
+    cell.onclick = () => selectInvCell(detail, model, cat, e, cell, grid, refreshCount);
+    cellOf[key] = cell;
+    grid.appendChild(cell);
   }
-  main.appendChild(rows);
+  main.appendChild(grid);
+
+  // Keep or reset the detail selection.
+  const keep = list.find((e) => entryKey(e) === selInvKey);
+  if (keep) selectInvCell(detail, model, cat, keep, cellOf[selInvKey], grid, refreshCount);
+  else { detail.className = "inv-detail empty"; detail.innerHTML = "<span>Choisis un objet.</span>"; }
+}
+
+function selectInvCell(detail, model, cat, e, cell, grid, refreshCount) {
+  selInvKey = entryKey(e);
+  grid.querySelectorAll(".cell").forEach((c) => c.classList.remove("sel"));
+  if (cell) cell.classList.add("sel");
+  renderInvDetail(detail, e, cell, refreshCount);
+}
+
+function renderInvDetail(detail, e, cell, refreshCount) {
+  detail.className = "inv-detail";
+  detail.innerHTML = "";
+  const ic = document.createElement("div");
+  ic.className = "detail-ic";
+  ic.appendChild(iconEl(e.item, 96));
+  const name = document.createElement("div");
+  name.className = "detail-name" + (e.known ? "" : " unknown");
+  name.textContent = e.name;
+  const meta = document.createElement("div");
+  meta.className = "icid";
+  meta.textContent = `CID ${e.cid} · ${e.stackable ? "tb_stackable_item" : "tb_cook"}`;
+  const sep = document.createElement("div");
+  sep.className = "detail-sep";
+  const lbl = document.createElement("div");
+  lbl.className = "label";
+  lbl.textContent = "Quantité en stock";
+  detail.append(ic, name, meta, sep, lbl);
+
+  const commit = async (v) => {
+    v = Math.max(0, Math.min(9999, v | 0));
+    if (v === e.value) return;
+    try {
+      await e.commit(v);
+      e.value = v; e.owned = v > 0;
+      if (cell && cell._paint) cell._paint();
+      refreshCount();
+      renderInvDetail(detail, e, cell, refreshCount);
+    } catch (err) { toast("Échec : " + err.message); }
+  };
+  detail.appendChild(stepper(e.value, 1, commit));
+
+  const presets = document.createElement("div");
+  presets.className = "presets";
+  for (const p of [0, 99, 999, 9999]) {
+    const b = document.createElement("button");
+    if (p === 9999) b.className = "max";
+    b.textContent = p === 9999 ? "MAX" : p;
+    b.onclick = () => commit(p);
+    presets.appendChild(b);
+  }
+  detail.appendChild(presets);
+
+  if (e.value !== e.saved) {
+    const diff = document.createElement("div");
+    diff.className = "diff-inset";
+    const undo = document.createElement("a");
+    undo.textContent = "Annuler cette modification";
+    undo.onclick = () => commit(e.saved);
+    diff.innerHTML = `<span class="t">Modifié · non écrit</span><span class="v">${e.saved} → ${e.value}</span>`;
+    diff.appendChild(undo);
+    detail.appendChild(diff);
+  }
+
+  const legend = document.createElement("div");
+  legend.className = "legend";
+  for (const r of RARITY) {
+    legend.innerHTML += `<span class="lg"><span class="sw" style="border-color:var(--r-${r.g === "normal" ? "common" : r.g})"></span>${lang === "fr" ? r.fr : r.en}</span>`;
+  }
+  detail.appendChild(legend);
 }
 
 // ── Personnages (read-only) ────────────────────────────────────────────────
@@ -688,8 +803,13 @@ $("#next").onclick = () => { sql.offset += sql.limit; loadPage(); };
 $("#save-btn").onclick = async () => {
   const btn = $("#save-btn");
   btn.disabled = true;
-  try { await api("/api/save", { method: "POST" }); resetModif(); toast("Sauvegarde écrite · backup .bak créé"); }
-  catch (e) { toast("Écriture échouée : " + e.message); }
+  try {
+    await api("/api/save", { method: "POST" });
+    resetModif();
+    invBaseline = {}; // written to disk → new baseline
+    if (loaded.has("inv")) RENDER.inv().catch(() => {});
+    toast("Sauvegarde écrite · backup .bak créé");
+  } catch (e) { toast("Écriture échouée : " + e.message); }
   finally { btn.disabled = false; }
 };
 
