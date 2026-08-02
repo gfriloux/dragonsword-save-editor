@@ -25,3 +25,4 @@ the sibling projects `auspex` and `stc`.
 | _(untagged)_ | `c6d4e6f` | 2026-08-01 | First version: pure-Go SQLCipher codec, save-editing layer, embedded web UI, Nix flake with Windows cross-compilation | — |
 | _(pending)_ | — | 2026-08-01 | Working procedures: plans layout, Justfile gates, git-cliff, DESIGN/PROCEDURE/CLAUDE docs | [`release/`](release/plan.md) |
 | _(pending)_ | — | 2026-08-02 | Consumables panel lists the full th.gl stackable catalog (owned + not owned) with editable counts (0 → X) | [`v0.9.0/`](v0.9.0/plan.md) |
+| _(pending)_ | — | 2026-08-02 | Curated functional consumable categories + category-sidebar panel (direction B); curated bilingual names for off-th.gl items | [`v0.10.0/`](v0.10.0/plan.md) |

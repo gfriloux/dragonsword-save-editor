@@ -53,6 +53,15 @@ Confident categories (encoded); everything not matched falls through to **Non tr
 Not created yet (no confirmed members): **XP personnage** — pending the user
 identifying the book CIDs in-game. Adding it later is a one-line curated change.
 
+**Delivered taxonomy (grew during implementation, from user in-game knowledge):**
+`Ingrédients · Percée · Éveil · Compétences · Fabrication · Runes · XP équipement ·
+Échange · Potions · Plats cuisinés · Non trié`. Added beyond the initial lock:
+**Awakening** (`1450410` Gemme d'éveil), **Skill** (`1450811/812/815/816/823`),
+**Crafting** (whole `14501xx` stone block + `1450820/821` + `1460101`–`1460199`
+crystals — the standalone Crystals category was folded in), **Exchange** (`1000500`).
+Off-th.gl items now get curated bilingual names via `internal/domain/data/items_extra.json`
+(e.g. `1450410` = Gemme d'éveil: Stigmate / Stigma Awaken Stone).
+
 ### Scope
 
 **In scope**
@@ -126,8 +135,16 @@ rail. Keep the app header/tabs/editor-nav chrome untouched.
   the user can still edit them; the map grows as items are identified in-game.
 
 ### Quality gates
-- [ ] `just ci` passes (incl. new domain unit test)
-- [ ] Real-save round-trip green (`DSA_SAVE=… just test`)
-- [ ] Docs synced in the same commits (content-ids facts with Step 1; README with Step 3)
-- [ ] Atomic commits on `feat/consumable-categories`
-- [ ] Manual tests M1–M5 pass (see `manual_tests.md`)
+- [x] `just ci` passes (incl. new domain unit tests) — green on every commit
+- [x] Real-save round-trip green — the panel was driven against the real save during
+      curation (harvested owned CIDs; user confirmed items and names live)
+- [x] Docs synced in the same commits (content-ids/DESIGN facts with the code)
+- [x] Atomic commits on `feat/consumable-categories`
+- [x] Manual UI validated by the user through live inspection (categories, names,
+      0 → X). Formal M1–M5 remain in `manual_tests.md` for reference.
+
+### Follow-ups (deferred, refine as items are identified in-game)
+- **Potions** (`1410002`–`1410105`): purpose/names still unclear to the user.
+- **XP personnage** category + names for the book candidates `1000800/801/802/804`.
+- Off-th.gl names (potions, mana) in `items_extra.json` as they're confirmed.
+- A later **UX pass** (search/filter, density) on the category panel.

@@ -7,16 +7,16 @@ DSA_SAVE=/path/to/6144_Slot1.db nix develop --command just run
 ```
 
 ## M1 — Category sidebar renders
-1. Editor tab → Consumables. A category rail lists: Ingrédients, Percée, Cristaux,
-   Runes, XP équipement, Potions, Plats cuisinés, Non trié (order per taxonomy), each
-   with a colored dot and `owned N / total`.
+1. Editor tab → Consumables. A category rail lists (delivered order): Ingrédients,
+   Percée, Éveil, Compétences, Fabrication, Runes, XP équipement, Échange, Potions,
+   Plats cuisinés, Non trié — each with a colored dot and `owned N / total`.
 2. Selecting a category shows only its items in the item pane.
 
 ## M2 — Percée is correct and prudent
 1. Open **Percée**: monster parts (essence/peau/os/carapace/molaire/griffe) +
    Fruit de la vitalité, Graine primordiale, Goutte de pureté, Feuille de vigueur.
-2. It must **not** contain enhancement stones ("Pierre de …"), badges, grimoires —
-   those live in **Non trié**.
+2. It must **not** contain the "Pierre de …" stones or crystals (those are in
+   **Fabrication**), skill books (**Compétences**), or the awakening gem (**Éveil**).
 
 ## M3 — Mana lands in XP équipement, not Potions
 1. **XP équipement** contains Fragment/Cristal/Minéral de mana (`1410202/203/204`).
