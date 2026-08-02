@@ -29,7 +29,7 @@
             pname = "dsa-save-editor";
             inherit version;
             src = ./.;
-            vendorHash = "sha256-3zh3NG41aGcphgpIEx+J5PBz9OObZRi5PFaVrJ0Rra8=";
+            vendorHash = "sha256-Sl2S9rQ+UrEFtDXPynsaG3VSautjj3RgSffPrtTcAyk=";
             subPackages = [ "cmd/dsa-save-editor" ];
             env = {
               CGO_ENABLED = "0";

@@ -28,6 +28,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -40,7 +41,9 @@ type item struct {
 	EN       string `json:"en,omitempty"`
 	Category string `json:"category"`
 	Type     string `json:"type,omitempty"`
-	Group    string `json:"group,omitempty"` // game item-category id (functional grouping)
+	Grade    string `json:"grade,omitempty"`    // rarity: normal|rare|superior|epic|legendary
+	Group    string `json:"group,omitempty"`    // game item-category id (functional grouping)
+	Icon     string `json:"iconPath,omitempty"` // pak-relative UTexture2D asset path (no extension)
 	X        int    `json:"x"`
 	Y        int    `json:"y"`
 }
@@ -119,6 +122,40 @@ type itemRow struct {
 	Name     string `xml:"Name,attr"`
 	ItemType string `xml:"ItemType,attr"`
 	Category string `xml:"Category,attr"`
+	Grade    string `xml:"Grade,attr"`
+	IconName string `xml:"IconName,attr"`
+}
+
+// iconGameRe pulls the /Game/... asset path (without extension) out of an
+// IconName like `…Texture2D'/Game/Art/UI/…/Icon_Item_Common_Gold.Icon_…'`.
+var iconGameRe = regexp.MustCompile(`/Game/([^.'"]+)`)
+
+// iconPath maps an IconName to the pak-relative asset path (no extension), e.g.
+// "Art/UI/InGame/Icon_Item/Common/Icon_Item_Common_Gold". Empty if none.
+func iconPath(iconName string) string {
+	m := iconGameRe.FindStringSubmatch(iconName)
+	if m == nil {
+		return ""
+	}
+	return m[1]
+}
+
+// normGrade maps the game's item Grade to a normalized rarity token, or "".
+func normGrade(g string) string {
+	switch g {
+	case "NORMAL":
+		return "normal"
+	case "RARE":
+		return "rare"
+	case "SUPERIOR":
+		return "superior"
+	case "EPIC":
+		return "epic"
+	case "LEGENDARY":
+		return "legendary"
+	default:
+		return ""
+	}
 }
 
 // streamRows decodes every element whose local name is `local` from an XML file into
@@ -213,6 +250,8 @@ func main() {
 			updated++
 		}
 		it.Type = r.ItemType
+		it.Grade = normGrade(r.Grade)
+		it.Icon = iconPath(r.IconName)
 		switch r.ItemType {
 		case "EQUIPMENT", "VEHICLE", "COSTUME", "CHARACTER":
 			it.Group = "" // instance items — shown in their own panels, not Consumables

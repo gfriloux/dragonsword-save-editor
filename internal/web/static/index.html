@@ -1,73 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DragonSword Awakening — Save Editor</title>
+<title>DragonSword — Éditeur de sauvegarde</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="brand">
-    <span class="mark">⚔</span>
-    <div>
-      <h1>DragonSword Awakening</h1>
-      <p class="sub">Save Editor</p>
-    </div>
+
+<!-- ── Bar 1: identity & actions ──────────────────────────────────────────── -->
+<header class="topbar">
+  <span class="brand">DragonSword</span>
+  <span class="spacer"></span>
+  <code id="path" class="path" title="fichier de sauvegarde"></code>
+  <div class="lang" id="lang" title="langue des noms d'objets">
+    <button data-lang="fr">FR</button><button data-lang="en">EN</button>
   </div>
-  <nav class="tabs">
-    <button class="tab active" data-view="editor">Editor</button>
-    <button class="tab" data-view="database">Database <span class="adv">advanced</span></button>
-  </nav>
-  <div class="save-area">
-    <div class="lang" id="lang" title="item name language">
-      <button data-lang="fr">FR</button><button data-lang="en">EN</button>
-    </div>
-    <code id="path" title="save file"></code>
-    <button id="save-btn">Write to save file</button>
-    <span id="save-status" class="status"></span>
-  </div>
+  <span id="modif-badge" class="badge hidden">0 modif.</span>
+  <button id="save-btn" class="cta hidden">Écrire dans la save</button>
 </header>
 
-<!-- ── Editor (friendly, game-oriented) ─────────────────────────────────── -->
-<main id="view-editor" class="view">
-  <aside class="editor-nav">
-    <button class="section-link active" data-section="currency">Currency</button>
-    <button class="section-link" data-section="consumables">Consumables</button>
-    <button class="section-link" data-section="characters">Characters</button>
-    <button class="section-link" data-section="team">Team</button>
-    <button class="section-link" data-section="equipment">Equipment</button>
-    <button class="section-link" data-section="gems">Gems</button>
-    <button class="section-link" data-section="cooking">Cooking</button>
-  </aside>
-  <section class="editor-body">
-    <div id="panel-currency" class="panel"></div>
-    <div id="panel-consumables" class="panel hidden"></div>
-    <div id="panel-characters" class="panel hidden"></div>
-    <div id="panel-team" class="panel hidden"></div>
-    <div id="panel-equipment" class="panel hidden"></div>
-    <div id="panel-gems" class="panel hidden"></div>
-    <div id="panel-cooking" class="panel hidden"></div>
-  </section>
-</main>
+<!-- ── Bar 2: navigation (own line, scrollable) ───────────────────────────── -->
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-view="home">Accueil</button>
+  <button class="tab needs-save" data-view="money">Monnaies</button>
+  <button class="tab needs-save" data-view="inv">Inventaire</button>
+  <button class="tab needs-save" data-view="chars">Personnages</button>
+  <button class="tab needs-save" data-view="team">Équipe</button>
+  <button class="tab needs-save" data-view="equip">Équipement</button>
+  <button class="tab needs-save" data-view="gems">Gemmes</button>
+  <button class="tab needs-save" data-view="cook">Cuisine</button>
+  <button class="tab needs-save" data-view="sql">SQL brut</button>
+</nav>
 
-<!-- ── Database (generic table browser) ─────────────────────────────────── -->
-<main id="view-database" class="view hidden">
-  <aside>
-    <input id="filter" type="search" placeholder="Filter tables…" autocomplete="off">
-    <ul id="tables"></ul>
-  </aside>
-  <section id="content">
-    <div id="table-header">
-      <h2 id="table-name">Select a table</h2>
-      <div id="pager" class="pager hidden">
-        <button id="prev">‹ Prev</button>
-        <span id="range"></span>
-        <button id="next">Next ›</button>
+<!-- ── Screens ────────────────────────────────────────────────────────────── -->
+<main class="stage">
+  <section id="screen-home"  class="screen"></section>
+  <section id="screen-money" class="screen hidden"></section>
+  <section id="screen-inv"   class="screen hidden"></section>
+  <section id="screen-chars" class="screen hidden"></section>
+  <section id="screen-team"  class="screen hidden"></section>
+  <section id="screen-equip" class="screen hidden"></section>
+  <section id="screen-gems"  class="screen hidden"></section>
+  <section id="screen-cook"  class="screen hidden"></section>
+
+  <section id="screen-sql" class="screen hidden sql">
+    <aside class="sql-rail">
+      <input id="filter" type="search" placeholder="Filtrer les tables…" autocomplete="off">
+      <ul id="tables"></ul>
+    </aside>
+    <div class="sql-content">
+      <div class="sql-head">
+        <h2 id="table-name">Choisis une table</h2>
+        <div id="pager" class="pager hidden">
+          <button id="prev">‹ Préc.</button>
+          <span id="range"></span>
+          <button id="next">Suiv. ›</button>
+        </div>
       </div>
+      <div id="grid-wrap"><table id="grid"></table></div>
+      <p id="hint" class="hint">Vue brute des tables. Double-clic pour éditer une cellule non-clé, puis <b>Écrire dans la save</b>. Un backup horodaté est créé automatiquement. Ferme le jeu avant d'écrire.</p>
     </div>
-    <div id="grid-wrap"><table id="grid"></table></div>
-    <p id="hint" class="hint">Raw table view. Edit any non-key cell (commit on Enter / blur), then <b>Write to save file</b>. A timestamped backup of the original is made automatically. Close the game before writing.</p>
   </section>
 </main>
 

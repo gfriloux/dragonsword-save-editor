@@ -21,6 +21,8 @@ type Item struct {
 	NameEN   string `json:"nameEn"`
 	Category string `json:"category"` // currency | potion | food | material | gear | character | costume | mount | misc
 	Group    string `json:"group"`    // game item-category id (functional consumable grouping); "unsorted" if none
+	Grade    string `json:"grade"`    // rarity: normal | rare | superior | epic | legendary; "" if unknown
+	IconPath string `json:"iconPath"` // pak-relative UTexture2D asset path (no extension); "" if none
 	Known    bool   `json:"known"`    // true if a seed name or a user label exists
 	Icon     bool   `json:"icon"`     // true if the item has a sprite cell
 	IconX    int    `json:"iconX"`    // sprite object-position (px), negative
@@ -32,6 +34,8 @@ type seedEntry struct {
 	EN       string `json:"en"`
 	Category string `json:"category"`
 	Group    string `json:"group"`
+	Grade    string `json:"grade"`
+	IconPath string `json:"iconPath"`
 	X        int    `json:"x"`
 	Y        int    `json:"y"`
 }
@@ -132,6 +136,8 @@ func (c *Catalog) LookupCtx(cid int64, categoryHint string) Item {
 		NameEN:   pick(seed.EN),
 		Category: category,
 		Group:    seed.Group, // "" for non-consumables / items without a game category
+		Grade:    seed.Grade,
+		IconPath: seed.IconPath,
 		Known:    hasLabel || (hasSeed && (seed.FR != "" || seed.EN != "")),
 		Icon:     hasSeed && (seed.X != 0 || seed.Y != 0),
 		IconX:    seed.X,

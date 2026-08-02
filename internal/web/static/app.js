@@ -2,14 +2,21 @@
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
+
 const api = async (url, opts) => {
   const r = await fetch(url, opts);
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || r.statusText);
   return j;
 };
-const postJSON = (url, body) =>
-  api(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+// postJSON also drives the "N modif." badge: game/table mutations bump it,
+// writing to disk resets it. Session calls (config/open/save) are excluded.
+const MUTATING = (url) => url.startsWith("/api/game/") || url === "/api/update";
+async function postJSON(url, body) {
+  const j = await api(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (MUTATING(url)) bumpModif(1);
+  return j;
+}
 
 function toast(msg) {
   const t = $("#toast");
@@ -19,68 +26,223 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
-const CATS = ["currency", "potion", "food", "material", "gear", "character", "misc"];
-const catClass = (c) => "cat-" + (CATS.includes(c) ? c : "misc");
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 let lang = localStorage.getItem("dsa-lang") || "fr";
-// Item names come in both languages; pick the active one, falling back gracefully.
 const displayName = (it) =>
   (lang === "fr" ? it.nameFr : it.nameEn) || it.nameEn || it.nameFr || "CID " + it.cid;
 
-// Icons live in a single sprite (/sprite.webp); each item has an object-position.
-let iconSize = 64; // sprite cell size, from /api/info
-const ICON_DISP = 28; // displayed px
-const iconStyle = (it) =>
+// ── Modif badge (derived, client-side; reset on write) ─────────────────────
+let modifCount = 0;
+function bumpModif(n) {
+  modifCount += n;
+  const b = $("#modif-badge");
+  b.textContent = modifCount + " modif.";
+  b.classList.toggle("hidden", modifCount === 0);
+}
+function resetModif() { modifCount = 0; $("#modif-badge").classList.add("hidden"); }
+
+// ── Icons ──────────────────────────────────────────────────────────────────
+// Authentic in-game icons come from /api/icon?cid=…; on failure (no game folder,
+// no icon, extraction error) they fall back to the th.gl sprite atlas, then a
+// category dot.
+let iconSize = 64;
+const ICON_DISP = 40;
+const spriteStyle = (it, disp) =>
   `object-fit:none;object-position:${it.iconX}px ${it.iconY}px;` +
-  `width:${iconSize}px;height:${iconSize}px;zoom:${ICON_DISP / iconSize}`;
-// DOM <img> icon, or a category dot fallback.
-function iconEl(it) {
-  if (!it.icon) {
+  `width:${iconSize}px;height:${iconSize}px;zoom:${disp / iconSize}`;
+
+// iconFail swaps a failed authentic <img> to its sprite cell, or a dot.
+function iconFail(img) {
+  img.onerror = null;
+  if (img.dataset.sprite === "1") {
+    img.src = "/sprite.webp";
+    img.style.cssText =
+      `object-fit:none;object-position:${img.dataset.x}px ${img.dataset.y}px;` +
+      `width:${iconSize}px;height:${iconSize}px;zoom:${+img.dataset.disp / iconSize}`;
+  } else {
+    const s = document.createElement("span");
+    s.className = "cat-dot";
+    img.replaceWith(s);
+  }
+}
+window.iconFail = iconFail;
+
+function iconEl(it, disp = ICON_DISP) {
+  if (!it || !it.cid) {
     const d = document.createElement("span");
-    d.className = "cat-dot " + catClass(it.category);
+    d.className = "cat-dot";
     return d;
   }
   const img = document.createElement("img");
   img.className = "ic";
-  img.src = "/sprite.webp";
   img.alt = "";
-  img.style.cssText = iconStyle(it);
+  img.width = img.height = disp;
+  img.style.objectFit = "contain";
+  img.src = "/api/icon?cid=" + it.cid;
+  img.dataset.sprite = it.icon ? "1" : "0";
+  img.dataset.x = it.iconX || 0;
+  img.dataset.y = it.iconY || 0;
+  img.dataset.disp = disp;
+  img.onerror = () => iconFail(img);
   return img;
 }
-// String form for innerHTML contexts (cards/slots).
-const iconHTML = (it) =>
-  it.icon
-    ? `<img class="ic" src="/sprite.webp" alt="" style="${iconStyle(it)}">`
-    : `<span class="cat-dot ${catClass(it.category)}"></span>`;
+const iconHTML = (it, disp = ICON_DISP) =>
+  it && it.cid
+    ? `<img class="ic" alt="" width="${disp}" height="${disp}" style="object-fit:contain" ` +
+      `src="/api/icon?cid=${it.cid}" data-sprite="${it.icon ? 1 : 0}" ` +
+      `data-x="${it.iconX || 0}" data-y="${it.iconY || 0}" data-disp="${disp}" onerror="iconFail(this)">`
+    : `<span class="cat-dot"></span>`;
 
-// ── View & section switching ─────────────────────────────────────────────
-let dbLoaded = false;
+// ── Session state & view routing ───────────────────────────────────────────
+let saveOpen = false;
+let currentView = "home";
+const RENDER = {}; // view -> async render fn (registered below)
+const loaded = new Set();
 
-function initTabs() {
-  $$(".tab").forEach((t) => (t.onclick = () => showView(t.dataset.view)));
-  $$(".section-link").forEach((l) => (l.onclick = () => showSection(l.dataset.section)));
-}
-function showView(v) {
+function setView(v) {
+  if (v !== "home" && !saveOpen) return;
+  currentView = v;
   $$(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === v));
-  $("#view-editor").classList.toggle("hidden", v !== "editor");
-  $("#view-database").classList.toggle("hidden", v !== "database");
-  if (v === "database" && !dbLoaded) {
-    loadTables().catch((e) => toast("Load failed: " + e.message));
-    dbLoaded = true;
+  $$(".screen").forEach((s) => s.classList.toggle("hidden", s.id !== "screen-" + v));
+  if (v !== "home" && RENDER[v] && !loaded.has(v)) {
+    loaded.add(v);
+    RENDER[v]().catch((e) => toast("Chargement échoué : " + e.message));
   }
 }
-function showSection(s) {
-  $$(".section-link").forEach((l) => l.classList.toggle("active", l.dataset.section === s));
-  $$("#view-editor .panel").forEach((p) => p.classList.toggle("hidden", p.id !== "panel-" + s));
+
+function onSaveOpened(path) {
+  saveOpen = true;
+  $("#path").textContent = path;
+  $("#path").title = path;
+  $("#save-btn").classList.remove("hidden");
+  document.body.classList.add("has-save");
+  loaded.clear();
+  resetModif();
+  loadInfo().catch(() => {});
 }
 
-// ── Shared editor row: name + quantity stepper + optional label edit ───────
-function stepperRow({ item, name, cid, known, value, onCommit, onLabel }) {
+// Re-render everything after a language switch.
+function reloadAll() {
+  const keep = currentView;
+  loaded.clear();
+  catalogCache = consCatsCache = null;
+  if (keep !== "home" && RENDER[keep]) {
+    loaded.add(keep);
+    RENDER[keep]().catch((e) => toast("Rechargement échoué : " + e.message));
+  }
+}
+
+// ── Accueil : game folder + save picker ────────────────────────────────────
+async function renderHome() {
+  const el = $("#screen-home");
+  el.className = "screen home";
+  el.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.className = "home-head";
+  head.innerHTML = `<span class="overline">Éditeur de sauvegarde</span><h1>Choisis ta sauvegarde</h1>`;
+  el.appendChild(head);
+
+  const cfg = await api("/api/config");
+  if (cfg.saveOpen && !saveOpen) onSaveOpened(cfg.savePath || "");
+
+  // Folder box.
+  const box = document.createElement("div");
+  box.className = "folder-box";
+  if (!cfg.gameDir) {
+    box.innerHTML = `<div class="label">Dossier du jeu</div>
+      <p class="sub">Indique le dossier d'installation de DragonSword (celui qui contient <span class="mono">DS/Content/Paks</span> et <span class="mono">DS/Saved/SaveGames</span>).</p>`;
+  } else {
+    box.innerHTML = `<div class="label">Dossier du jeu</div>
+      <div class="cur-folder">${escapeHtml(cfg.gameDir)}</div>`;
+  }
+  const row = document.createElement("div");
+  row.className = "folder-row";
+  const input = document.createElement("input");
+  input.placeholder = "/chemin/vers/DragonSword Awakening";
+  input.value = cfg.gameDir || "";
+  const btn = document.createElement("button");
+  btn.className = "cta";
+  btn.textContent = cfg.gameDir ? "Changer" : "Valider";
+  btn.onclick = async () => {
+    const dir = input.value.trim();
+    if (!dir) return;
+    btn.disabled = true;
+    try {
+      await postJSON("/api/config/game-dir", { dir });
+      await renderHome();
+    } catch (e) {
+      toast("Dossier invalide : " + e.message);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+  input.onkeydown = (e) => { if (e.key === "Enter") btn.click(); };
+  row.append(input, btn);
+  box.appendChild(row);
+  el.appendChild(box);
+
+  // Slots.
+  if (cfg.gameDir) {
+    try {
+      const { slots } = await api("/api/saves");
+      if (!slots || !slots.length) {
+        const p = document.createElement("p");
+        p.className = "empty-note";
+        p.textContent = "Aucune sauvegarde trouvée sous ce dossier.";
+        el.appendChild(p);
+      } else {
+        const grid = document.createElement("div");
+        grid.className = "slots";
+        for (const s of slots) grid.appendChild(slotCard(s));
+        el.appendChild(grid);
+      }
+    } catch (e) {
+      const p = document.createElement("p");
+      p.className = "empty-note";
+      p.textContent = "Impossible de lister les sauvegardes : " + e.message;
+      el.appendChild(p);
+    }
+  }
+
+  // Warning banner.
+  const warn = document.createElement("div");
+  warn.className = "warn-banner";
+  warn.innerHTML = `<span class="dot">!</span><p><b>Ferme le jeu avant d'écrire.</b> Le jeu garde la base ouverte pendant qu'il tourne. Au premier write, un backup horodaté <span class="mono">.bak</span> de l'original est créé automatiquement.</p>`;
+  el.appendChild(warn);
+}
+
+function slotCard(s) {
+  const card = document.createElement("div");
+  card.className = "slot-card";
+  const when = s.modTime ? new Date(s.modTime).toLocaleString() : "";
+  const thumb = s.screenshot
+    ? `<img class="slot-thumb" src="/api/screenshot?path=${encodeURIComponent(s.screenshot)}" alt="">`
+    : `<div class="slot-thumb"></div>`;
+  card.innerHTML =
+    `<div class="slot-top"><span class="slot-n">SLOT ${s.slot}</span><span class="pill">compte ${escapeHtml(s.accountId)}</span></div>` +
+    `<div class="slot-main">${thumb}<div class="slot-meta">` +
+    `<span class="slot-name">Slot ${s.slot}</span><span class="slot-when">${escapeHtml(when)}</span></div></div>` +
+    `<div class="slot-path" title="${escapeHtml(s.path)}">${escapeHtml(s.path)}</div>`;
+  card.onclick = async () => {
+    try {
+      await api("/api/open", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ path: s.path }) });
+      onSaveOpened(s.path);
+      setView("inv");
+    } catch (e) {
+      toast("Ouverture échouée : " + e.message);
+    }
+  };
+  return card;
+}
+
+// ── Shared stepper row ─────────────────────────────────────────────────────
+function stepperRow({ item, name, cid, known, value, step = 1, onCommit, onLabel }) {
   const row = document.createElement("div");
   row.className = "row";
-  row.appendChild(iconEl(item));
+  row.appendChild(iconEl(item, 32));
 
   const names = document.createElement("div");
   names.className = "names";
@@ -90,9 +252,9 @@ function stepperRow({ item, name, cid, known, value, onCommit, onLabel }) {
   if (onLabel) {
     const edit = document.createElement("button");
     edit.className = "edit-label";
-    edit.textContent = "✎ name";
+    edit.textContent = "✎";
     edit.onclick = () => {
-      const v = prompt(`Name for CID ${cid}`, known ? name : "");
+      const v = prompt(`Nom pour CID ${cid}`, known ? name : "");
       if (v !== null) onLabel(v.trim());
     };
     iname.appendChild(edit);
@@ -100,12 +262,15 @@ function stepperRow({ item, name, cid, known, value, onCommit, onLabel }) {
   const icid = document.createElement("span");
   icid.className = "icid";
   icid.textContent = "CID " + cid;
-  names.appendChild(iname);
-  names.appendChild(icid);
+  names.append(iname, icid);
   row.appendChild(names);
+  row.appendChild(stepper(value, step, onCommit));
+  return row;
+}
 
+function stepper(value, step, onCommit) {
   const qty = document.createElement("div");
-  qty.className = "qty";
+  qty.className = "stepper";
   const input = document.createElement("input");
   input.type = "number";
   input.value = value;
@@ -120,50 +285,51 @@ function stepperRow({ item, name, cid, known, value, onCommit, onLabel }) {
       input.classList.add("saved");
     } catch (e) {
       input.value = value;
-      toast("Update failed: " + e.message);
+      toast("Échec : " + e.message);
     }
   };
-  const bump = (d) => {
-    input.value = Math.max(0, (parseInt(input.value, 10) || 0) + d);
-    commit();
-  };
+  const bump = (d) => { input.value = Math.max(0, (parseInt(input.value, 10) || 0) + d); commit(); };
   const minus = document.createElement("button");
   minus.textContent = "−";
-  minus.onclick = () => bump(-1);
+  minus.onclick = () => bump(-step);
   const plus = document.createElement("button");
+  plus.className = "plus";
   plus.textContent = "+";
-  plus.onclick = () => bump(1);
+  plus.onclick = () => bump(step);
   input.onchange = commit;
-  input.onkeydown = (e) => {
-    if (e.key === "Enter") input.blur();
-  };
-  qty.appendChild(minus);
-  qty.appendChild(input);
-  qty.appendChild(plus);
-  row.appendChild(qty);
-  return row;
+  input.onkeydown = (e) => { if (e.key === "Enter") input.blur(); };
+  qty.append(minus, input, plus);
+  return qty;
 }
 
-// ── Editor: Currency panel ────────────────────────────────────────────────
-async function renderCurrency() {
-  const el = $("#panel-currency");
-  el.innerHTML = `<h2>Currency</h2><p class="panel-sub">Account currencies (gold, tokens…). Edit an amount and Enter, then Write to save file.</p>`;
+// ── Monnaies ───────────────────────────────────────────────────────────────
+RENDER.money = async function () {
+  const el = $("#screen-money");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Compte</span><h2>Monnaies</h2></div>`;
   const { currencies } = await api("/api/game/currency");
-  const rows = document.createElement("div");
-  rows.className = "rows";
+  const cards = document.createElement("div");
+  cards.className = "cards";
   for (const c of currencies || []) {
-    rows.appendChild(
-      stepperRow({
-        item: c, name: displayName(c), cid: c.cid, known: c.known, value: c.amount,
-        onCommit: (v) => postJSON("/api/game/currency", { cid: c.cid, amount: v }),
-        onLabel: (name) => postJSON("/api/game/label", { cid: c.cid, name }).then(renderCurrency),
-      })
-    );
+    const card = document.createElement("div");
+    card.className = "card";
+    const head = document.createElement("div");
+    head.className = "card-head";
+    head.appendChild(iconEl(c, 40));
+    const names = document.createElement("div");
+    names.className = "names";
+    names.innerHTML = `<span class="iname">${escapeHtml(displayName(c))}</span><span class="icid">CID ${c.cid}</span>`;
+    head.appendChild(names);
+    card.appendChild(head);
+    // Gold steps by 10k, crystals/tokens by 50.
+    const step = /gold|or\b/i.test(displayName(c)) ? 10000 : 50;
+    card.appendChild(stepper(c.amount, step, (v) => postJSON("/api/game/currency", { cid: c.cid, amount: v })));
+    cards.appendChild(card);
   }
-  el.appendChild(rows);
-}
+  el.appendChild(cards);
+};
 
-// ── Editor: Consumables panel (direction B: curated category sidebar) ──────
+// ── Inventaire (categories rail + list) ────────────────────────────────────
 let catalogCache = null;
 async function catalog() {
   if (!catalogCache) catalogCache = (await api("/api/game/catalog")).items || [];
@@ -174,271 +340,270 @@ async function consCategories() {
   if (!consCatsCache) consCatsCache = (await api("/api/game/consumable-categories")).categories || [];
   return consCatsCache;
 }
-let selectedConsCat = null; // persists across re-renders
-
+let selectedCat = null;
+let selInvKey = null; // selected cell (detail panel)
+let invBaseline = {}; // key -> value read from the save (for the amber "modified" dot)
 const catLabel = (c) => (lang === "fr" ? c.labelFr : c.labelEn) || c.labelEn || c.key;
 
-// Build the per-category editable model: merge owned stacks (fresh) with the full
-// th.gl catalog (not-owned → count 0), plus owned-only items absent from the catalog
-// (potions, mana, cooked food, off-catalog materials). Grouping is by the curated
-// functional category key (Item.group = the game's item category).
+const RARITY = [
+  { g: "normal", fr: "Commun", en: "Common" },
+  { g: "rare", fr: "Rare", en: "Rare" },
+  { g: "superior", fr: "Supérieur", en: "Superior" },
+  { g: "epic", fr: "Épique", en: "Epic" },
+  { g: "legendary", fr: "Légendaire", en: "Legendary" },
+];
+const entryKey = (e) => (e.stackable ? "c" + e.cid : "k" + (e.item.id || e.cid));
+const rarityClass = (e) => (e.item && e.item.grade ? "r-" + e.item.grade : "r-normal");
+
 async function buildConsumableModel() {
-  const [{ items: owned }, cat, cats] = await Promise.all([
-    api("/api/game/consumables"),
-    catalog(),
-    consCategories(),
-  ]);
+  const [{ items: owned }, cat, cats] = await Promise.all([api("/api/game/consumables"), catalog(), consCategories()]);
   const catByCid = {};
   for (const it of cat) catByCid[it.cid] = it;
-
-  const entries = {}; // key -> [entry]
+  const entries = {};
   const push = (key, e) => (entries[key] ||= []).push(e);
-  const ownedStack = {}; // cid -> count, to fill catalog rows
-
+  const ownedStack = {};
   for (const it of owned || []) {
     if (it.kind === "cook") {
-      // cooked dishes are per-instance; edit via /api/game/stack
-      push(it.group || "unsorted", {
-        item: it, name: displayName(it), cid: it.cid, known: it.known,
-        value: it.count, owned: it.count > 0, stackable: false,
-        commit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }),
-      });
+      push(it.group || "unsorted", { item: it, name: displayName(it), cid: it.cid, known: it.known, value: it.count, owned: it.count > 0, stackable: false,
+        commit: (v) => postJSON("/api/game/stack", { kind: it.kind, id: it.id, count: v }) });
     } else {
       ownedStack[it.cid] = it.count;
       if (!catByCid[it.cid]) {
-        // owned stackable the th.gl catalog does not list (potions, mana, …)
-        push(it.group || "unsorted", {
-          item: it, name: displayName(it), cid: it.cid, known: it.known,
-          value: it.count, owned: it.count > 0, stackable: true,
-          commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
-        });
+        push(it.group || "unsorted", { item: it, name: displayName(it), cid: it.cid, known: it.known, value: it.count, owned: it.count > 0, stackable: true,
+          commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }) });
       }
     }
   }
-  // catalog stackables merged with owned counts (0 → X supported). Items without a
-  // consumable group (equipment, costumes, characters…) belong to other panels — skip.
   for (const it of cat) {
     if (!it.group) continue;
     const c = ownedStack[it.cid] || 0;
-    push(it.group, {
-      item: it, name: displayName(it), cid: it.cid, known: it.known,
-      value: c, owned: c > 0, stackable: true,
-      commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }),
-    });
+    push(it.group, { item: it, name: displayName(it), cid: it.cid, known: it.known, value: c, owned: c > 0, stackable: true,
+      commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }) });
   }
-  for (const k in entries) {
-    entries[k].sort((a, b) => (b.owned - a.owned) || a.name.localeCompare(b.name));
-  }
+  for (const k in entries) entries[k].sort((a, b) => (b.owned - a.owned) || a.name.localeCompare(b.name));
   return { entries, cats };
 }
 
-async function renderConsumables() {
-  const el = $("#panel-consumables");
-  el.innerHTML = `<h2>Consumables</h2><p class="panel-sub">Pick a category, then set any count — owned or not (0 → X). Not-owned items are dimmed.</p>`;
+RENDER.inv = async function () {
+  const el = $("#screen-inv");
+  el.className = "screen inv";
+  el.innerHTML = "";
   const model = await buildConsumableModel();
-
-  const layout = document.createElement("div");
-  layout.className = "cons-layout";
-  const rail = document.createElement("aside");
-  rail.className = "cons-cats";
-  const pane = document.createElement("div");
-  pane.className = "cons-pane";
-  layout.append(rail, pane);
-  el.appendChild(layout);
-
+  // Capture the save baseline once per item (drives the amber "modified" dot).
+  for (const k in model.entries) for (const e of model.entries[k]) {
+    const key = entryKey(e);
+    if (invBaseline[key] === undefined) invBaseline[key] = e.value;
+    e.saved = invBaseline[key];
+  }
   const cats = model.cats.filter((c) => (model.entries[c.key] || []).length);
-  if (!cats.length) {
-    pane.innerHTML = `<p class="empty-note">No consumables.</p>`;
-    return;
-  }
-  if (!selectedConsCat || !cats.some((c) => c.key === selectedConsCat)) {
-    selectedConsCat = cats[0].key;
-  }
+
+  const rail = document.createElement("aside");
+  rail.className = "inv-rail";
+  const main = document.createElement("div");
+  main.className = "inv-main";
+  const detail = document.createElement("div");
+  detail.className = "inv-detail empty";
+  el.append(rail, main, detail);
+
+  if (!cats.length) { main.innerHTML = `<p class="empty-note">Aucun consommable.</p>`; return; }
+  if (!selectedCat || !cats.some((c) => c.key === selectedCat)) selectedCat = cats[0].key;
 
   for (const c of cats) {
     const list = model.entries[c.key];
     const ownedN = list.filter((e) => e.owned).length;
     const b = document.createElement("button");
-    b.className = "cons-cat" + (c.key === selectedConsCat ? " active" : "");
+    b.className = "cat-link" + (c.key === selectedCat ? " active" : "");
     b.dataset.key = c.key;
-    b.innerHTML =
-      `<span class="cat-dot" style="background:${c.color}"></span>` +
-      `<span class="cc-label">${escapeHtml(catLabel(c))}</span>` +
-      `<span class="cc-count">${ownedN}/${list.length}</span>`;
+    b.innerHTML = `<span title="${escapeHtml(catLabel(c))}">${escapeHtml(catLabel(c))}</span><span class="n">${ownedN}/${list.length}</span>`;
     b.onclick = () => {
-      selectedConsCat = c.key;
-      $$(".cons-cat").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
-      renderConsPane(pane, model, c);
+      selectedCat = c.key;
+      selInvKey = null;
+      $$(".cat-link").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
+      renderInvCat(main, detail, model, c);
     };
     rail.appendChild(b);
   }
-  renderConsPane(pane, model, cats.find((c) => c.key === selectedConsCat));
-}
+  renderInvCat(main, detail, model, cats.find((c) => c.key === selectedCat));
+};
 
-// renderConsPane fills the right-hand pane with the selected category's items.
-function renderConsPane(pane, model, cat) {
+function renderInvCat(main, detail, model, cat) {
   const list = model.entries[cat.key] || [];
-  const ownedN = list.filter((e) => e.owned).length;
-  pane.innerHTML = "";
-
-  const head = document.createElement("div");
-  head.className = "cons-pane-head";
-  const h = document.createElement("h3");
+  main.innerHTML = "";
+  const bar = document.createElement("div");
+  bar.className = "inv-toolbar";
+  const ownedN = () => list.filter((e) => e.owned).length;
+  const count = document.createElement("span");
+  count.className = "count";
+  const refreshCount = () => (count.textContent = `${ownedN()} possédés / ${list.length}`);
+  const h = document.createElement("h2");
   h.textContent = catLabel(cat);
-  const stat = document.createElement("span");
-  stat.className = "cc-stat";
-  stat.textContent = `${ownedN} owned / ${list.length}`;
-  head.append(h, stat);
-
+  bar.append(h, count);
+  refreshCount();
   const fillWrap = document.createElement("div");
-  fillWrap.className = "cons-fill";
+  fillWrap.className = "inv-fill";
   const fillN = document.createElement("input");
-  fillN.type = "number";
-  fillN.value = 999;
-  fillN.min = 0;
-  fillN.className = "add-qty";
-  const fill = document.createElement("button");
-  fill.textContent = "Fill category";
-  fill.onclick = async () => {
+  fillN.type = "number"; fillN.value = 999; fillN.min = 0;
+  const fillBtn = document.createElement("button");
+  fillBtn.textContent = "Remplir";
+  fillBtn.onclick = async () => {
     const n = Math.max(0, parseInt(fillN.value, 10) || 0);
     const stacks = list.filter((e) => e.stackable);
-    if (!stacks.length) return toast("Nothing fillable in this category.");
-    if (!confirm(`Set all ${stacks.length} stackable items in "${catLabel(cat)}" to ${n}?`)) return;
-    try {
-      for (const e of stacks) await postJSON("/api/game/stackable", { cid: e.cid, count: n });
-      await renderConsumables();
-    } catch (err) {
-      toast("Fill failed: " + err.message);
-    }
+    if (!stacks.length) return toast("Rien à remplir ici.");
+    if (!confirm(`Mettre les ${stacks.length} objets empilables de « ${catLabel(cat)} » à ${n} ?`)) return;
+    try { for (const e of stacks) await postJSON("/api/game/stackable", { cid: e.cid, count: n }); await RENDER.inv(); }
+    catch (err) { toast("Remplissage échoué : " + err.message); }
   };
-  fillWrap.append(fillN, fill);
-  head.appendChild(fillWrap);
-  pane.appendChild(head);
+  fillWrap.append(fillN, fillBtn);
+  bar.appendChild(fillWrap);
+  main.appendChild(bar);
 
-  const rows = document.createElement("div");
-  rows.className = "rows";
+  const grid = document.createElement("div");
+  grid.className = "inv-grid";
+  const cellOf = {};
   for (const e of list) {
-    let row;
-    row = stepperRow({
-      item: e.item, name: e.name, cid: e.cid, known: e.known, value: e.value,
-      onCommit: async (v) => {
-        await e.commit(v);
-        e.value = v;
-        e.owned = v > 0;
-        row.classList.toggle("not-owned", !e.owned);
-      },
-      onLabel: (name) => postJSON("/api/game/label", { cid: e.cid, name }).then(renderConsumables),
-    });
-    if (!e.owned) row.classList.add("not-owned");
-    rows.appendChild(row);
+    const key = entryKey(e);
+    const cell = document.createElement("div");
+    cell.className = "cell " + rarityClass(e);
+    cell.appendChild(iconEl(e.item, 56));
+    const q = document.createElement("span");
+    q.className = "badge-q";
+    const dot = document.createElement("span");
+    dot.className = "dirty";
+    cell.append(q, dot);
+    const paint = () => {
+      q.textContent = e.value;
+      cell.classList.toggle("empty", e.value <= 0);
+      dot.style.display = e.value !== e.saved ? "block" : "none";
+    };
+    paint();
+    cell._paint = paint;
+    cell.onclick = () => selectInvCell(detail, model, cat, e, cell, grid, refreshCount);
+    cellOf[key] = cell;
+    grid.appendChild(cell);
   }
-  pane.appendChild(rows);
+  main.appendChild(grid);
+
+  // Keep or reset the detail selection.
+  const keep = list.find((e) => entryKey(e) === selInvKey);
+  if (keep) selectInvCell(detail, model, cat, keep, cellOf[selInvKey], grid, refreshCount);
+  else { detail.className = "inv-detail empty"; detail.innerHTML = "<span>Choisis un objet.</span>"; }
 }
 
-// ── Editor: Characters panel (read-only) ──────────────────────────────────
-async function renderCharacters() {
-  const el = $("#panel-characters");
-  el.innerHTML = `<h2>Characters</h2><p class="panel-sub">Read-only — owned characters and their progression.</p>`;
+function selectInvCell(detail, model, cat, e, cell, grid, refreshCount) {
+  selInvKey = entryKey(e);
+  grid.querySelectorAll(".cell").forEach((c) => c.classList.remove("sel"));
+  if (cell) cell.classList.add("sel");
+  renderInvDetail(detail, e, cell, refreshCount);
+}
+
+function renderInvDetail(detail, e, cell, refreshCount) {
+  detail.className = "inv-detail";
+  detail.innerHTML = "";
+  const ic = document.createElement("div");
+  ic.className = "detail-ic";
+  ic.appendChild(iconEl(e.item, 96));
+  const name = document.createElement("div");
+  name.className = "detail-name" + (e.known ? "" : " unknown");
+  name.textContent = e.name;
+  const meta = document.createElement("div");
+  meta.className = "icid";
+  meta.textContent = `CID ${e.cid} · ${e.stackable ? "tb_stackable_item" : "tb_cook"}`;
+  const sep = document.createElement("div");
+  sep.className = "detail-sep";
+  const lbl = document.createElement("div");
+  lbl.className = "label";
+  lbl.textContent = "Quantité en stock";
+  detail.append(ic, name, meta, sep, lbl);
+
+  const commit = async (v) => {
+    v = Math.max(0, Math.min(9999, v | 0));
+    if (v === e.value) return;
+    try {
+      await e.commit(v);
+      e.value = v; e.owned = v > 0;
+      if (cell && cell._paint) cell._paint();
+      refreshCount();
+      renderInvDetail(detail, e, cell, refreshCount);
+    } catch (err) { toast("Échec : " + err.message); }
+  };
+  detail.appendChild(stepper(e.value, 1, commit));
+
+  const presets = document.createElement("div");
+  presets.className = "presets";
+  for (const p of [0, 99, 999, 9999]) {
+    const b = document.createElement("button");
+    if (p === 9999) b.className = "max";
+    b.textContent = p === 9999 ? "MAX" : p;
+    b.onclick = () => commit(p);
+    presets.appendChild(b);
+  }
+  detail.appendChild(presets);
+
+  if (e.value !== e.saved) {
+    const diff = document.createElement("div");
+    diff.className = "diff-inset";
+    const undo = document.createElement("a");
+    undo.textContent = "Annuler cette modification";
+    undo.onclick = () => commit(e.saved);
+    diff.innerHTML = `<span class="t">Modifié · non écrit</span><span class="v">${e.saved} → ${e.value}</span>`;
+    diff.appendChild(undo);
+    detail.appendChild(diff);
+  }
+
+  const legend = document.createElement("div");
+  legend.className = "legend";
+  for (const r of RARITY) {
+    legend.innerHTML += `<span class="lg"><span class="sw" style="border-color:var(--r-${r.g === "normal" ? "common" : r.g})"></span>${lang === "fr" ? r.fr : r.en}</span>`;
+  }
+  detail.appendChild(legend);
+}
+
+// ── Personnages (read-only) ────────────────────────────────────────────────
+RENDER.chars = async function () {
+  const el = $("#screen-chars");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Roster</span><h2>Personnages</h2><span class="sub">Lecture seule — personnages possédés et progression.</span></div>`;
   const { characters } = await api("/api/game/characters");
   const grid = document.createElement("div");
   grid.className = "cards";
   for (const c of characters || []) {
     const card = document.createElement("div");
     card.className = "card";
-    const stat = (label, v) => `<div><dt>${label}</dt><dd>${v}</dd></div>`;
+    const stat = (l, v) => `<div><dt class="label">${l}</dt><dd class="mono">${v}</dd></div>`;
     card.innerHTML =
-      `<div class="card-head">${iconHTML(c)}` +
-      `<span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(displayName(c))}</span></div>` +
-      `<div class="icid">CID ${c.cid}</div>` +
-      `<dl class="stats">${stat("Level", c.level)}${stat("EXP", c.exp)}${stat("HP", c.hp)}` +
-      `${stat("Ascend", c.ascend)}${stat("Transcend", c.transcend)}${stat("Soldier", c.soldierGrade)}</dl>`;
+      `<div class="card-head">${iconHTML(c, 40)}<div class="names"><span class="iname ${c.known ? "" : "unknown"}">${escapeHtml(displayName(c))}</span><span class="icid">CID ${c.cid}</span></div></div>` +
+      `<dl class="stats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0">${stat("Niveau", c.level)}${stat("EXP", c.exp)}${stat("PV", c.hp)}${stat("Ascension", c.ascend)}${stat("Transcend.", c.transcend)}${stat("Soldat", c.soldierGrade)}</dl>`;
     grid.appendChild(card);
   }
   el.appendChild(grid);
-}
+};
 
-// ── Editor: Team panel (read-only) ────────────────────────────────────────
-async function renderTeam() {
-  const el = $("#panel-team");
-  el.innerHTML = `<h2>Team</h2><p class="panel-sub">Read-only — saved team pages (three slots each).</p>`;
+// ── Équipe (read-only) ─────────────────────────────────────────────────────
+RENDER.team = async function () {
+  const el = $("#screen-team");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Formation</span><h2>Équipe</h2><span class="sub">Lecture seule — pages d'équipe (trois slots chacune).</span></div>`;
   const { teams } = await api("/api/game/teams");
   for (const p of teams || []) {
     const title = document.createElement("div");
     title.className = "group-title";
     title.textContent = "Page " + p.pageId;
     el.appendChild(title);
-    const slots = document.createElement("div");
-    slots.className = "slots";
+    const rows = document.createElement("div");
+    rows.className = "rows";
     for (const s of p.slots || []) {
       const slot = document.createElement("div");
-      slot.className = "slot";
-      if (s.empty) {
-        slot.classList.add("empty");
-        slot.textContent = "— empty —";
-      } else {
-        slot.innerHTML =
-          iconHTML(s) +
-          `<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(displayName(s))}</span>` +
-          `<span class="lv">Lv ${s.level}</span>`;
-      }
-      slots.appendChild(slot);
+      slot.className = "slot" + (s.empty ? " empty" : "");
+      if (s.empty) slot.textContent = "— vide —";
+      else slot.innerHTML = `${iconHTML(s, 32)}<span class="iname ${s.known ? "" : "unknown"}">${escapeHtml(displayName(s))}</span><span class="lv">Niv ${s.level}</span>`;
+      rows.appendChild(slot);
     }
-    el.appendChild(slots);
+    el.appendChild(rows);
   }
-}
+};
 
-// ── Editor: Equipment & Gems panels (editable) ────────────────────────────
-function eqNumField(label, value, onCommit) {
-  const wrap = document.createElement("label");
-  wrap.className = "eq-field";
-  const span = document.createElement("span");
-  span.textContent = label;
-  const input = document.createElement("input");
-  input.type = "number";
-  input.value = value;
-  const commit = async () => {
-    const v = parseInt(input.value, 10);
-    if (!Number.isFinite(v) || String(v) === String(value)) return;
-    try {
-      await onCommit(v);
-      value = v;
-      input.classList.remove("saved");
-      void input.offsetWidth;
-      input.classList.add("saved");
-    } catch (e) {
-      input.value = value;
-      toast("Update failed: " + e.message);
-    }
-  };
-  input.onchange = commit;
-  input.onkeydown = (e) => {
-    if (e.key === "Enter") input.blur();
-  };
-  wrap.appendChild(span);
-  wrap.appendChild(input);
-  return wrap;
-}
-
-function lockToggle(checked, onChange) {
-  const label = document.createElement("label");
-  label.className = "lock";
-  const cb = document.createElement("input");
-  cb.type = "checkbox";
-  cb.checked = checked;
-  cb.onchange = async () => {
-    try {
-      await onChange(cb.checked);
-    } catch (e) {
-      cb.checked = !cb.checked;
-      toast("Update failed: " + e.message);
-    }
-  };
-  label.appendChild(cb);
-  label.appendChild(document.createTextNode("lock"));
-  return label;
-}
-
-function namesCell(cat, name, cid, known, onLabel) {
+// ── Équipement & Gemmes (editable) ─────────────────────────────────────────
+function namesCell(name, cid, known, onLabel) {
   const names = document.createElement("div");
   names.className = "names";
   const iname = document.createElement("span");
@@ -447,86 +612,86 @@ function namesCell(cat, name, cid, known, onLabel) {
   if (onLabel) {
     const edit = document.createElement("button");
     edit.className = "edit-label";
-    edit.textContent = "✎ name";
-    edit.onclick = () => {
-      const v = prompt(`Name for CID ${cid}`, known ? name : "");
-      if (v !== null) onLabel(v.trim());
-    };
+    edit.textContent = "✎";
+    edit.onclick = () => { const v = prompt(`Nom pour CID ${cid}`, known ? name : ""); if (v !== null) onLabel(v.trim()); };
     iname.appendChild(edit);
   }
   const icid = document.createElement("span");
   icid.className = "icid";
   icid.textContent = "CID " + cid;
-  names.appendChild(iname);
-  names.appendChild(icid);
+  names.append(iname, icid);
   return names;
 }
-
+function eqNumField(label, value, onCommit) {
+  const wrap = document.createElement("label");
+  wrap.className = "eq-field";
+  wrap.innerHTML = `<span>${label}</span>`;
+  const input = document.createElement("input");
+  input.type = "number"; input.value = value;
+  const commit = async () => {
+    const v = parseInt(input.value, 10);
+    if (!Number.isFinite(v) || String(v) === String(value)) return;
+    try { await onCommit(v); value = v; input.classList.remove("saved"); void input.offsetWidth; input.classList.add("saved"); }
+    catch (e) { input.value = value; toast("Échec : " + e.message); }
+  };
+  input.onchange = commit;
+  input.onkeydown = (e) => { if (e.key === "Enter") input.blur(); };
+  wrap.appendChild(input);
+  return wrap;
+}
+function lockToggle(checked, onChange) {
+  const label = document.createElement("label");
+  label.className = "lock";
+  const cb = document.createElement("input");
+  cb.type = "checkbox"; cb.checked = checked;
+  cb.onchange = async () => { try { await onChange(cb.checked); } catch (e) { cb.checked = !cb.checked; toast("Échec : " + e.message); } };
+  label.append(cb, document.createTextNode("verrou"));
+  return label;
+}
 function statChips(cids) {
   const chips = document.createElement("div");
   chips.className = "stat-chips";
-  for (const cid of cids) {
-    if (!cid) continue;
-    const c = document.createElement("span");
-    c.className = "chip";
-    c.title = "stat CID (read-only)";
-    c.textContent = cid;
-    chips.appendChild(c);
-  }
+  for (const cid of cids) { if (!cid) continue; const c = document.createElement("span"); c.className = "chip"; c.title = "stat CID (lecture seule)"; c.textContent = cid; chips.appendChild(c); }
   return chips;
 }
 
-async function renderEquipment() {
-  const el = $("#panel-equipment");
-  el.innerHTML = `<h2>Equipment</h2><p class="panel-sub">Enchant level, item XP and lock are editable. Stat references (chips) are read-only.</p>`;
+RENDER.equip = async function () {
+  const el = $("#screen-equip");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Stuff</span><h2>Équipement</h2><span class="sub">Enchant, XP d'objet et verrou éditables ; les stats (puces) sont en lecture seule.</span></div>`;
   const { equipment } = await api("/api/game/equipment");
   const rows = document.createElement("div");
   rows.className = "rows";
   for (const e of equipment || []) {
     const row = document.createElement("div");
-    row.className = "row eq-row";
-    row.appendChild(iconEl(e));
-    row.appendChild(namesCell(e.category, displayName(e), e.cid, e.known, (name) =>
-      postJSON("/api/game/label", { cid: e.cid, name }).then(renderEquipment)
-    ));
+    row.className = "row";
+    row.appendChild(iconEl(e, 32));
+    row.appendChild(namesCell(displayName(e), e.cid, e.known, (name) => postJSON("/api/game/label", { cid: e.cid, name }).then(() => RENDER.equip())));
     const fields = document.createElement("div");
     fields.className = "eq-fields";
-    fields.appendChild(eqNumField("Enchant", e.enchantLevel, (v) =>
-      postJSON("/api/game/equipment", { dbid: e.dbid, field: "enchant", value: v })
-    ));
-    fields.appendChild(eqNumField("XP", e.exp, (v) =>
-      postJSON("/api/game/equipment", { dbid: e.dbid, field: "exp", value: v })
-    ));
-    fields.appendChild(lockToggle(e.isLock, (locked) =>
-      postJSON("/api/game/equipment", { dbid: e.dbid, field: "lock", value: locked ? 1 : 0 })
-    ));
+    fields.appendChild(eqNumField("Enchant", e.enchantLevel, (v) => postJSON("/api/game/equipment", { dbid: e.dbid, field: "enchant", value: v })));
+    fields.appendChild(eqNumField("XP", e.exp, (v) => postJSON("/api/game/equipment", { dbid: e.dbid, field: "exp", value: v })));
+    fields.appendChild(lockToggle(e.isLock, (locked) => postJSON("/api/game/equipment", { dbid: e.dbid, field: "lock", value: locked ? 1 : 0 })));
     row.appendChild(fields);
     row.appendChild(statChips([e.mainStatCid, ...(e.subStatCids || [])]));
     rows.appendChild(row);
   }
   el.appendChild(rows);
-}
+};
 
-async function renderGems() {
-  const el = $("#panel-gems");
-  el.innerHTML = `<h2>Gems</h2><p class="panel-sub">Socketed / instanced gems (the game's <code>tb_gem</code>). Lock is editable. Gems you hold as inventory items appear under <b>Consumables</b> (materials).</p>`;
+RENDER.gems = async function () {
+  const el = $("#screen-gems");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Sertissage</span><h2>Gemmes</h2><span class="sub">Gemmes serties (<span class="mono">tb_gem</span>). Le verrou est éditable. Les gemmes d'inventaire sont sous <b>Inventaire</b>.</span></div>`;
   const { gems } = await api("/api/game/gems");
-  if (!gems || gems.length === 0) {
-    const p = document.createElement("p");
-    p.className = "empty-note";
-    p.textContent = "No socketed gems here. Inventory gems are editable under Consumables.";
-    el.appendChild(p);
-    return;
-  }
+  if (!gems || !gems.length) { el.innerHTML += `<p class="empty-note">Aucune gemme sertie. Les gemmes d'inventaire sont éditables sous Inventaire.</p>`; return; }
   const rows = document.createElement("div");
   rows.className = "rows";
   for (const gm of gems) {
     const row = document.createElement("div");
-    row.className = "row eq-row";
-    row.appendChild(iconEl(gm));
-    row.appendChild(namesCell(gm.category, displayName(gm), gm.cid, gm.known, (name) =>
-      postJSON("/api/game/label", { cid: gm.cid, name }).then(renderGems)
-    ));
+    row.className = "row";
+    row.appendChild(iconEl(gm, 32));
+    row.appendChild(namesCell(displayName(gm), gm.cid, gm.known, (name) => postJSON("/api/game/label", { cid: gm.cid, name }).then(() => RENDER.gems())));
     const fields = document.createElement("div");
     fields.className = "eq-fields";
     fields.appendChild(lockToggle(gm.isLock, (locked) => postJSON("/api/game/gem", { dbid: gm.dbid, locked })));
@@ -535,101 +700,71 @@ async function renderGems() {
     rows.appendChild(row);
   }
   el.appendChild(rows);
-}
+};
 
-// ── Editor: Cooking panel ─────────────────────────────────────────────────
-function renderCooking() {
-  const el = $("#panel-cooking");
-  el.innerHTML = `<h2>Cooking</h2><p class="panel-sub">Recipe unlocks.</p>`;
+// ── Cuisine (recipe details land in Phase 3) ───────────────────────────────
+RENDER.cook = async function () {
+  const el = $("#screen-cook");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Fourneaux</span><h2>Livre de recettes</h2></div>`;
   const btn = document.createElement("button");
   btn.className = "action-btn";
-  btn.textContent = "Unlock all recipes";
+  btn.textContent = "Tout débloquer";
   btn.onclick = async () => {
-    if (!confirm("Mark all normal cooking recipes as known?")) return;
+    if (!confirm("Marquer toutes les recettes normales comme connues ?")) return;
     btn.disabled = true;
-    try {
-      await postJSON("/api/game/recipes/unlock-all", {});
-      toast("All recipes unlocked — click Write to save file.");
-    } catch (e) {
-      toast("Unlock failed: " + e.message);
-    } finally {
-      btn.disabled = false;
-    }
+    try { await postJSON("/api/game/recipes/unlock-all", {}); toast("Recettes débloquées — clique « Écrire dans la save »."); }
+    catch (e) { toast("Échec : " + e.message); }
+    finally { btn.disabled = false; }
   };
   const note = document.createElement("p");
   note.className = "empty-note";
-  note.innerHTML =
-    "Marks every normal grilled / boiled / sliced recipe as known. A few special recipes " +
-    "(odd CIDs) aren't covered yet. Then <b>Write to save file</b> (game closed).";
-  el.appendChild(btn);
-  el.appendChild(note);
-}
+  note.innerHTML = "Marque chaque recette normale (grillé / bouilli / tranché) comme connue. Les détails par recette (matériaux requis / possédés) arrivent en Phase 3.";
+  el.append(btn, note);
+};
 
-async function loadEditor() {
-  renderCooking();
-  await Promise.all([
-    renderCurrency(),
-    renderConsumables(),
-    renderCharacters(),
-    renderTeam(),
-    renderEquipment(),
-    renderGems(),
-  ]);
-}
-
-// ── Database: generic table browser ───────────────────────────────────────
-const state = { table: null, limit: 200, offset: 0, total: 0, columns: [], pkCols: [], tables: [] };
-
+// ── SQL brut (generic table browser) ───────────────────────────────────────
+const sql = { table: null, limit: 200, offset: 0, total: 0, columns: [], pkCols: [], tables: [] };
 async function loadInfo() {
   const info = await api("/api/info");
-  $("#path").textContent = info.path;
-  $("#path").title = info.path;
   iconSize = info.iconSize || 64;
-  state.tables = info.tables || [];
+  sql.tables = info.tables || [];
 }
-async function loadTables() {
-  if (!state.tables.length) await loadInfo();
+RENDER.sql = async function () {
+  if (!sql.tables.length) await loadInfo();
   renderTableList();
-}
+};
 function renderTableList() {
   const ul = $("#tables");
   const filter = $("#filter").value.toLowerCase();
   ul.innerHTML = "";
-  for (const name of state.tables) {
+  for (const name of sql.tables) {
     if (filter && !name.toLowerCase().includes(filter)) continue;
     const li = document.createElement("li");
-    li.textContent = name;
-    li.title = name;
-    if (name === state.table) li.classList.add("active");
+    li.textContent = name; li.title = name;
+    if (name === sql.table) li.classList.add("active");
     li.onclick = () => openTable(name);
     ul.appendChild(li);
   }
 }
-async function openTable(name) {
-  state.table = name;
-  state.offset = 0;
-  renderTableList();
-  await loadPage();
-}
+async function openTable(name) { sql.table = name; sql.offset = 0; renderTableList(); await loadPage(); }
 async function loadPage() {
-  const { table, limit, offset } = state;
+  const { table, limit, offset } = sql;
   const data = await api(`/api/table?name=${encodeURIComponent(table)}&limit=${limit}&offset=${offset}`);
-  state.columns = data.columns;
-  state.total = data.total;
-  state.pkCols = data.columns.filter((c) => c.primaryKey).map((c) => displayName(c));
+  sql.columns = data.columns; sql.total = data.total;
+  sql.pkCols = data.columns.filter((c) => c.primaryKey).map((c) => c.name);
   $("#table-name").textContent = table;
   $("#hint").classList.add("hidden");
   renderGrid(data.columns, data.rows);
   renderPager();
 }
 function renderPager() {
-  const p = $("#pager");
-  p.classList.remove("hidden");
-  const from = state.total ? state.offset + 1 : 0;
-  const to = Math.min(state.offset + state.limit, state.total);
-  $("#range").textContent = `${from}–${to} of ${state.total}`;
-  $("#prev").disabled = state.offset <= 0;
-  $("#next").disabled = to >= state.total;
+  $("#pager").classList.remove("hidden");
+  const from = sql.total ? sql.offset + 1 : 0;
+  const to = Math.min(sql.offset + sql.limit, sql.total);
+  $("#range").textContent = `${from}–${to} sur ${sql.total}`;
+  $("#prev").disabled = sql.offset <= 0;
+  $("#next").disabled = to >= sql.total;
 }
 function renderGrid(columns, rows) {
   const grid = $("#grid");
@@ -638,39 +773,23 @@ function renderGrid(columns, rows) {
   const htr = document.createElement("tr");
   for (const c of columns) {
     const th = document.createElement("th");
-    th.textContent = displayName(c);
-    if (c.primaryKey) {
-      const s = document.createElement("span");
-      s.className = "pk";
-      s.textContent = "KEY";
-      th.appendChild(s);
-    }
-    const t = document.createElement("span");
-    t.className = "type";
-    t.textContent = c.type || "";
-    th.appendChild(t);
+    th.textContent = c.name;
+    if (c.primaryKey) { const s = document.createElement("span"); s.className = "pk"; s.textContent = "KEY"; th.appendChild(s); }
+    const t = document.createElement("span"); t.className = "type"; t.textContent = c.type || ""; th.appendChild(t);
     htr.appendChild(th);
   }
   thead.appendChild(htr);
   grid.appendChild(thead);
-
   const tbody = document.createElement("tbody");
   for (const row of rows || []) {
     const tr = document.createElement("tr");
     const pk = {};
-    columns.forEach((c, i) => {
-      if (c.primaryKey) pk[displayName(c)] = row[i];
-    });
+    columns.forEach((c, i) => { if (c.primaryKey) pk[c.name] = row[i]; });
     columns.forEach((c, i) => {
       const td = document.createElement("td");
       setCellText(td, row[i]);
-      if (c.primaryKey) {
-        td.classList.add("pk");
-      } else {
-        td.classList.add("editable");
-        td.title = "double-click to edit";
-        td.ondblclick = () => beginEdit(td, c, pk);
-      }
+      if (c.primaryKey) td.classList.add("pk");
+      else { td.classList.add("editable"); td.title = "double-clic pour éditer"; td.ondblclick = () => beginEdit(td, c, pk); }
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -678,103 +797,63 @@ function renderGrid(columns, rows) {
   grid.appendChild(tbody);
 }
 function setCellText(td, val) {
-  if (val === null || val === undefined) {
-    td.textContent = "NULL";
-    td.classList.add("null");
-  } else {
-    td.textContent = String(val);
-    td.classList.remove("null");
-  }
+  if (val === null || val === undefined) { td.textContent = "NULL"; td.classList.add("null"); }
+  else { td.textContent = String(val); td.classList.remove("null"); }
 }
 function beginEdit(td, col, pk) {
   const original = td.classList.contains("null") ? "" : td.textContent;
-  td.contentEditable = "true";
-  td.focus();
-  const range = document.createRange();
-  range.selectNodeContents(td);
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-
+  td.contentEditable = "true"; td.focus();
+  const range = document.createRange(); range.selectNodeContents(td);
+  const s = window.getSelection(); s.removeAllRanges(); s.addRange(range);
   const finish = async (commit) => {
     td.contentEditable = "false";
-    td.removeEventListener("keydown", onKey);
-    td.removeEventListener("blur", onBlur);
+    td.removeEventListener("keydown", onKey); td.removeEventListener("blur", onBlur);
     const text = td.textContent;
-    if (!commit || text === original) {
-      setCellText(td, original === "" && td.classList.contains("null") ? null : original);
-      return;
-    }
+    if (!commit || text === original) { setCellText(td, original === "" && td.classList.contains("null") ? null : original); return; }
     try {
       let value = text;
       if (/^-?\d+$/.test(text)) value = parseInt(text, 10);
       else if (/^-?\d*\.\d+$/.test(text)) value = parseFloat(text);
-      await postJSON("/api/update", { table: state.table, pk, column: col.name, value });
+      await postJSON("/api/update", { table: sql.table, pk, column: col.name, value });
       setCellText(td, value);
-      td.classList.remove("saved");
-      void td.offsetWidth;
-      td.classList.add("saved");
-    } catch (e) {
-      setCellText(td, original);
-      toast("Update failed: " + e.message);
-    }
+      td.classList.remove("saved"); void td.offsetWidth; td.classList.add("saved");
+    } catch (e) { setCellText(td, original); toast("Échec : " + e.message); }
   };
-  const onKey = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      finish(true);
-    } else if (e.key === "Escape") {
-      e.preventDefault();
-      finish(false);
-    }
-  };
+  const onKey = (e) => { if (e.key === "Enter") { e.preventDefault(); finish(true); } else if (e.key === "Escape") { e.preventDefault(); finish(false); } };
   const onBlur = () => finish(true);
   td.addEventListener("keydown", onKey);
   td.addEventListener("blur", onBlur);
 }
 
-// ── Wiring ────────────────────────────────────────────────────────────────
+// ── Wiring ─────────────────────────────────────────────────────────────────
+$$(".tab").forEach((t) => (t.onclick = () => setView(t.dataset.view)));
 $("#filter").addEventListener("input", renderTableList);
-$("#prev").onclick = () => {
-  state.offset = Math.max(0, state.offset - state.limit);
-  loadPage();
-};
-$("#next").onclick = () => {
-  state.offset += state.limit;
-  loadPage();
-};
+$("#prev").onclick = () => { sql.offset = Math.max(0, sql.offset - sql.limit); loadPage(); };
+$("#next").onclick = () => { sql.offset += sql.limit; loadPage(); };
 $("#save-btn").onclick = async () => {
-  const s = $("#save-status");
-  s.textContent = "Writing…";
-  s.className = "status";
+  const btn = $("#save-btn");
+  btn.disabled = true;
   try {
-    await postJSON("/api/save", {});
-    s.textContent = "Saved ✓";
-    s.className = "status ok";
-  } catch (e) {
-    s.textContent = "Failed";
-    s.className = "status err";
-    toast("Save failed: " + e.message);
-  }
-  setTimeout(() => (s.textContent = ""), 4000);
+    await api("/api/save", { method: "POST" });
+    resetModif();
+    invBaseline = {}; // written to disk → new baseline
+    if (loaded.has("inv")) RENDER.inv().catch(() => {});
+    toast("Sauvegarde écrite · backup .bak créé");
+  } catch (e) { toast("Écriture échouée : " + e.message); }
+  finally { btn.disabled = false; }
 };
 
 function initLang() {
   const sync = () => $$("#lang button").forEach((b) => b.classList.toggle("active", b.dataset.lang === lang));
-  $$("#lang button").forEach(
-    (b) =>
-      (b.onclick = () => {
-        if (b.dataset.lang === lang) return;
-        lang = b.dataset.lang;
-        localStorage.setItem("dsa-lang", lang);
-        sync();
-        loadEditor().catch((e) => toast("Editor load failed: " + e.message));
-      })
-  );
+  $$("#lang button").forEach((b) => (b.onclick = () => {
+    if (b.dataset.lang === lang) return;
+    lang = b.dataset.lang;
+    localStorage.setItem("dsa-lang", lang);
+    sync();
+    reloadAll();
+  }));
   sync();
 }
 
-initTabs();
 initLang();
-loadInfo().catch((e) => toast("Load failed: " + e.message));
-loadEditor().catch((e) => toast("Editor load failed: " + e.message));
+renderHome().catch((e) => toast("Chargement échoué : " + e.message));

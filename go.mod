@@ -2,7 +2,10 @@ module github.com/gfriloux/dragonsword-save-editor
 
 go 1.26.4
 
-require modernc.org/sqlite v1.55.0
+require (
+	github.com/tetratelabs/wazero v1.8.2
+	modernc.org/sqlite v1.55.0
+)
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect

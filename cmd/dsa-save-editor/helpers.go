@@ -6,6 +6,9 @@ import (
 	"path/filepath"
 	"sort"
 	"syscall"
+
+	"github.com/gfriloux/dragonsword-save-editor/internal/config"
+	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 )
 
 // buildVersion is overridden at build time with -ldflags "-X main.buildVersion=...".
@@ -17,9 +20,16 @@ func waitForSignal() {
 	<-c
 }
 
-// autoDetectSave looks for a "<id>_Slot<N>.db" file in the current directory and
-// in an optional DSA_SAVE_DIR. It returns the most recently modified match, or "".
+// autoDetectSave returns the most recently modified save. It prefers the
+// remembered game folder's save tree, then falls back to DSA_SAVE_DIR and the
+// current directory. Returns "" when nothing is found.
 func autoDetectSave() string {
+	if cfg, err := config.Load(); err == nil && cfg.GameDir != "" {
+		if slots, err := save.Discover(cfg.GameDir); err == nil && len(slots) > 0 {
+			return slots[0].Path // Discover sorts most-recent first
+		}
+	}
+
 	var dirs []string
 	if d := os.Getenv("DSA_SAVE_DIR"); d != "" {
 		dirs = append(dirs, d)
