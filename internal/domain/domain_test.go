@@ -251,3 +251,33 @@ func TestFillStackables(t *testing.T) {
 		}
 	}
 }
+
+func TestUnlockAllRecipes(t *testing.T) {
+	g := openGame(t)
+	uid, err := g.UserID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bitfield := func(cat int) (int64, bool) {
+		var v int64
+		err := g.Save().DB().QueryRow(`SELECT BIT_FIELD FROM tb_switch WHERE USER_DBID=? AND CATEGORY=?`, uid, cat).Scan(&v)
+		if err != nil {
+			return 0, false
+		}
+		return v, true
+	}
+	if err := g.UnlockAllRecipes(); err != nil {
+		t.Fatalf("unlock: %v", err)
+	}
+	// Every recipe category is now all-bits (-1), including ones absent before.
+	for _, cat := range []int{15, 30, 45, 60} {
+		v, ok := bitfield(cat)
+		if !ok || v != -1 {
+			t.Fatalf("category %d = %d (present=%v), want -1", cat, v, ok)
+		}
+	}
+	// A category outside the recipe range is untouched.
+	if v, ok := bitfield(0); ok && v == -1 {
+		t.Fatal("category 0 (non-recipe) should not be all-bits")
+	}
+}
