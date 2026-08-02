@@ -100,9 +100,9 @@ Update `README.md` feature list if it enumerates editor capabilities.
   Owned potions still appear via the normal owned-rows path.
 
 ### Quality gates
-- [ ] `just ci` passes
-- [ ] Real-save round-trip still green (`DSA_SAVE=… just test`) — unchanged layers,
-      but re-run to confirm no regression
-- [ ] Docs synced (same commit) — or confirmed no doc change needed
-- [ ] Atomic commits on `feat/browse-stackable-catalog`
-- [ ] Manual tests M1–M3 pass (see `manual_tests.md`)
+- [x] `just ci` passes
+- [x] Real-save round-trip still green (`DSA_SAVE=… just test`) — unchanged layers;
+      manual M1–M3 validated by the user against a real save
+- [x] Docs synced (same commit) — README capability line updated with the code
+- [x] Atomic commits on `feat/browse-stackable-catalog`
+- [x] Manual tests M1–M3 pass (see `manual_tests.md`) — validated by the user
