@@ -1,0 +1,77 @@
+package domain
+
+import "testing"
+
+func TestClassifyConsumable(t *testing.T) {
+	cases := []struct {
+		cid  int64
+		want string
+		note string
+	}{
+		// Mana upgrade mats sit inside the 141x range but are NOT potions.
+		{1410202, CatEquipXP, "Fragment de mana"},
+		{1410203, CatEquipXP, "Cristal de mana"},
+		{1410204, CatEquipXP, "Minéral de mana"},
+		// Real potions, on either side of the mana block.
+		{1410002, CatPotion, "potion below mana"},
+		{1410105, CatPotion, "potion below mana"},
+		{1410201, CatPotion, "141x just below mana → potion"},
+		{1410205, CatPotion, "141x just above mana → potion"},
+		// Cooked dishes.
+		{1420102, CatCooked, "Poisson grillé"},
+		{1422314, CatCooked, "Rouleaux de printemps"},
+		// Ingredients (143x/144x).
+		{1430003, CatIngredient, "Viande de bête"},
+		{1440802, CatIngredient, "Aged Game Meat"},
+		// Breakthrough: monster parts and plants only.
+		{1450001, CatBreakthrough, "Essence de monstre"},
+		{1450018, CatBreakthrough, "Griffe de monstre (last)"},
+		{1450501, CatBreakthrough, "Fruit de la vitalité"},
+		{1450504, CatBreakthrough, "Feuille de vigueur"},
+		// The rest of the mixed 145x block must NOT be breakthrough → unsorted.
+		{1450101, CatUnsorted, "Pierre d'amplification (enhancement stone)"},
+		{1450202, CatUnsorted, "Insigne d'Orbis (faction badge)"},
+		{1450401, CatUnsorted, "Grimoire de la perspicacité"},
+		{1450601, CatUnsorted, "Cristal de la mémoire (reminiscence)"},
+		{1450811, CatUnsorted, "Chronique de combat"},
+		// Crystals and runes.
+		{1460101, CatCrystal, "Cristal de cohésion"},
+		{1310001, CatRune, "Damaged Rune of Determination"},
+		// Off-th.gl XP-book candidates stay unsorted (unverified).
+		{1000800, CatUnsorted, "XP-book candidate, unverified"},
+		{1000802, CatUnsorted, "XP-book candidate, unverified"},
+		// Other unknowns.
+		{1470103, CatUnsorted, "147x"},
+		{1510018, CatUnsorted, "151x"},
+	}
+	for _, c := range cases {
+		if got := ClassifyConsumable(c.cid); got != c.want {
+			t.Errorf("ClassifyConsumable(%d) [%s] = %q, want %q", c.cid, c.note, got, c.want)
+		}
+	}
+}
+
+func TestConsumableCategoriesShape(t *testing.T) {
+	cats := ConsumableCategories()
+	if len(cats) == 0 {
+		t.Fatal("no categories")
+	}
+	if cats[len(cats)-1].Key != CatUnsorted {
+		t.Errorf("last category = %q, want %q (unsorted is always last)", cats[len(cats)-1].Key, CatUnsorted)
+	}
+	seen := map[string]bool{}
+	for _, c := range cats {
+		if c.Key == "" || c.LabelFR == "" || c.LabelEN == "" || c.Color == "" {
+			t.Errorf("category %+v has an empty field", c)
+		}
+		if seen[c.Key] {
+			t.Errorf("duplicate category key %q", c.Key)
+		}
+		seen[c.Key] = true
+	}
+	// Returned slice must be a copy (mutating it must not affect the source).
+	cats[0].LabelFR = "MUTATED"
+	if ConsumableCategories()[0].LabelFR == "MUTATED" {
+		t.Error("ConsumableCategories() leaks its backing array")
+	}
+}
