@@ -464,7 +464,36 @@ async function renderGems() {
   el.appendChild(rows);
 }
 
+// ── Editor: Cooking panel ─────────────────────────────────────────────────
+function renderCooking() {
+  const el = $("#panel-cooking");
+  el.innerHTML = `<h2>Cooking</h2><p class="panel-sub">Recipe unlocks.</p>`;
+  const btn = document.createElement("button");
+  btn.className = "action-btn";
+  btn.textContent = "Unlock all recipes";
+  btn.onclick = async () => {
+    if (!confirm("Mark all normal cooking recipes as known?")) return;
+    btn.disabled = true;
+    try {
+      await postJSON("/api/game/recipes/unlock-all", {});
+      toast("All recipes unlocked — click Write to save file.");
+    } catch (e) {
+      toast("Unlock failed: " + e.message);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+  const note = document.createElement("p");
+  note.className = "empty-note";
+  note.innerHTML =
+    "Marks every normal grilled / boiled / sliced recipe as known. A few special recipes " +
+    "(odd CIDs) aren't covered yet. Then <b>Write to save file</b> (game closed).";
+  el.appendChild(btn);
+  el.appendChild(note);
+}
+
 async function loadEditor() {
+  renderCooking();
   await Promise.all([
     renderCurrency(),
     renderConsumables(),

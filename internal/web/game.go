@@ -213,3 +213,15 @@ func (s *Server) handleFillStackables(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, 200, map[string]any{"ok": true})
 }
+
+func (s *Server) handleUnlockRecipes(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	if err := s.g.UnlockAllRecipes(); err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}

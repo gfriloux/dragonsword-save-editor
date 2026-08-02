@@ -199,3 +199,6 @@ td.null { color: var(--muted); font-style: italic; }
   border-radius: 4px; padding: .05rem .3rem; font-family: ui-monospace, monospace; }
 .lock { display: flex; align-items: center; gap: .3rem; font-size: .75rem; color: var(--muted); }
 .empty-note { color: var(--muted); font-style: italic; }
+.action-btn { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; padding: .5rem 1rem; }
+.action-btn:hover { filter: brightness(1.08); }
+.action-btn:disabled { opacity: .6; cursor: default; }
