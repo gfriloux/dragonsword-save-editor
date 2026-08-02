@@ -1,11 +1,15 @@
 package pak
 
 import (
+	"crypto/sha256"
 	"encoding/binary"
+	"encoding/hex"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/gfriloux/dragonsword-save-editor/internal/oodle"
 )
 
 // gameProvider opens the real game paks, or skips when DSA_GAME_DIR is unset.
@@ -95,3 +99,33 @@ func TestCompressedBlocksCoverEntry(t *testing.T) {
 		t.Fatalf("block raw sizes sum to %d, want %d", sum, e.UncompressedSize)
 	}
 }
+
+// TestReadOodleIcon is the end-to-end pure-Go proof: the pak reader + the
+// embedded ooz.wasm (via internal/oodle) decompress the real Gold icon .uexp to
+// exactly the bytes the ooz C reference produced (checked by SHA-256).
+func TestReadOodleIcon(t *testing.T) {
+	pv := gameProvider(t)
+	e := pv.Find("Icon_Item/Common/Icon_Item_Common_Gold.uexp")
+	if e == nil {
+		t.Skip("Gold icon .uexp not found")
+	}
+	dec, err := oodle.New()
+	if err != nil {
+		t.Fatalf("oodle.New: %v", err)
+	}
+	defer dec.Close()
+
+	b, err := e.Read(dec)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if int64(len(b)) != e.UncompressedSize {
+		t.Fatalf("got %d bytes, want %d", len(b), e.UncompressedSize)
+	}
+	const golden = "5d84cb8ea5cbd397d99a320a14f50321a3969a301d2628292256d5215462779d"
+	if got := hex.EncodeToString(sha256Sum(b)); got != golden {
+		t.Fatalf("sha256 = %s, want %s", got, golden)
+	}
+}
+
+func sha256Sum(b []byte) []byte { h := sha256.Sum256(b); return h[:] }

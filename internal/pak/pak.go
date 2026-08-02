@@ -424,10 +424,38 @@ func (e *Entry) CompressedBlocks() ([]CompBlock, error) {
 
 // ReadStored returns the bytes of an uncompressed entry (decrypting it if the
 // record is AES-encrypted). It errors on compressed (Oodle) entries, which need
-// internal/oodle (wired in a later step).
+// a Decompressor (see Read).
 func (e *Entry) ReadStored() ([]byte, error) {
 	if !e.Stored() {
 		return nil, fmt.Errorf("%s is %s-compressed (not stored)", e.Path, e.Method)
 	}
 	return e.rawBlocks()
+}
+
+// Decompressor decompresses one Oodle block to rawSize bytes. internal/oodle
+// implements it; pak stays decoupled from the wasm runtime (dependency
+// injection keeps the layering one-directional).
+type Decompressor interface {
+	Decompress(comp []byte, rawSize int) ([]byte, error)
+}
+
+// Read returns an entry's full uncompressed bytes: stored records are read
+// directly, compressed ones are decompressed block by block via d.
+func (e *Entry) Read(d Decompressor) ([]byte, error) {
+	if e.Stored() {
+		return e.ReadStored()
+	}
+	blocks, err := e.CompressedBlocks()
+	if err != nil {
+		return nil, err
+	}
+	out := make([]byte, 0, e.UncompressedSize)
+	for _, b := range blocks {
+		raw, err := d.Decompress(b.Data, b.RawSize)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, raw...)
+	}
+	return out, nil
 }
