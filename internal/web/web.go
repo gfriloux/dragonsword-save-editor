@@ -5,10 +5,12 @@ package web
 import (
 	"embed"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"math"
 	"net/http"
+	"sync"
 
 	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
 	"github.com/gfriloux/dragonsword-save-editor/internal/save"
@@ -17,43 +19,74 @@ import (
 //go:embed static
 var staticFS embed.FS
 
-// Server wires the API handlers to a Game (domain view) and its underlying Save
-// (generic database view).
+// errNoSave is returned by save-scoped endpoints when no save is open yet.
+var errNoSave = errors.New("no save open — pick one first")
+
+// Server serves the UI and JSON API. It starts without a save: the game folder
+// is configured and a slot is picked through the API, at which point a session
+// (an open Save + its domain Game) is created. The session can be replaced by
+// opening another slot.
 type Server struct {
-	sv  *save.Save
-	g   *domain.Game
+	cat *domain.Catalog
 	mux *http.ServeMux
+
+	mu sync.Mutex
+	sv *save.Save   // nil until a save is opened
+	g  *domain.Game // nil until a save is opened
 }
 
-// New returns an http.Handler serving the UI and API for g.
-func New(g *domain.Game) *Server {
-	s := &Server{sv: g.Save(), g: g, mux: http.NewServeMux()}
+// New returns an http.Handler serving the UI and API. cat is the (save-agnostic)
+// item catalog, loaded once for the whole process.
+func New(cat *domain.Catalog) *Server {
+	s := &Server{cat: cat, mux: http.NewServeMux()}
 	sub, _ := fs.Sub(staticFS, "static")
 	s.mux.Handle("/", http.FileServer(http.FS(sub)))
-	// Generic database view.
-	s.mux.HandleFunc("/api/info", s.handleInfo)
-	s.mux.HandleFunc("/api/table", s.handleTable)
-	s.mux.HandleFunc("/api/update", s.handleUpdate)
-	s.mux.HandleFunc("/api/save", s.handleSave)
-	// Game-oriented editor view.
-	s.mux.HandleFunc("/api/game/currency", s.handleCurrency)
-	s.mux.HandleFunc("/api/game/consumables", s.handleConsumables)
-	s.mux.HandleFunc("/api/game/consumable-categories", s.handleConsumableCategories)
-	s.mux.HandleFunc("/api/game/stack", s.handleStack)
-	s.mux.HandleFunc("/api/game/label", s.handleLabel)
-	s.mux.HandleFunc("/api/game/characters", s.handleCharacters)
-	s.mux.HandleFunc("/api/game/teams", s.handleTeams)
-	s.mux.HandleFunc("/api/game/equipment", s.handleEquipment)
-	s.mux.HandleFunc("/api/game/gems", s.handleGems)
-	s.mux.HandleFunc("/api/game/gem", s.handleGem)
-	s.mux.HandleFunc("/api/game/catalog", s.handleCatalog)
-	s.mux.HandleFunc("/api/game/stackable", s.handleAddStackable)
-	s.mux.HandleFunc("/api/game/stackable/fill", s.handleFillStackables)
-	s.mux.HandleFunc("/api/game/recipes/unlock-all", s.handleUnlockRecipes)
+
+	// Session-agnostic: configuration and slot selection.
+	s.mux.HandleFunc("/api/config", s.handleConfig)
+	s.mux.HandleFunc("/api/config/game-dir", s.handleSetGameDir)
+	s.mux.HandleFunc("/api/saves", s.handleSaves)
+	s.mux.HandleFunc("/api/screenshot", s.handleScreenshot)
+	s.mux.HandleFunc("/api/open", s.handleOpen)
+
+	// Generic database view (needs an open save).
+	s.mux.HandleFunc("/api/info", s.needSave(s.handleInfo))
+	s.mux.HandleFunc("/api/table", s.needSave(s.handleTable))
+	s.mux.HandleFunc("/api/update", s.needSave(s.handleUpdate))
+	s.mux.HandleFunc("/api/save", s.needSave(s.handleSave))
+	// Game-oriented editor view (needs an open save).
+	s.mux.HandleFunc("/api/game/currency", s.needSave(s.handleCurrency))
+	s.mux.HandleFunc("/api/game/consumables", s.needSave(s.handleConsumables))
+	s.mux.HandleFunc("/api/game/consumable-categories", s.needSave(s.handleConsumableCategories))
+	s.mux.HandleFunc("/api/game/stack", s.needSave(s.handleStack))
+	s.mux.HandleFunc("/api/game/label", s.needSave(s.handleLabel))
+	s.mux.HandleFunc("/api/game/characters", s.needSave(s.handleCharacters))
+	s.mux.HandleFunc("/api/game/teams", s.needSave(s.handleTeams))
+	s.mux.HandleFunc("/api/game/equipment", s.needSave(s.handleEquipment))
+	s.mux.HandleFunc("/api/game/gems", s.needSave(s.handleGems))
+	s.mux.HandleFunc("/api/game/gem", s.needSave(s.handleGem))
+	s.mux.HandleFunc("/api/game/catalog", s.needSave(s.handleCatalog))
+	s.mux.HandleFunc("/api/game/stackable", s.needSave(s.handleAddStackable))
+	s.mux.HandleFunc("/api/game/stackable/fill", s.needSave(s.handleFillStackables))
+	s.mux.HandleFunc("/api/game/recipes/unlock-all", s.needSave(s.handleUnlockRecipes))
 	return s
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) { s.mux.ServeHTTP(w, r) }
+
+// needSave wraps a handler so it 409s when no save is open yet.
+func (s *Server) needSave(h http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		s.mu.Lock()
+		ok := s.g != nil
+		s.mu.Unlock()
+		if !ok {
+			writeErr(w, http.StatusConflict, errNoSave)
+			return
+		}
+		h(w, r)
+	}
+}
 
 func writeJSON(w http.ResponseWriter, code int, v any) {
 	w.Header().Set("Content-Type", "application/json")

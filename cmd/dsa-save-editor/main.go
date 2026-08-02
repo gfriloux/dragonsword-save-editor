@@ -15,8 +15,8 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/gfriloux/dragonsword-save-editor/internal/config"
 	"github.com/gfriloux/dragonsword-save-editor/internal/domain"
-	"github.com/gfriloux/dragonsword-save-editor/internal/save"
 	"github.com/gfriloux/dragonsword-save-editor/internal/web"
 )
 
@@ -25,6 +25,7 @@ func main() {
 	var (
 		addr    = flag.String("addr", "127.0.0.1:0", "listen address (host:port; port 0 picks a free one)")
 		noOpen  = flag.Bool("no-open", false, "do not open a browser automatically")
+		gameDir = flag.String("game-dir", "", "set and remember the game folder, then start")
 		version = flag.Bool("version", false, "print version and exit")
 	)
 	flag.Usage = usage
@@ -35,27 +36,30 @@ func main() {
 		return
 	}
 
-	path := flag.Arg(0)
-	if path == "" {
-		path = autoDetectSave()
-		if path == "" {
-			usage()
-			os.Exit(2)
+	if *gameDir != "" {
+		if err := (config.Config{GameDir: *gameDir}).Store(); err != nil {
+			log.Fatalf("cannot save game folder: %v", err)
 		}
-		log.Printf("auto-detected save: %s", path)
+		log.Printf("game folder set: %s", *gameDir)
 	}
-
-	sv, err := save.Open(path, "")
-	if err != nil {
-		log.Fatalf("cannot open save %q: %v", path, err)
-	}
-	defer sv.Close()
 
 	cat, err := domain.LoadCatalog(domain.DefaultOverridesPath())
 	if err != nil {
 		log.Fatalf("cannot load item catalog: %v", err)
 	}
-	game := domain.New(sv, cat)
+	srv := web.New(cat)
+	defer srv.Close()
+
+	// Power-user convenience: a save path given on the CLI, or auto-detected,
+	// is pre-opened so returning users skip the picker. Otherwise the UI drives
+	// the first-run game-folder + slot selection.
+	if path := savePath(); path != "" {
+		if err := srv.Open(path); err != nil {
+			log.Printf("could not pre-open %q: %v", path, err)
+		} else {
+			log.Printf("editing %s", filepath.Base(path))
+		}
+	}
 
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {
@@ -63,9 +67,9 @@ func main() {
 	}
 	url := fmt.Sprintf("http://%s/", ln.Addr().String())
 
-	srv := &http.Server{Handler: web.New(game)}
+	httpd := &http.Server{Handler: srv}
 	go func() {
-		if err := srv.Serve(ln); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		if err := httpd.Serve(ln); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("serve: %v", err)
 		}
 	}()
@@ -74,10 +78,19 @@ func main() {
 	if !*noOpen {
 		openBrowser(url)
 	}
-	log.Printf("editing %s — press Ctrl+C to quit", filepath.Base(path))
+	log.Print("press Ctrl+C to quit")
 
 	waitForSignal()
 	log.Println("bye")
+}
+
+// savePath returns a save path given on the CLI, or one auto-detected from the
+// configured game folder / working directory, or "".
+func savePath() string {
+	if p := flag.Arg(0); p != "" {
+		return p
+	}
+	return autoDetectSave()
 }
 
 func usage() {
@@ -86,8 +99,9 @@ func usage() {
 Usage:
   dsa-save-editor [flags] [path/to/<id>_Slot<N>.db]
 
-If no path is given, common save locations are searched. Close the game before
-writing changes back.
+On first run the browser UI asks for the game folder and lists your saves; the
+chosen folder is remembered. A save path (or -game-dir) may be given to skip
+the picker. Close the game before writing changes back.
 
 Flags:
 `)
