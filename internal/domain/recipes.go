@@ -45,8 +45,9 @@ type ingredientSeed struct {
 }
 
 var (
-	recipeTools []RecipeTool
-	recipeSeeds []recipeSeed
+	recipeTools    []RecipeTool
+	recipeSeeds    []recipeSeed
+	ingTypeIconCID map[int64]int64 // ingredient category id -> a representative item CID with an icon
 )
 
 func init() {
@@ -55,14 +56,21 @@ func init() {
 		panic(fmt.Sprintf("domain: reading recipes.json: %v", err))
 	}
 	var f struct {
-		Tools   []RecipeTool `json:"tools"`
-		Recipes []recipeSeed `json:"recipes"`
+		Tools               []RecipeTool     `json:"tools"`
+		IngredientTypeIcons map[string]int64 `json:"ingredientTypeIcons"`
+		Recipes             []recipeSeed     `json:"recipes"`
 	}
 	if err := json.Unmarshal(raw, &f); err != nil {
 		panic(fmt.Sprintf("domain: parsing recipes.json: %v", err))
 	}
 	recipeTools = f.Tools
 	recipeSeeds = f.Recipes
+	ingTypeIconCID = map[int64]int64{}
+	for k, v := range f.IngredientTypeIcons {
+		if id, err := strconv.ParseInt(k, 10, 64); err == nil {
+			ingTypeIconCID[id] = v
+		}
+	}
 }
 
 // RecipeTools returns the ordered cooking-tool list (a copy).
@@ -86,6 +94,7 @@ type RecipeIngredient struct {
 	NameEN   string `json:"nameEn"`
 	Qty      int    `json:"qty"`
 	Owned    int64  `json:"owned"`
+	IconCID  int64  `json:"iconCid,omitempty"` // CID to fetch an icon for (own CID for item; a representative for type)
 	IconPath string `json:"iconPath,omitempty"`
 }
 
@@ -156,13 +165,17 @@ func resolveIngredients(cat *Catalog, seeds []ingredientSeed, ownedByCID, ownedB
 		switch s.Kind {
 		case "item":
 			it := cat.Lookup(s.ID)
-			ing.NameFR, ing.NameEN, ing.IconPath = it.NameFR, it.NameEN, it.IconPath
+			ing.NameFR, ing.NameEN, ing.IconPath, ing.IconCID = it.NameFR, it.NameEN, it.IconPath, it.CID
 			ing.Owned = ownedByCID[s.ID]
 		case "type":
 			if l, ok := catLabels[strconv.FormatInt(s.ID, 10)]; ok {
 				ing.NameFR, ing.NameEN = l[0], l[1]
 			}
 			ing.Owned = ownedByGroup[s.ID]
+			if rep, ok := ingTypeIconCID[s.ID]; ok {
+				ing.IconCID = rep
+				ing.IconPath = cat.Lookup(rep).IconPath
+			}
 		}
 		index[k] = len(out)
 		out = append(out, ing)
