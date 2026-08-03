@@ -186,3 +186,32 @@ doc edits done inline in earlier phases).
 - [ ] `just build-windows` produces a single static `.exe` (CGO_ENABLED=0)
 - [ ] No game art / no personal save committed; recipes.json is data only
 - [ ] Docs synced in the same commit; atomic commits on `feat/cooking-recipes`
+
+---
+
+## Delivered (v0.13.0)
+
+Shipped on `feat/cooking-recipes`. The plan grew during dev (all validated in-game):
+
+- **Phase 1 gate passed** — the switch mapping `category = key/64, bit = key%64` was
+  confirmed in-game (the 9 category-62 recipes, keys 4000–4008, previously unknown).
+- **Data** — `cmd/pak-catalog` emits `recipes.json`: tools, and per recipe the switch
+  key, tool, ingredient slots (type/item), the 5 dish tiers, **dish eat-effects** (via a
+  newly reverse-engineered chain: dish `Value1` → `ContentsBuffData` → localized text,
+  scaling across tiers), and a **representative icon** per ingredient category.
+- **New tool** — `cmd/pak-dump`: a pure-Go pak XML extractor (reuses `internal/pak` +
+  `internal/oodle`), replacing the one-off C# step for the data XML.
+- **domain** — per-recipe known/unknown from `tb_switch`, per-recipe unlock/lock,
+  key-accurate "unlock all" (covers the category-62 tail the blanket missed), ingredients
+  resolved to names + owned counts + a category icon, dish effects.
+- **web** — Cuisine reworked to the design handoff's grid + 320px detail panel: recipe
+  cards (known/locked), and a detail with the dish visual, eat-effect (with a scaling
+  hint), "Matériaux requis" vignettes (icon + owned/required, category ingredients use a
+  representative icon), a Verrouillée/Connue toggle, and the `tb_switch` cat/bit ref.
+- **docs** — `docs/switches.md` (corrected mapping + effect chain + pak-dump), DESIGN.md,
+  README.md.
+
+**Scope calls made during dev:** the 3 special recipes (`1999xxx`, `1423001`, `1430920`)
+stay out (different table). **Recipe grade** was investigated and deliberately *not* added:
+a recipe spans all 5 grades (its `Cook_ID1..5`), so there is no single per-recipe grade —
+th.gl only appears to have one because it lists each dish×grade as a separate row.

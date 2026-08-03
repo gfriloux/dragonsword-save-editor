@@ -48,6 +48,23 @@ Since the exact `CookBook_SwitchData` key is known per recipe, the editor now re
 each recipe's **own bit** (per-recipe known state, unlock and lock), and "unlock all" ORs
 the exact bit of every recipe key into its category.
 
+### Recipe data & dish effects
+
+`CookRecipeData.xml` gives each recipe its `ToolType` (FryingPan / Pot / Knife), up to
+three ingredient conditions (`IngredientCondN_Type` = `INGREDIENT_TYPE` for a whole item
+category or `INGREDIENT_ID` for a specific item), and `Cook_ID1..5` — the produced dish
+at each of the **5 quality grades** (Normal, Superior, Rare, Epic, Legendary; the grade is
+encoded in the CID, e.g. `14201xx`→Normal, `14202xx`→Superior).
+
+The dish's **eat-effect** is one hop further: a COOKING item's `Value1` is a
+`ContentsBuffData` id whose `Desc` is the localized effect text (e.g. "restores 850 HP").
+The effect scales with the grade, so each of the 5 tiers has its own text.
+
+All of this is datamined into `internal/domain/data/recipes.json` (committed *data*): run
+`cmd/pak-dump` to extract `CookRecipeData.xml`, `CookToolData.xml`, `GameItemData.xml`,
+`StringData.xml` and `ContentsBuffData.xml` from the paks (pure Go, no CGO), then
+`cmd/pak-catalog` to convert them.
+
 ### The old blanket, and the bug it hid
 
 Earlier releases had no access to `CookBook_SwitchData` and unlocked by writing

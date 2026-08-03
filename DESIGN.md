@@ -78,7 +78,8 @@ implementation change.
 | `internal/icons/`        | Extract + cache authentic item icons (pak → oodle → texture → PNG). |
 | `internal/web/`          | Embedded static UI (`go:embed`) + JSON API (`/api/*`, `/api/game/*`). |
 | `cmd/dsa-save-editor/`   | Flags, first-run config, HTTP server, browser launch.     |
-| `cmd/pak-catalog/`       | Offline: merge names/categories/grade/icon paths from the paks into `items.json`. |
+| `cmd/pak-catalog/`       | Offline: merge names/categories/grade/icon paths into `items.json`; emit `recipes.json` (cooking recipes + dish effects). |
+| `cmd/pak-dump/`          | Offline: extract named data XML from the paks in pure Go (feeds `pak-catalog`). |
 | `flake.nix`              | Dev shell + `packages.default` (Linux) + `packages.windows`. |
 | `.claude/plans/`         | Planning documents (see `PROCEDURE_PLANS.md`).            |
 
@@ -92,8 +93,10 @@ Cuisine · **SQL brut**). Item names come from a bundled bilingual catalog
 (`internal/domain/data/items.json`, names/categories/grade/icon paths from the paks,
 merged over th.gl), switchable FR/EN, with user-editable labels. Item **icons** are the
 authentic in-game art, extracted per-user from the paks and cached (falling back to the
-th.gl sprite, then a category dot). **SQL brut** is the generic `tb_*` table browser,
-kept as the power user's escape hatch.
+th.gl sprite, then a category dot). **Cuisine** is a recipe book: a grid of dish cards
+(known/locked) and a detail panel showing the eat-effect, the required ingredients
+(resolved to icons, with owned/required counts), and a per-recipe known/lock toggle.
+**SQL brut** is the generic `tb_*` table browser, kept as the power user's escape hatch.
 
 ## Reverse-engineered facts
 
@@ -104,15 +107,20 @@ FNV-1a-64 derivation from the embedded seed) are documented in
 
 The **paks** are read in pure Go (`internal/pak`): a standard UE5 pak whose footer
 version is obfuscated to 101, its AES-256-ECB index (public key) carrying two extra
-XOR layers, reverse-engineered from CUE4Parse's DragonSword profile. `cmd/pak-catalog`
-mines names/categories/grade/icon paths into `items.json`; icon textures are decoded on
+XOR layers, reverse-engineered from CUE4Parse's DragonSword profile. `cmd/pak-dump`
+extracts the game's data XML; `cmd/pak-catalog` mines names/categories/grade/icon paths
+into `items.json` and cooking data into `recipes.json`; icon textures are decoded on
 demand at runtime.
+
+**Cooking recipes** live in `CookRecipeData.xml`: each recipe's `CookBook_SwitchData`
+key maps to a `tb_switch` flag (`category = key/64`, `bit = key%64`, validated in-game —
+see `docs/switches.md`), and its dish `Value1` chains through `ContentsBuffData` to the
+localized eat-effect. Both are committed as *data* (`recipes.json`), not art.
 
 ## Out of scope (for now)
 
 - Server/online features — the save is treated as local single-player state only.
 - Editing the companion `SPack_*.sav` (UE GVAS slot metadata); only the `.db` is
   edited (its screenshot is read for the save picker).
-- **Cooking recipe details** (materials required / owned, per-recipe unlock) — the data
-  is now extractable (`CookRecipeData.xml`), planned as the next increment; today
-  Cuisine only offers a blanket "unlock all".
+- A handful of **special recipes** (iced drinks `1999xxx`, `1423001`, `1430920`) that
+  are not in `CookRecipeData.xml` — a different table, not covered by the recipe unlock.
