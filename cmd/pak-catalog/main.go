@@ -196,9 +196,19 @@ type recipeOut struct {
 }
 
 type recipesFile struct {
-	Source  string      `json:"_source"`
-	Tools   []toolOut   `json:"tools"`
-	Recipes []recipeOut `json:"recipes"`
+	Source string    `json:"_source"`
+	Tools  []toolOut `json:"tools"`
+	// IngredientTypeIcons maps an ingredient category id (a "type" ingredient value) to a
+	// representative item CID that has an icon, so the UI can show an icon for a category.
+	IngredientTypeIcons map[string]int `json:"ingredientTypeIcons,omitempty"`
+	Recipes             []recipeOut    `json:"recipes"`
+}
+
+// lessCID reports whether the numeric CID a sorts before b (both are numeric strings).
+func lessCID(a, b string) bool {
+	ai, _ := strconv.Atoi(a)
+	bi, _ := strconv.Atoi(b)
+	return ai < bi
 }
 
 // ingredient converts one (Type, Value) condition pair into a recipeIngredient, or
@@ -336,9 +346,15 @@ func main() {
 	cats = append(cats, consumableCategory{Key: "unsorted", LabelFR: "Non trié", LabelEN: "Unsorted", Color: "#8a93a6"})
 
 	var added, updated, noName int
-	itemValue1 := map[string]string{} // CID -> Value1 (dish effect id, among others)
+	itemValue1 := map[string]string{}   // CID -> Value1 (dish effect id, among others)
+	repIconByCat := map[string]string{} // item Category -> a representative CID that has an icon
 	err = streamRows(*itemsXML, "GameItemData", func(r itemRow) {
 		itemValue1[r.ID] = r.Value1
+		if iconPath(r.IconName) != "" {
+			if cur, ok := repIconByCat[r.Category]; !ok || lessCID(r.ID, cur) {
+				repIconByCat[r.Category] = r.ID
+			}
+		}
 		s := strs[r.Name]
 		it, ok := cat.Items[r.ID]
 		if !ok {
@@ -386,14 +402,14 @@ func main() {
 	})
 	log.Printf("wrote %s: %d consumable categories", *categoriesOut, len(cats))
 
-	emitRecipes(*recipesXML, *toolsXML, *buffsXML, *recipesOut, strs, itemValue1)
+	emitRecipes(*recipesXML, *toolsXML, *buffsXML, *recipesOut, strs, itemValue1, repIconByCat)
 }
 
 // emitRecipes parses the cooking tables and writes recipes.json (tools + per-recipe
 // switch key, tool, ingredient slots, dish tiers and the eat-effect per tier). Tool
 // labels and effect text resolve through StringData; ids stay raw for runtime name/icon
 // resolution. dishValue1 maps a dish CID to its Value1 (a ContentsBuffData id).
-func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]strRow, dishValue1 map[string]string) {
+func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]strRow, dishValue1, repIconByCat map[string]string) {
 	var tools []toolOut
 	if err := streamRows(toolsXML, "CookToolData", func(r toolRow) {
 		s := strs[r.Name]
@@ -420,6 +436,7 @@ func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]str
 	}
 
 	var recipes []recipeOut
+	usedTypes := map[string]bool{} // ingredient category ids referenced by a "type" slot
 	err := streamRows(recipesXML, "CookRecipeData", func(r recipeRow) {
 		key, err := strconv.Atoi(r.SwitchData)
 		if err != nil {
@@ -431,6 +448,9 @@ func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]str
 		} {
 			if ing, ok := ingredient(c[0], c[1]); ok {
 				ings = append(ings, ing)
+				if ing.Kind == "type" {
+					usedTypes[c[1]] = true
+				}
 			}
 		}
 		var dishes []int
@@ -470,12 +490,23 @@ func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]str
 	}
 	sort.Slice(recipes, func(i, j int) bool { return recipes[i].Key < recipes[j].Key })
 
+	// A representative icon CID per ingredient category actually used by the recipes.
+	typeIcons := map[string]int{}
+	for cat := range usedTypes {
+		if rep, ok := repIconByCat[cat]; ok {
+			if cid, err := strconv.Atoi(rep); err == nil {
+				typeIcons[cat] = cid
+			}
+		}
+	}
+
 	writeJSON(out, recipesFile{
-		Source:  "Cooking recipes datamined from CookRecipeData/CookToolData + dish effects via ContentsBuffData (paks). category=key/64, bit=key%64. Regenerate with `go run ./cmd/pak-catalog` (after `pak-dump`).",
-		Tools:   tools,
-		Recipes: recipes,
+		Source:              "Cooking recipes datamined from CookRecipeData/CookToolData + dish effects via ContentsBuffData (paks). category=key/64, bit=key%64. Regenerate with `go run ./cmd/pak-catalog` (after `pak-dump`).",
+		Tools:               tools,
+		IngredientTypeIcons: typeIcons,
+		Recipes:             recipes,
 	})
-	log.Printf("wrote %s: %d recipes, %d tools", out, len(recipes), len(tools))
+	log.Printf("wrote %s: %d recipes, %d tools, %d ingredient-type icons", out, len(recipes), len(tools), len(typeIcons))
 }
 
 func writeJSON(path string, v any) {
