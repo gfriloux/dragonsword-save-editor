@@ -71,6 +71,8 @@ func New(cat *domain.Catalog) *Server {
 	s.mux.HandleFunc("/api/game/catalog", s.needSave(s.handleCatalog))
 	s.mux.HandleFunc("/api/game/stackable", s.needSave(s.handleAddStackable))
 	s.mux.HandleFunc("/api/game/stackable/fill", s.needSave(s.handleFillStackables))
+	s.mux.HandleFunc("/api/game/recipes", s.needSave(s.handleRecipes))
+	s.mux.HandleFunc("/api/game/recipes/known", s.needSave(s.handleSetRecipeKnown))
 	s.mux.HandleFunc("/api/game/recipes/unlock-all", s.needSave(s.handleUnlockRecipes))
 	return s
 }

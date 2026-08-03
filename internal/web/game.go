@@ -233,3 +233,32 @@ func (s *Server) handleUnlockRecipes(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, 200, map[string]any{"ok": true})
 }
+
+func (s *Server) handleRecipes(w http.ResponseWriter, r *http.Request) {
+	recipes, err := s.g.Recipes()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"recipes": recipes, "tools": domain.RecipeTools()})
+}
+
+func (s *Server) handleSetRecipeKnown(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		Key   int  `json:"key"`
+		Known bool `json:"known"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.SetRecipeKnown(req.Key, req.Known); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}

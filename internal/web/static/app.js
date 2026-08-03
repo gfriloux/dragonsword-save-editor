@@ -702,26 +702,186 @@ RENDER.gems = async function () {
   el.appendChild(rows);
 };
 
-// ── Cuisine (recipe details land in Phase 3) ───────────────────────────────
+// ── Cuisine (per-recipe details + unlock) ──────────────────────────────────
+const cook = { recipes: [], tools: [], tool: "", search: "", known: "all" };
+
 RENDER.cook = async function () {
   const el = $("#screen-cook");
   el.className = "screen panel";
-  el.innerHTML = `<div class="panel-head"><span class="overline">Fourneaux</span><h2>Livre de recettes</h2></div>`;
-  const btn = document.createElement("button");
-  btn.className = "action-btn";
-  btn.textContent = "Tout débloquer";
-  btn.onclick = async () => {
-    if (!confirm("Marquer toutes les recettes normales comme connues ?")) return;
-    btn.disabled = true;
-    try { await postJSON("/api/game/recipes/unlock-all", {}); toast("Recettes débloquées — clique « Écrire dans la save »."); }
-    catch (e) { toast("Échec : " + e.message); }
-    finally { btn.disabled = false; }
+  el.innerHTML = `<div class="panel-head"><span class="overline">Fourneaux</span><h2>Livre de recettes</h2><span class="sub">Marque chaque recette comme connue et vois les ingrédients requis (possédés / requis).</span></div>`;
+
+  const data = await api("/api/game/recipes");
+  cook.recipes = data.recipes || [];
+  cook.tools = data.tools || [];
+
+  const bar = document.createElement("div");
+  bar.className = "cook-toolbar";
+
+  // Tool filter (Tous + one chip per tool).
+  const seg = document.createElement("div");
+  seg.className = "seg";
+  const mkSeg = (val, label) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = cook.tool === val ? "on" : "";
+    b.onclick = () => { cook.tool = val; seg.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b)); paintCook(); };
+    return b;
   };
-  const note = document.createElement("p");
-  note.className = "empty-note";
-  note.innerHTML = "Marque chaque recette normale (grillé / bouilli / tranché) comme connue. Les détails par recette (matériaux requis / possédés) arrivent en Phase 3.";
-  el.append(btn, note);
+  seg.appendChild(mkSeg("", "Tous"));
+  for (const t of cook.tools) seg.appendChild(mkSeg(t.type, lang === "fr" ? t.labelFr : t.labelEn));
+
+  // Known filter.
+  const kseg = document.createElement("div");
+  kseg.className = "seg";
+  const mkK = (val, label) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = cook.known === val ? "on" : "";
+    b.onclick = () => { cook.known = val; kseg.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b)); paintCook(); };
+    return b;
+  };
+  kseg.append(mkK("all", "Toutes"), mkK("unknown", "Inconnues"), mkK("known", "Connues"));
+
+  const search = document.createElement("input");
+  search.type = "search";
+  search.className = "cook-search";
+  search.placeholder = "Rechercher un plat…";
+  search.value = cook.search;
+  search.oninput = () => { cook.search = search.value; paintCook(); };
+
+  const unlock = document.createElement("button");
+  unlock.className = "action-btn";
+  unlock.textContent = "Tout débloquer";
+  unlock.onclick = async () => {
+    if (!confirm("Marquer toutes les recettes comme connues ?")) return;
+    unlock.disabled = true;
+    try {
+      await postJSON("/api/game/recipes/unlock-all", {});
+      for (const r of cook.recipes) r.known = true;
+      paintCook();
+      toast("Recettes débloquées — clique « Écrire dans la save ».");
+    } catch (e) { toast("Échec : " + e.message); }
+    finally { unlock.disabled = false; }
+  };
+
+  bar.append(seg, kseg, search, unlock);
+  el.appendChild(bar);
+
+  const count = document.createElement("div");
+  count.className = "cook-count";
+  el.appendChild(count);
+  cook._count = count;
+
+  const list = document.createElement("div");
+  list.className = "cook-list";
+  el.appendChild(list);
+  cook._list = list;
+
+  paintCook();
 };
+
+function cookVisible() {
+  const q = cook.search.trim().toLowerCase();
+  return cook.recipes.filter((r) => {
+    if (cook.tool && r.tool !== cook.tool) return false;
+    if (cook.known === "known" && !r.known) return false;
+    if (cook.known === "unknown" && r.known) return false;
+    if (q) {
+      const n = ((r.dish && (r.dish.nameFr + " " + r.dish.nameEn)) || "").toLowerCase();
+      if (!n.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function paintCook() {
+  const vis = cookVisible();
+  const knownN = cook.recipes.filter((r) => r.known).length;
+  cook._count.textContent = `${vis.length} affichées · ${knownN} connues / ${cook.recipes.length}`;
+
+  const list = cook._list;
+  list.innerHTML = "";
+  if (!vis.length) {
+    list.innerHTML = `<p class="empty-note">Aucune recette ne correspond.</p>`;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  const toolLabel = (type) => { const t = cook.tools.find((x) => x.type === type); return t ? (lang === "fr" ? t.labelFr : t.labelEn) : type; };
+  for (const r of vis) frag.appendChild(cookRow(r, toolLabel));
+  list.appendChild(frag);
+}
+
+function cookRow(r, toolLabel) {
+  const row = document.createElement("div");
+  row.className = "cook-row" + (r.known ? " known" : "");
+
+  const toggle = document.createElement("label");
+  toggle.className = "cook-toggle";
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.checked = r.known;
+  cb.onchange = async () => {
+    cb.disabled = true;
+    try {
+      await postJSON("/api/game/recipes/known", { key: r.key, known: cb.checked });
+      r.known = cb.checked;
+      row.classList.toggle("known", r.known);
+      const knownN = cook.recipes.filter((x) => x.known).length;
+      cook._count.textContent = `${cookVisible().length} affichées · ${knownN} connues / ${cook.recipes.length}`;
+    } catch (e) { cb.checked = !cb.checked; toast("Échec : " + e.message); }
+    finally { cb.disabled = false; }
+  };
+  toggle.appendChild(cb);
+
+  const dish = r.dish || {};
+  const ic = iconEl(dish, 40);
+  ic.classList.add("cook-dish-ic");
+
+  const main = document.createElement("div");
+  main.className = "cook-main";
+  const title = document.createElement("div");
+  title.className = "cook-title";
+  const nm = document.createElement("span");
+  nm.className = "cook-name" + (r.known ? "" : " unknown");
+  nm.textContent = (lang === "fr" ? dish.nameFr : dish.nameEn) || `Plat ${dish.cid || r.key}`;
+  const tool = document.createElement("span");
+  tool.className = "cook-tool";
+  tool.textContent = toolLabel(r.tool);
+  title.append(nm, tool);
+
+  const ings = document.createElement("div");
+  ings.className = "cook-ings";
+  for (const g of r.ingredients || []) ings.appendChild(ingChip(g));
+  main.append(title, ings);
+
+  row.append(toggle, ic, main);
+  return row;
+}
+
+function ingChip(g) {
+  const chip = document.createElement("span");
+  const have = g.owned >= g.qty;
+  chip.className = "ing-chip" + (have ? " have" : " miss");
+  if (g.kind === "item") {
+    const i = iconEl({ cid: g.id, iconPath: g.iconPath, icon: false }, 20);
+    i.classList.add("ing-ic");
+    chip.appendChild(i);
+  } else {
+    const dot = document.createElement("span");
+    dot.className = "ing-dot";
+    chip.appendChild(dot);
+  }
+  const lbl = document.createElement("span");
+  lbl.className = "ing-lbl";
+  const name = (lang === "fr" ? g.nameFr : g.nameEn) || String(g.id);
+  lbl.textContent = g.qty > 1 ? `${name} ×${g.qty}` : name;
+  const cnt = document.createElement("span");
+  cnt.className = "ing-cnt";
+  cnt.textContent = `${g.owned}/${g.qty}`;
+  chip.append(lbl, cnt);
+  chip.title = g.kind === "type" ? "Catégorie d'ingrédient (total possédé)" : "Ingrédient précis";
+  return chip;
+}
 
 // ── SQL brut (generic table browser) ───────────────────────────────────────
 const sql = { table: null, limit: 200, offset: 0, total: 0, columns: [], pkCols: [], tables: [] };
