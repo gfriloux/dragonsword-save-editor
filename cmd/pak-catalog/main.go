@@ -126,6 +126,79 @@ type itemRow struct {
 	IconName string `xml:"IconName,attr"`
 }
 
+// --- Cooking recipes (CookRecipeData.xml + CookToolData.xml) --------------------
+//
+// Whether a recipe is *known* is a tb_switch flag: category = CookBook_SwitchData/64,
+// bit = CookBook_SwitchData%64 (validated in-game, see docs/switches.md). recipes.json
+// stays purely structural — ingredient item-CIDs and category ids resolve to names via
+// the existing items.json / item_categories.json at runtime.
+
+type toolRow struct {
+	ID       string `xml:"ID,attr"`
+	ToolType string `xml:"ToolType,attr"`
+	Name     string `xml:"Name,attr"` // StringData key for the localized action label
+}
+
+type recipeRow struct {
+	SwitchData string `xml:"CookBook_SwitchData,attr"`
+	ToolType   string `xml:"ToolType,attr"`
+	Cond1Type  string `xml:"IngredientCond1_Type,attr"`
+	Cond1Value string `xml:"IngredientCond1_Value,attr"`
+	Cond2Type  string `xml:"IngredientCond2_Type,attr"`
+	Cond2Value string `xml:"IngredientCond2_Value,attr"`
+	Cond3Type  string `xml:"IngredientCond3_Type,attr"`
+	Cond3Value string `xml:"IngredientCond3_Value,attr"`
+	Cook1      string `xml:"Cook_ID1,attr"`
+	Cook2      string `xml:"Cook_ID2,attr"`
+	Cook3      string `xml:"Cook_ID3,attr"`
+	Cook4      string `xml:"Cook_ID4,attr"`
+	Cook5      string `xml:"Cook_ID5,attr"`
+}
+
+type toolOut struct {
+	Type    string `json:"type"`
+	LabelFR string `json:"labelFr"`
+	LabelEN string `json:"labelEn"`
+}
+
+// recipeIngredient is one required ingredient slot: a whole game item-category
+// ("type", id ∈ item_categories.json) or a specific item ("item", id ∈ items.json).
+// A repeated slot means "×2/×3" of the same ingredient.
+type recipeIngredient struct {
+	Kind string `json:"kind"` // "type" | "item"
+	ID   int    `json:"id"`
+}
+
+type recipeOut struct {
+	Key         int                `json:"key"` // CookBook_SwitchData; cat=Key/64, bit=Key%64
+	Tool        string             `json:"tool"`
+	Ingredients []recipeIngredient `json:"ingredients"`
+	Dishes      []int              `json:"dishes"` // Cook_ID1..5: the dish CID per quality tier
+}
+
+type recipesFile struct {
+	Source  string      `json:"_source"`
+	Tools   []toolOut   `json:"tools"`
+	Recipes []recipeOut `json:"recipes"`
+}
+
+// ingredient converts one (Type, Value) condition pair into a recipeIngredient, or
+// (,false) when the slot is empty.
+func ingredient(condType, condValue string) (recipeIngredient, bool) {
+	v, err := strconv.Atoi(condValue)
+	if err != nil {
+		return recipeIngredient{}, false
+	}
+	switch condType {
+	case "INGREDIENT_TYPE":
+		return recipeIngredient{Kind: "type", ID: v}, true
+	case "INGREDIENT_ID":
+		return recipeIngredient{Kind: "item", ID: v}, true
+	default:
+		return recipeIngredient{}, false
+	}
+}
+
 // iconGameRe pulls the /Game/... asset path (without extension) out of an
 // IconName like `…Texture2D'/Game/Art/UI/…/Icon_Item_Common_Gold.Icon_…'`.
 var iconGameRe = regexp.MustCompile(`/Game/([^.'"]+)`)
@@ -193,6 +266,9 @@ func main() {
 	categoriesXML := flag.String("categories", "tmp/pak/GameItemCategoryData.xml", "GameItemCategoryData.xml extracted from the paks")
 	catalogPath := flag.String("catalog", "internal/domain/data/items.json", "items.json to merge into (in place)")
 	categoriesOut := flag.String("categories-out", "internal/domain/data/item_categories.json", "item_categories.json to write")
+	recipesXML := flag.String("recipes", "tmp/pak/CookRecipeData.xml", "CookRecipeData.xml extracted from the paks")
+	toolsXML := flag.String("tools", "tmp/pak/CookToolData.xml", "CookToolData.xml extracted from the paks")
+	recipesOut := flag.String("recipes-out", "internal/domain/data/recipes.json", "recipes.json to write")
 	flag.Parse()
 
 	raw, err := os.ReadFile(*catalogPath)
@@ -287,6 +363,55 @@ func main() {
 		Categories: cats,
 	})
 	log.Printf("wrote %s: %d consumable categories", *categoriesOut, len(cats))
+
+	emitRecipes(*recipesXML, *toolsXML, *recipesOut, strs)
+}
+
+// emitRecipes parses the cooking tables and writes recipes.json (tools + per-recipe
+// switch key, tool, ingredient slots and dish tiers). Tool labels resolve through the
+// already-loaded StringData; everything else stays as raw ids resolved at runtime.
+func emitRecipes(recipesXML, toolsXML, out string, strs map[string]strRow) {
+	var tools []toolOut
+	if err := streamRows(toolsXML, "CookToolData", func(r toolRow) {
+		s := strs[r.Name]
+		tools = append(tools, toolOut{Type: r.ToolType, LabelFR: s.FR, LabelEN: s.EN})
+	}); err != nil {
+		log.Fatalf("parse cook tools: %v", err)
+	}
+
+	var recipes []recipeOut
+	err := streamRows(recipesXML, "CookRecipeData", func(r recipeRow) {
+		key, err := strconv.Atoi(r.SwitchData)
+		if err != nil {
+			log.Fatalf("recipe with non-numeric CookBook_SwitchData %q", r.SwitchData)
+		}
+		var ings []recipeIngredient
+		for _, c := range [][2]string{
+			{r.Cond1Type, r.Cond1Value}, {r.Cond2Type, r.Cond2Value}, {r.Cond3Type, r.Cond3Value},
+		} {
+			if ing, ok := ingredient(c[0], c[1]); ok {
+				ings = append(ings, ing)
+			}
+		}
+		var dishes []int
+		for _, d := range []string{r.Cook1, r.Cook2, r.Cook3, r.Cook4, r.Cook5} {
+			if v, err := strconv.Atoi(d); err == nil {
+				dishes = append(dishes, v)
+			}
+		}
+		recipes = append(recipes, recipeOut{Key: key, Tool: r.ToolType, Ingredients: ings, Dishes: dishes})
+	})
+	if err != nil {
+		log.Fatalf("parse cook recipes: %v", err)
+	}
+	sort.Slice(recipes, func(i, j int) bool { return recipes[i].Key < recipes[j].Key })
+
+	writeJSON(out, recipesFile{
+		Source:  "Cooking recipes datamined from the game's CookRecipeData/CookToolData (paks). category=key/64, bit=key%64. Regenerate with `go run ./cmd/pak-catalog`.",
+		Tools:   tools,
+		Recipes: recipes,
+	})
+	log.Printf("wrote %s: %d recipes, %d tools", out, len(recipes), len(tools))
 }
 
 func writeJSON(path string, v any) {
