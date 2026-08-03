@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-//go:embed data/items.json data/items_extra.json data/item_categories.json
+//go:embed data/items.json data/items_extra.json data/item_categories.json data/recipes.json
 var seedFS embed.FS
 
 // Item is a resolved catalog entry for a content id (CID). Names are provided in

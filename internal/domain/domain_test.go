@@ -252,7 +252,9 @@ func TestFillStackables(t *testing.T) {
 	}
 }
 
-func TestUnlockAllRecipes(t *testing.T) {
+// TestUnlockAllRecipesNoSideEffects checks the key-accurate unlock leaves the non-recipe
+// tb_switch categories (0 and 5) untouched — the precise map only sets real recipe bits.
+func TestUnlockAllRecipesNoSideEffects(t *testing.T) {
 	g := openGame(t)
 	uid, err := g.UserID()
 	if err != nil {
@@ -266,18 +268,15 @@ func TestUnlockAllRecipes(t *testing.T) {
 		}
 		return v, true
 	}
+	before0, ok0 := bitfield(0)
+	before5, ok5 := bitfield(5)
 	if err := g.UnlockAllRecipes(); err != nil {
 		t.Fatalf("unlock: %v", err)
 	}
-	// Every recipe category is now all-bits (-1), including ones absent before.
-	for _, cat := range []int{15, 30, 45, 60} {
-		v, ok := bitfield(cat)
-		if !ok || v != -1 {
-			t.Fatalf("category %d = %d (present=%v), want -1", cat, v, ok)
-		}
+	if after, ok := bitfield(0); ok0 && (!ok || after != before0) {
+		t.Fatalf("non-recipe category 0 changed: %d -> %d", before0, after)
 	}
-	// A category outside the recipe range is untouched.
-	if v, ok := bitfield(0); ok && v == -1 {
-		t.Fatal("category 0 (non-recipe) should not be all-bits")
+	if after, ok := bitfield(5); ok5 && (!ok || after != before5) {
+		t.Fatalf("non-recipe category 5 changed: %d -> %d", before5, after)
 	}
 }

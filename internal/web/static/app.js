@@ -702,26 +702,258 @@ RENDER.gems = async function () {
   el.appendChild(rows);
 };
 
-// ── Cuisine (recipe details land in Phase 3) ───────────────────────────────
+// ── Cuisine (recipe grid + detail panel) ───────────────────────────────────
+const cook = { recipes: [], tools: [], tool: "", search: "", known: "all", sel: null };
+
+function cookToolLabel(type) {
+  const t = cook.tools.find((x) => x.type === type);
+  return t ? (lang === "fr" ? t.labelFr : t.labelEn) : type;
+}
+function localized(o) { return o ? (lang === "fr" ? o.fr : o.en) : ""; }
+function dishName(dish, key) {
+  return (lang === "fr" ? dish.nameFr : dish.nameEn) || `Plat ${dish.cid || key}`;
+}
+
 RENDER.cook = async function () {
   const el = $("#screen-cook");
-  el.className = "screen panel";
-  el.innerHTML = `<div class="panel-head"><span class="overline">Fourneaux</span><h2>Livre de recettes</h2></div>`;
-  const btn = document.createElement("button");
-  btn.className = "action-btn";
-  btn.textContent = "Tout débloquer";
-  btn.onclick = async () => {
-    if (!confirm("Marquer toutes les recettes normales comme connues ?")) return;
-    btn.disabled = true;
-    try { await postJSON("/api/game/recipes/unlock-all", {}); toast("Recettes débloquées — clique « Écrire dans la save »."); }
-    catch (e) { toast("Échec : " + e.message); }
-    finally { btn.disabled = false; }
+  el.className = "screen cook";
+  el.innerHTML = "";
+
+  const data = await api("/api/game/recipes");
+  cook.recipes = data.recipes || [];
+  cook.tools = data.tools || [];
+  if (!cook.recipes.some((r) => r.key === cook.sel)) cook.sel = null;
+
+  const main = document.createElement("div");
+  main.className = "cook-main";
+  const detail = document.createElement("aside");
+  detail.className = "cook-detail empty";
+  detail.innerHTML = "<span>Choisis une recette.</span>";
+  el.append(main, detail);
+  cook._detail = detail;
+
+  // Toolbar: title + count, then filters.
+  const bar = document.createElement("div");
+  bar.className = "cook-toolbar";
+  const head = document.createElement("div");
+  head.className = "cook-head";
+  head.innerHTML = `<div><span class="overline">Fourneaux</span><h2>Livre de recettes</h2></div>`;
+  const count = document.createElement("span");
+  count.className = "cook-count";
+  head.appendChild(count);
+  cook._count = count;
+
+  const controls = document.createElement("div");
+  controls.className = "cook-controls";
+  const toolSeg = segGroup("tool", [["", "Tous"], ...cook.tools.map((t) => [t.type, lang === "fr" ? t.labelFr : t.labelEn])]);
+  const knownSeg = segGroup("known", [["all", "Toutes"], ["unknown", "Inconnues"], ["known", "Connues"]]);
+  const search = document.createElement("input");
+  search.type = "search";
+  search.className = "cook-search";
+  search.placeholder = "Rechercher un plat…";
+  search.value = cook.search;
+  search.oninput = () => { cook.search = search.value; paintCook(); };
+  const unlock = document.createElement("button");
+  unlock.className = "action-btn";
+  unlock.textContent = "Tout débloquer";
+  unlock.onclick = async () => {
+    if (!confirm("Marquer toutes les recettes comme connues ?")) return;
+    unlock.disabled = true;
+    try {
+      await postJSON("/api/game/recipes/unlock-all", {});
+      for (const r of cook.recipes) r.known = true;
+      paintCook();
+      const sel = cook.recipes.find((r) => r.key === cook.sel);
+      if (sel) renderCookDetail(sel);
+      toast("Recettes débloquées — clique « Écrire dans la save ».");
+    } catch (e) { toast("Échec : " + e.message); }
+    finally { unlock.disabled = false; }
   };
-  const note = document.createElement("p");
-  note.className = "empty-note";
-  note.innerHTML = "Marque chaque recette normale (grillé / bouilli / tranché) comme connue. Les détails par recette (matériaux requis / possédés) arrivent en Phase 3.";
-  el.append(btn, note);
+  controls.append(toolSeg, knownSeg, search, unlock);
+  bar.append(head, controls);
+
+  const grid = document.createElement("div");
+  grid.className = "cook-grid";
+  main.append(bar, grid);
+  cook._grid = grid;
+
+  paintCook();
+  const sel = cook.recipes.find((r) => r.key === cook.sel);
+  if (sel) renderCookDetail(sel);
 };
+
+function segGroup(key, options) {
+  const seg = document.createElement("div");
+  seg.className = "seg";
+  for (const [val, label] of options) {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = cook[key] === val ? "on" : "";
+    b.onclick = () => {
+      cook[key] = val;
+      seg.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+      paintCook();
+    };
+    seg.appendChild(b);
+  }
+  return seg;
+}
+
+function cookVisible() {
+  const q = cook.search.trim().toLowerCase();
+  return cook.recipes.filter((r) => {
+    if (cook.tool && r.tool !== cook.tool) return false;
+    if (cook.known === "known" && !r.known) return false;
+    if (cook.known === "unknown" && r.known) return false;
+    if (q) {
+      const n = ((r.dish && (r.dish.nameFr + " " + r.dish.nameEn)) || "").toLowerCase();
+      if (!n.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function paintCook() {
+  const vis = cookVisible();
+  const knownN = cook.recipes.filter((r) => r.known).length;
+  cook._count.textContent = `${knownN} / ${cook.recipes.length} connues`;
+
+  const grid = cook._grid;
+  grid.innerHTML = "";
+  if (!vis.length) {
+    grid.innerHTML = `<p class="empty-note">Aucune recette ne correspond.</p>`;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  for (const r of vis) frag.appendChild(cookCard(r));
+  grid.appendChild(frag);
+}
+
+function cookCard(r) {
+  const dish = r.dish || {};
+  const card = document.createElement("button");
+  card.className = "cook-card " + (r.known ? "known" : "locked") + (cook.sel === r.key ? " sel" : "");
+  card.dataset.key = r.key;
+  const vis = document.createElement("div");
+  vis.className = "cook-card-vis";
+  vis.appendChild(iconEl(dish, 64));
+  const badge = document.createElement("span");
+  badge.className = "cook-badge " + (r.known ? "known" : "locked");
+  badge.textContent = r.known ? "✓" : "";
+  vis.appendChild(badge);
+  const nm = document.createElement("span");
+  nm.className = "cook-card-name";
+  nm.textContent = dishName(dish, r.key);
+  card.append(vis, nm);
+  card.onclick = () => selectCook(r);
+  return card;
+}
+
+function selectCook(r) {
+  cook.sel = r.key;
+  cook._grid.querySelectorAll(".cook-card").forEach((c) => c.classList.toggle("sel", Number(c.dataset.key) === r.key));
+  renderCookDetail(r);
+}
+
+function renderCookDetail(r) {
+  const d = cook._detail;
+  d.className = "cook-detail";
+  d.innerHTML = "";
+  const dish = r.dish || {};
+
+  const vis = document.createElement("div");
+  vis.className = "cook-detail-vis";
+  vis.appendChild(iconEl(dish, 120));
+  const name = document.createElement("div");
+  name.className = "cook-detail-name" + (r.known ? "" : " unknown");
+  name.textContent = dishName(dish, r.key);
+  const tool = document.createElement("div");
+  tool.className = "cook-detail-tool";
+  tool.textContent = cookToolLabel(r.tool);
+  d.append(vis, name, tool);
+
+  if (r.effects && r.effects.length) {
+    const eff = document.createElement("div");
+    eff.className = "cook-effect";
+    const ov = document.createElement("div");
+    ov.className = "overline";
+    ov.textContent = "Effet" + (r.effectName ? " · " + localized(r.effectName) : "");
+    const txt = document.createElement("div");
+    txt.className = "cook-effect-txt";
+    txt.textContent = localized(r.effects[0]);
+    eff.append(ov, txt);
+    const distinct = [...new Set(r.effects.map(localized).filter(Boolean))];
+    if (distinct.length > 1) {
+      const scale = document.createElement("div");
+      scale.className = "cook-effect-scale";
+      scale.textContent = "Augmente avec la qualité (5 paliers)";
+      scale.title = distinct.join("\n");
+      eff.appendChild(scale);
+    }
+    d.appendChild(eff);
+  }
+
+  const mHead = document.createElement("div");
+  mHead.className = "overline mat-head";
+  mHead.textContent = "Matériaux requis";
+  d.appendChild(mHead);
+  const mats = document.createElement("div");
+  mats.className = "cook-mats";
+  for (const g of r.ingredients || []) mats.appendChild(matTile(g));
+  d.appendChild(mats);
+
+  const seg = document.createElement("div");
+  seg.className = "seg cook-known-seg";
+  const mk = (known, label) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = r.known === known ? "on" : "";
+    b.onclick = async () => {
+      if (r.known === known) return;
+      seg.querySelectorAll("button").forEach((x) => (x.disabled = true));
+      try {
+        await postJSON("/api/game/recipes/known", { key: r.key, known });
+        r.known = known;
+        paintCook();
+        renderCookDetail(r);
+        toast(known ? "Recette connue — écris la save." : "Recette verrouillée — écris la save.");
+      } catch (e) { toast("Échec : " + e.message); seg.querySelectorAll("button").forEach((x) => (x.disabled = false)); }
+    };
+    return b;
+  };
+  seg.append(mk(false, "Verrouillée"), mk(true, "Connue"));
+  d.appendChild(seg);
+
+  const ref = document.createElement("div");
+  ref.className = "cook-ref";
+  ref.textContent = `tb_switch · cat ${r.category} · bit ${r.bit}`;
+  d.appendChild(ref);
+}
+
+function matTile(g) {
+  const tile = document.createElement("div");
+  const have = g.owned >= g.qty;
+  tile.className = "mat-tile " + (have ? "have" : "miss");
+  const vis = document.createElement("div");
+  vis.className = "mat-vis";
+  if (g.iconCid) {
+    vis.appendChild(iconEl({ cid: g.iconCid, iconPath: g.iconPath, icon: false }, 36));
+  } else {
+    const dot = document.createElement("span");
+    dot.className = "mat-dot";
+    vis.appendChild(dot);
+  }
+  const lbl = document.createElement("div");
+  lbl.className = "mat-lbl";
+  const name = (lang === "fr" ? g.nameFr : g.nameEn) || String(g.id);
+  lbl.textContent = g.qty > 1 ? `${name} ×${g.qty}` : name;
+  const ratio = document.createElement("div");
+  ratio.className = "mat-ratio";
+  ratio.textContent = `${g.owned}/${g.qty}`;
+  tile.append(vis, lbl, ratio);
+  tile.title = g.kind === "type" ? "Catégorie d'ingrédient (total possédé dans la save)" : "Ingrédient précis";
+  return tile;
+}
 
 // ── SQL brut (generic table browser) ───────────────────────────────────────
 const sql = { table: null, limit: 200, offset: 0, total: 0, columns: [], pkCols: [], tables: [] };

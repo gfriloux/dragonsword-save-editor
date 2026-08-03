@@ -33,7 +33,9 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
   - **Characters** and **Team** — read-only reference views (levels, squads).
   - **Equipment** and **Gems** — edit enchant level, item XP and lock; stat
     references are shown read-only.
-  - **Cooking** — one click to unlock all normal cooking recipes.
+  - **Cooking** — a recipe book: a grid of dish cards (known / locked) and a detail
+    panel with the dish's eat-effect, its required ingredients (icons + owned/required
+    counts), and a per-recipe known/lock toggle — plus a key-accurate "unlock all".
 
   Item, character and equipment **names and icons** come from a bundled catalog
   datamined by [th.gl](https://dragonswordawakening.th.gl) — names in **French &
@@ -128,8 +130,13 @@ Item, character and equipment **names and icons** are datamined by
 [The Hidden Gaming Lair (th.gl)](https://dragonswordawakening.th.gl) and bundled as
 `internal/domain/data/items.json` (names + icon positions) and
 `internal/web/static/sprite.webp` (the icon sprite sheet). Regenerate both with
-`just gen-catalog` (`cmd/gen-catalog`). All names and icons are © their respective
-owners.
+`just gen-catalog` (`cmd/gen-catalog`).
+
+Item names/categories/grades and the **cooking recipes** (`recipes.json`) are also
+datamined from the game's own data XML inside the paks: `cmd/pak-dump` extracts the XML
+in pure Go, `cmd/pak-catalog` converts it. The extracted XML is game-copyright and lives
+under `tmp/` (never committed); only the derived *data* is bundled. All names, icons and
+recipe data are © their respective owners.
 
 ## Disclaimer
 

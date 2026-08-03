@@ -7,6 +7,25 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [Unreleased]
+
+### Features
+
+- **web**: Show an icon for category ingredients
+- **domain**: Representative icon for category ingredients
+- **cmd**: Recipes.json maps ingredient categories to a representative icon
+- **web**: Cuisine recipe grid + detail panel with effects
+- **domain**: Expose recipe dish effects
+- **cmd**: Recipes.json carries dish effects (ContentsBuff)
+- **cmd**: Pure-Go pak XML extractor (pak-dump)
+- **web**: Cuisine recipe list + per-recipe unlock
+- **domain**: Per-recipe cooking known-state + key-accurate unlock
+- **cmd**: Pak-catalog emits recipes.json
+
+### Documentation
+
+- **plan**: V0.13.0 cooking recipe details + per-recipe unlock
+
 ## [0.12.0] - 2026-08-02
 
 ### Features
@@ -32,6 +51,7 @@ by git-cliff.
 
 ### Documentation
 
+- DESIGN + changelog for v0.12.0
 - **plans**: V0.12.0 chantier — UI refonte + save picker + authentic icons
 
 ### Build & tooling
