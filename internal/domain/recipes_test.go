@@ -27,6 +27,27 @@ func TestRecipeCatalogLoaded(t *testing.T) {
 	t.Logf("keys %d-%d, categories %d-%d", minKey, maxKey, minKey/64, maxKey/64)
 }
 
+func TestRecipeEffects(t *testing.T) {
+	var withEffect int
+	for _, r := range recipeSeeds {
+		if len(r.Effects) > 0 {
+			withEffect++
+		}
+	}
+	if withEffect == 0 {
+		t.Fatal("no recipe carries an effect; the ContentsBuff resolution is broken")
+	}
+	// The first recipe (key 1001, grilled meat) restores HP across its tiers.
+	r := recipeSeeds[0]
+	if r.EffectName == nil || r.EffectName.FR == "" {
+		t.Fatalf("recipe %d has no effect name", r.Key)
+	}
+	if len(r.Effects) != len(r.Dishes) {
+		t.Fatalf("recipe %d: %d effects for %d dish tiers (must be parallel)", r.Key, len(r.Effects), len(r.Dishes))
+	}
+	t.Logf("%d/%d recipes carry an effect; recipe %d effect: %q", withEffect, len(recipeSeeds), r.Key, r.Effects[0].FR)
+}
+
 func TestSwitchPos(t *testing.T) {
 	// Ground truth from docs/switches.md: "Poisson grillé" key 1002 -> cat 15, bit 42.
 	if cat, bit := switchPos(1002); cat != 15 || bit != 42 {

@@ -23,12 +23,20 @@ type RecipeTool struct {
 	LabelEN string `json:"labelEn"`
 }
 
+// EffectText is one localized effect line (the dish's eat-effect, via ContentsBuffData).
+type EffectText struct {
+	FR string `json:"fr,omitempty"`
+	EN string `json:"en,omitempty"`
+}
+
 // recipeSeed is one raw recipe as stored in recipes.json.
 type recipeSeed struct {
 	Key         int              `json:"key"`
 	Tool        string           `json:"tool"`
 	Ingredients []ingredientSeed `json:"ingredients"`
 	Dishes      []int64          `json:"dishes"`
+	EffectName  *EffectText      `json:"effectName"`
+	Effects     []EffectText     `json:"effects"` // parallel to Dishes; scales with tier
 }
 
 type ingredientSeed struct {
@@ -89,8 +97,10 @@ type Recipe struct {
 	Tool        string             `json:"tool"`
 	Known       bool               `json:"known"`
 	Ingredients []RecipeIngredient `json:"ingredients"`
-	Dish        Item               `json:"dish"`   // representative dish (tier 1) for name/icon
-	Dishes      []int64            `json:"dishes"` // the dish CID at each of the 5 quality tiers
+	Dish        Item               `json:"dish"`                 // representative dish (tier 1) for name/icon
+	Dishes      []int64            `json:"dishes"`               // the dish CID at each of the 5 quality tiers
+	EffectName  *EffectText        `json:"effectName,omitempty"` // the eat-effect's category label
+	Effects     []EffectText       `json:"effects,omitempty"`    // effect text per dish tier
 }
 
 // Recipes lists every cooking recipe resolved against the save: known/unknown state read
@@ -114,12 +124,14 @@ func (g *Game) Recipes() ([]Recipe, error) {
 	for _, rs := range recipeSeeds {
 		cat, bit := switchPos(rs.Key)
 		r := Recipe{
-			Key:      rs.Key,
-			Category: cat,
-			Bit:      bit,
-			Tool:     rs.Tool,
-			Known:    known[cat]>>uint(bit)&1 == 1,
-			Dishes:   rs.Dishes,
+			Key:        rs.Key,
+			Category:   cat,
+			Bit:        bit,
+			Tool:       rs.Tool,
+			Known:      known[cat]>>uint(bit)&1 == 1,
+			Dishes:     rs.Dishes,
+			EffectName: rs.EffectName,
+			Effects:    rs.Effects,
 		}
 		if len(rs.Dishes) > 0 {
 			r.Dish = g.cat.LookupCtx(rs.Dishes[0], "food")
