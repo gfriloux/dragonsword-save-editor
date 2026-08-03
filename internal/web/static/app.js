@@ -936,8 +936,8 @@ function matTile(g) {
   tile.className = "mat-tile " + (have ? "have" : "miss");
   const vis = document.createElement("div");
   vis.className = "mat-vis";
-  if (g.kind === "item") {
-    vis.appendChild(iconEl({ cid: g.id, iconPath: g.iconPath, icon: false }, 36));
+  if (g.iconCid) {
+    vis.appendChild(iconEl({ cid: g.iconCid, iconPath: g.iconPath, icon: false }, 36));
   } else {
     const dot = document.createElement("span");
     dot.className = "mat-dot";
