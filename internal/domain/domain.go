@@ -391,39 +391,8 @@ func (g *Game) Gems() ([]Gem, error) {
 	return out, rows.Err()
 }
 
-// Known cooking recipes are flags in the generic tb_switch bitmask table; the
-// normal recipes occupy these switch categories (see memory dsa-cook-recipes).
-const (
-	recipeSwitchLo = 15
-	recipeSwitchHi = 60
-)
-
-// UnlockAllRecipes marks every normal cooking recipe as known by setting all bits
-// of the recipe switch categories. Bits beyond real recipes are inert (the game
-// only checks recipe keys that exist in its table). A few special recipes with
-// atypical CIDs live outside this range and are not covered.
-func (g *Game) UnlockAllRecipes() error {
-	uid, err := g.UserID()
-	if err != nil {
-		return err
-	}
-	tx, err := g.s.DB().Begin()
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()
-	stmt, err := tx.Prepare(`INSERT OR REPLACE INTO tb_switch (USER_DBID, CATEGORY, BIT_FIELD) VALUES (?,?,?)`)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	for cat := recipeSwitchLo; cat <= recipeSwitchHi; cat++ {
-		if _, err := stmt.Exec(uid, cat, -1); err != nil { // -1 == all 64 bits
-			return err
-		}
-	}
-	return tx.Commit()
-}
+// Cooking recipes (known-state, per-recipe unlock/lock, key-accurate UnlockAllRecipes)
+// live in recipes.go.
 
 // SetGemLock locks or unlocks a gem.
 func (g *Game) SetGemLock(dbid int64, locked bool) error {
