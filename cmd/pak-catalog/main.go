@@ -124,6 +124,15 @@ type itemRow struct {
 	Category string `xml:"Category,attr"`
 	Grade    string `xml:"Grade,attr"`
 	IconName string `xml:"IconName,attr"`
+	Value1   string `xml:"Value1,attr"` // for COOKING dishes: a ContentsBuffData id (the eat effect)
+}
+
+// contentsBuffRow links a consumable's Value1 to its localized effect (Name + Desc string
+// keys). A cooked dish's Value1 → ContentsBuffData.ID → Desc = "restores 850 HP", etc.
+type contentsBuffRow struct {
+	ID   string `xml:"ID,attr"`
+	Name string `xml:"Name,attr"`
+	Desc string `xml:"Desc,attr"`
 }
 
 // --- Cooking recipes (CookRecipeData.xml + CookToolData.xml) --------------------
@@ -169,11 +178,21 @@ type recipeIngredient struct {
 	ID   int    `json:"id"`
 }
 
+// effectText is one localized effect line (the ContentsBuff Desc / Name).
+type effectText struct {
+	FR string `json:"fr,omitempty"`
+	EN string `json:"en,omitempty"`
+}
+
+func (e effectText) empty() bool { return e.FR == "" && e.EN == "" }
+
 type recipeOut struct {
 	Key         int                `json:"key"` // CookBook_SwitchData; cat=Key/64, bit=Key%64
 	Tool        string             `json:"tool"`
 	Ingredients []recipeIngredient `json:"ingredients"`
-	Dishes      []int              `json:"dishes"` // Cook_ID1..5: the dish CID per quality tier
+	Dishes      []int              `json:"dishes"`               // Cook_ID1..5: the dish CID per quality tier
+	EffectName  *effectText        `json:"effectName,omitempty"` // the eat-effect's category label
+	Effects     []effectText       `json:"effects,omitempty"`    // effect text per dish tier (parallel to Dishes)
 }
 
 type recipesFile struct {
@@ -268,6 +287,7 @@ func main() {
 	categoriesOut := flag.String("categories-out", "internal/domain/data/item_categories.json", "item_categories.json to write")
 	recipesXML := flag.String("recipes", "tmp/pak/CookRecipeData.xml", "CookRecipeData.xml extracted from the paks")
 	toolsXML := flag.String("tools", "tmp/pak/CookToolData.xml", "CookToolData.xml extracted from the paks")
+	buffsXML := flag.String("buffs", "tmp/pak/ContentsBuffData.xml", "ContentsBuffData.xml extracted from the paks")
 	recipesOut := flag.String("recipes-out", "internal/domain/data/recipes.json", "recipes.json to write")
 	flag.Parse()
 
@@ -316,7 +336,9 @@ func main() {
 	cats = append(cats, consumableCategory{Key: "unsorted", LabelFR: "Non trié", LabelEN: "Unsorted", Color: "#8a93a6"})
 
 	var added, updated, noName int
+	itemValue1 := map[string]string{} // CID -> Value1 (dish effect id, among others)
 	err = streamRows(*itemsXML, "GameItemData", func(r itemRow) {
+		itemValue1[r.ID] = r.Value1
 		s := strs[r.Name]
 		it, ok := cat.Items[r.ID]
 		if !ok {
@@ -364,19 +386,37 @@ func main() {
 	})
 	log.Printf("wrote %s: %d consumable categories", *categoriesOut, len(cats))
 
-	emitRecipes(*recipesXML, *toolsXML, *recipesOut, strs)
+	emitRecipes(*recipesXML, *toolsXML, *buffsXML, *recipesOut, strs, itemValue1)
 }
 
 // emitRecipes parses the cooking tables and writes recipes.json (tools + per-recipe
-// switch key, tool, ingredient slots and dish tiers). Tool labels resolve through the
-// already-loaded StringData; everything else stays as raw ids resolved at runtime.
-func emitRecipes(recipesXML, toolsXML, out string, strs map[string]strRow) {
+// switch key, tool, ingredient slots, dish tiers and the eat-effect per tier). Tool
+// labels and effect text resolve through StringData; ids stay raw for runtime name/icon
+// resolution. dishValue1 maps a dish CID to its Value1 (a ContentsBuffData id).
+func emitRecipes(recipesXML, toolsXML, buffsXML, out string, strs map[string]strRow, dishValue1 map[string]string) {
 	var tools []toolOut
 	if err := streamRows(toolsXML, "CookToolData", func(r toolRow) {
 		s := strs[r.Name]
 		tools = append(tools, toolOut{Type: r.ToolType, LabelFR: s.FR, LabelEN: s.EN})
 	}); err != nil {
 		log.Fatalf("parse cook tools: %v", err)
+	}
+
+	// ContentsBuffData id -> its localized effect name/desc (via StringData keys).
+	buffs := map[string]contentsBuffRow{}
+	if err := streamRows(buffsXML, "ContentsBuffData", func(r contentsBuffRow) {
+		buffs[r.ID] = r
+	}); err != nil {
+		log.Fatalf("parse contents buffs: %v", err)
+	}
+	// effectOf resolves a dish CID to its (name, desc) effect text, empty if none.
+	effectOf := func(dishCID int) (name, desc effectText) {
+		cb, ok := buffs[dishValue1[strconv.Itoa(dishCID)]]
+		if !ok {
+			return
+		}
+		n, d := strs[cb.Name], strs[cb.Desc]
+		return effectText{FR: n.FR, EN: n.EN}, effectText{FR: d.FR, EN: d.EN}
 	}
 
 	var recipes []recipeOut
@@ -394,12 +434,36 @@ func emitRecipes(recipesXML, toolsXML, out string, strs map[string]strRow) {
 			}
 		}
 		var dishes []int
+		var effects []effectText
+		var effectName *effectText
 		for _, d := range []string{r.Cook1, r.Cook2, r.Cook3, r.Cook4, r.Cook5} {
-			if v, err := strconv.Atoi(d); err == nil {
-				dishes = append(dishes, v)
+			v, err := strconv.Atoi(d)
+			if err != nil {
+				continue
+			}
+			dishes = append(dishes, v)
+			name, desc := effectOf(v)
+			effects = append(effects, desc)
+			if effectName == nil && !name.empty() {
+				n := name
+				effectName = &n
 			}
 		}
-		recipes = append(recipes, recipeOut{Key: key, Tool: r.ToolType, Ingredients: ings, Dishes: dishes})
+		// Drop the effects slice entirely if no tier has an effect (keeps JSON lean).
+		allEmpty := true
+		for _, e := range effects {
+			if !e.empty() {
+				allEmpty = false
+				break
+			}
+		}
+		if allEmpty {
+			effects = nil
+		}
+		recipes = append(recipes, recipeOut{
+			Key: key, Tool: r.ToolType, Ingredients: ings, Dishes: dishes,
+			EffectName: effectName, Effects: effects,
+		})
 	})
 	if err != nil {
 		log.Fatalf("parse cook recipes: %v", err)
@@ -407,7 +471,7 @@ func emitRecipes(recipesXML, toolsXML, out string, strs map[string]strRow) {
 	sort.Slice(recipes, func(i, j int) bool { return recipes[i].Key < recipes[j].Key })
 
 	writeJSON(out, recipesFile{
-		Source:  "Cooking recipes datamined from the game's CookRecipeData/CookToolData (paks). category=key/64, bit=key%64. Regenerate with `go run ./cmd/pak-catalog`.",
+		Source:  "Cooking recipes datamined from CookRecipeData/CookToolData + dish effects via ContentsBuffData (paks). category=key/64, bit=key%64. Regenerate with `go run ./cmd/pak-catalog` (after `pak-dump`).",
 		Tools:   tools,
 		Recipes: recipes,
 	})
