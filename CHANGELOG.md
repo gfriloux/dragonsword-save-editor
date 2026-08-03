@@ -24,6 +24,7 @@ by git-cliff.
 
 ### Documentation
 
+- Cooking recipe details (v0.13.0)
 - **plan**: V0.13.0 cooking recipe details + per-recipe unlock
 
 ## [0.12.0] - 2026-08-02
