@@ -327,9 +327,9 @@ function stepperRow({ item, name, cid, known, value, step = 1, onCommit, onLabel
     const edit = document.createElement("button");
     edit.className = "edit-label";
     edit.textContent = "✎";
-    edit.onclick = () => {
-      const v = prompt(`Nom pour CID ${cid}`, known ? name : "");
-      if (v !== null) onLabel(v.trim());
+    edit.onclick = async () => {
+      const v = await modalPrompt({ title: "Renommer", message: `Nom pour CID ${cid}`, value: known ? name : "" });
+      if (v !== null) onLabel(v);
     };
     iname.appendChild(edit);
   }
@@ -523,7 +523,7 @@ function renderInvCat(main, detail, model, cat) {
     const n = Math.max(0, parseInt(fillN.value, 10) || 0);
     const stacks = list.filter((e) => e.stackable);
     if (!stacks.length) return toast("Rien à remplir ici.");
-    if (!confirm(`Mettre les ${stacks.length} objets empilables de « ${catLabel(cat)} » à ${n} ?`)) return;
+    if (!(await modalConfirm({ title: "Remplir la catégorie", message: `Mettre les ${stacks.length} objets empilables de « ${catLabel(cat)} » à ${n} ?`, okText: "Remplir" }))) return;
     try { for (const e of stacks) await postJSON("/api/game/stackable", { cid: e.cid, count: n }); await RENDER.inv(); }
     catch (err) { toast("Remplissage échoué : " + err.message); }
   };
@@ -687,7 +687,7 @@ function namesCell(name, cid, known, onLabel) {
     const edit = document.createElement("button");
     edit.className = "edit-label";
     edit.textContent = "✎";
-    edit.onclick = () => { const v = prompt(`Nom pour CID ${cid}`, known ? name : ""); if (v !== null) onLabel(v.trim()); };
+    edit.onclick = async () => { const v = await modalPrompt({ title: "Renommer", message: `Nom pour CID ${cid}`, value: known ? name : "" }); if (v !== null) onLabel(v); };
     iname.appendChild(edit);
   }
   const icid = document.createElement("span");
@@ -831,7 +831,7 @@ RENDER.cook = async function () {
   unlock.className = "action-btn";
   unlock.textContent = "Tout débloquer";
   unlock.onclick = async () => {
-    if (!confirm("Marquer toutes les recettes comme connues ?")) return;
+    if (!(await modalConfirm({ title: "Tout débloquer", message: "Marquer toutes les recettes comme connues ?", okText: "Tout débloquer" }))) return;
     unlock.disabled = true;
     try {
       await postJSON("/api/game/recipes/unlock-all", {});
