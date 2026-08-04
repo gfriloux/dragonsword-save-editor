@@ -230,6 +230,10 @@ body:not(.has-save) .tab.needs-save:hover { color: var(--muted); }
   color: var(--text); font-family: var(--mono); font-size: 18px;
 }
 .stepper input:focus { outline: none; }
+/* Drop the native number spinner; the ± buttons and quick-fills replace it. */
+input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .saved { animation: flash 0.6s ease; }
 @keyframes flash { from { background: var(--accent-veil); } }
 
