@@ -26,6 +26,80 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
+// ── Themed modal (replaces native prompt/confirm) ──────────────────────────
+// showModal resolves to a boolean (confirm) or, when `prompt` is true, the
+// entered string (Valider) / null (annulé). Keyboard: Enter validates (unless a
+// button is focused, which activates itself), Escape and overlay-click cancel;
+// Tab is trapped inside the card. Only one modal is expected at a time.
+function showModal({ title, message = "", prompt = false, value = "", okText, cancelText = "Annuler" }) {
+  return new Promise((resolve) => {
+    const cancelVal = prompt ? null : false;
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    const card = document.createElement("div");
+    card.className = "modal";
+    overlay.appendChild(card);
+
+    if (title) {
+      const h = document.createElement("div");
+      h.className = "modal-title";
+      h.textContent = title;
+      card.appendChild(h);
+    }
+    if (message) {
+      const m = document.createElement("div");
+      m.className = "modal-msg";
+      m.textContent = message;
+      card.appendChild(m);
+    }
+    let field = null;
+    if (prompt) {
+      field = document.createElement("input");
+      field.className = "modal-input";
+      field.type = "text";
+      field.value = value;
+      card.appendChild(field);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "modal-actions";
+    const cancel = document.createElement("button");
+    cancel.className = "modal-btn ghost";
+    cancel.textContent = cancelText;
+    const ok = document.createElement("button");
+    ok.className = "modal-btn primary";
+    ok.textContent = okText || (prompt ? "Valider" : "Confirmer");
+    actions.append(cancel, ok);
+    card.appendChild(actions);
+
+    const focusables = [field, cancel, ok].filter(Boolean);
+    const close = (val) => {
+      document.removeEventListener("keydown", onKey, true);
+      overlay.remove();
+      resolve(val);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") { e.preventDefault(); close(cancelVal); }
+      else if (e.key === "Enter" && e.target.tagName !== "BUTTON") { e.preventDefault(); close(prompt ? field.value.trim() : true); }
+      else if (e.key === "Tab") {
+        const first = focusables[0], last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    cancel.onclick = () => close(cancelVal);
+    ok.onclick = () => close(prompt ? field.value.trim() : true);
+    overlay.onclick = (e) => { if (e.target === overlay) close(cancelVal); };
+    document.addEventListener("keydown", onKey, true);
+
+    document.body.appendChild(overlay);
+    (field || ok).focus();
+    if (field) field.select();
+  });
+}
+const modalConfirm = (opts) => showModal({ ...opts, prompt: false });
+const modalPrompt = (opts) => showModal({ ...opts, prompt: true });
+
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 

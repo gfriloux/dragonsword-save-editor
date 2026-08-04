@@ -385,6 +385,40 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
 #grid td.saved { background: var(--warn-veil); color: var(--warn); }
 .hint { padding: 12px 20px; color: var(--muted); font-size: 12.5px; }
 
+/* ── Modale (confirm / prompt) ──────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  display: grid; place-items: center;
+  padding: 20px;
+  background: rgba(6, 7, 9, 0.62);
+  animation: modal-fade 0.12s ease;
+}
+.modal {
+  width: min(440px, 100%);
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 22px 24px; border-radius: 14px;
+  background: var(--surface); border: 1px solid var(--border-2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  animation: modal-rise 0.14s ease;
+}
+.modal-title { font-family: var(--serif); font-size: 21px; }
+.modal-msg { color: var(--text-2); font-size: 14.5px; line-height: 1.5; }
+.modal-input {
+  height: 40px; padding: 0 14px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--cell); color: var(--text);
+  font-family: var(--mono); font-size: 15px;
+}
+.modal-input:focus { outline: none; border-color: var(--accent); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 2px; }
+.modal-btn {
+  padding: 9px 18px; border: 0; border-radius: 22px; cursor: pointer;
+  font-family: var(--ui); font-size: 14px; font-weight: 700;
+}
+.modal-btn.ghost { background: var(--soft); color: var(--text-2); }
+.modal-btn.primary { background: var(--accent); color: var(--bg); box-shadow: 0 2px 0 var(--accent-deep); }
+@keyframes modal-fade { from { opacity: 0; } }
+@keyframes modal-rise { from { opacity: 0; transform: translateY(8px); } }
+
 /* ── Toast ──────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
