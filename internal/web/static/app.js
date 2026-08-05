@@ -778,6 +778,136 @@ RENDER.gems = async function () {
   el.appendChild(rows);
 };
 
+// ── Costumes & Familiers (cosmetics + mounts) ──────────────────────────────
+// A themed <select> that reflects a current value and posts on change, rolling
+// back to the previous choice on failure.
+function equipSelect(options, current, onCommit) {
+  const sel = document.createElement("select");
+  sel.className = "equip-select";
+  for (const [val, label] of options) {
+    const o = document.createElement("option");
+    o.value = val; o.textContent = label;
+    if (String(val) === String(current)) o.selected = true;
+    sel.appendChild(o);
+  }
+  let prev = sel.value;
+  sel.onchange = async () => {
+    try { await onCommit(sel.value); prev = sel.value; sel.classList.remove("saved"); void sel.offsetWidth; sel.classList.add("saved"); }
+    catch (e) { sel.value = prev; toast("Échec : " + e.message); }
+  };
+  return sel;
+}
+
+function sectionTitle(text) {
+  const t = document.createElement("div");
+  t.className = "group-title";
+  t.textContent = text;
+  return t;
+}
+
+// unlockGrid renders not-owned catalog entries as cards, each with an unlock
+// button; returns the grid, or an empty-note paragraph when there is nothing.
+function unlockGrid(entries, onUnlock, refresh, emptyMsg) {
+  if (!entries.length) {
+    const p = document.createElement("p");
+    p.className = "empty-note";
+    p.textContent = emptyMsg;
+    return p;
+  }
+  const grid = document.createElement("div");
+  grid.className = "cards";
+  for (const e of entries) {
+    const card = document.createElement("div");
+    card.className = "card";
+    const head = document.createElement("div");
+    head.className = "card-head";
+    head.appendChild(iconEl(e, 40));
+    head.appendChild(namesCell(displayName(e), e.cid, e.known, null));
+    card.appendChild(head);
+    const btn = document.createElement("button");
+    btn.className = "action-btn";
+    btn.textContent = "Débloquer";
+    btn.onclick = async () => {
+      btn.disabled = true;
+      try { await onUnlock(e.cid); toast("Débloqué — clique « Écrire dans la save »."); await refresh(); }
+      catch (err) { btn.disabled = false; toast("Échec : " + err.message); }
+    };
+    card.appendChild(btn);
+    grid.appendChild(card);
+  }
+  return grid;
+}
+
+RENDER.costumes = async function () {
+  const el = $("#screen-costumes");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Garde-robe</span><h2>Costumes</h2><span class="sub">Tenues et skins d'arme (<span class="mono">tb_costume</span>). Un personnage peut en porter plusieurs à la fois. Débloque et équipe librement.</span></div>`;
+  const { costumes, catalog, characters } = await api("/api/game/costumes");
+
+  const charOpts = [[0, "— non porté —"], ...(characters || []).map((c) => [c.cid, displayName(c)])];
+  const owned = document.createElement("div");
+  owned.className = "rows";
+  if (!(costumes && costumes.length)) owned.innerHTML = `<p class="empty-note">Aucun costume possédé.</p>`;
+  for (const c of costumes || []) {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.appendChild(iconEl(c, 32));
+    row.appendChild(namesCell(displayName(c), c.cid, c.known, (name) => postJSON("/api/game/label", { cid: c.cid, name }).then(() => RENDER.costumes())));
+    const fields = document.createElement("div");
+    fields.className = "eq-fields";
+    const lbl = document.createElement("label");
+    lbl.className = "eq-field";
+    lbl.innerHTML = "<span>Porté par</span>";
+    lbl.appendChild(equipSelect(charOpts, c.equipCharacterCid, (v) => postJSON("/api/game/costumes/equip", { dbid: c.dbid, characterCid: Number(v) })));
+    fields.appendChild(lbl);
+    row.appendChild(fields);
+    owned.appendChild(row);
+  }
+
+  const locked = (catalog || []).filter((e) => !e.owned);
+  el.appendChild(sectionTitle("Possédés"));
+  el.appendChild(owned);
+  el.appendChild(sectionTitle(`Débloquer (${locked.length})`));
+  el.appendChild(unlockGrid(locked, (cid) => postJSON("/api/game/costumes/unlock", { cid }), () => RENDER.costumes(), "Tous les costumes sont déjà possédés."));
+};
+
+RENDER.familiers = async function () {
+  const el = $("#screen-familiers");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Écurie</span><h2>Familiers</h2><span class="sub">Créatures montables (<span class="mono">tb_vehicle</span>). Une monture par personnage. Débloque et assigne à chaque héros.</span></div>`;
+  const { vehicles, catalog, mounts, characters } = await api("/api/game/familiers");
+
+  const mountByChar = {};
+  for (const m of mounts || []) mountByChar[m.characterCid] = m;
+  const vehOpts = [[0, "— aucune —"], ...(vehicles || []).map((v) => [v.dbid, displayName(v)])];
+
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  if (!(characters && characters.length)) rows.innerHTML = `<p class="empty-note">Aucun personnage.</p>`;
+  for (const ch of characters || []) {
+    const cur = mountByChar[ch.cid];
+    const row = document.createElement("div");
+    row.className = "row";
+    row.appendChild(iconEl(ch, 32));
+    row.appendChild(namesCell(displayName(ch), ch.cid, ch.known, null));
+    const fields = document.createElement("div");
+    fields.className = "eq-fields";
+    const lbl = document.createElement("label");
+    lbl.className = "eq-field";
+    lbl.innerHTML = "<span>Monture</span>";
+    lbl.appendChild(equipSelect(vehOpts, cur ? cur.vehicleDbid : 0, (v) => postJSON("/api/game/familiers/equip", { characterCid: ch.cid, vehicleDbid: v })));
+    fields.appendChild(lbl);
+    row.appendChild(fields);
+    rows.appendChild(row);
+  }
+
+  const locked = (catalog || []).filter((e) => !e.owned);
+  el.appendChild(sectionTitle("Montures par personnage"));
+  el.appendChild(rows);
+  el.appendChild(sectionTitle(`Débloquer (${locked.length})`));
+  el.appendChild(unlockGrid(locked, (cid) => postJSON("/api/game/familiers/unlock", { cid }), () => RENDER.familiers(), "Tous les familiers sont déjà possédés."));
+};
+
 // ── Cuisine (recipe grid + detail panel) ───────────────────────────────────
 const cook = { recipes: [], tools: [], tool: "", search: "", known: "all", sel: null };
 
