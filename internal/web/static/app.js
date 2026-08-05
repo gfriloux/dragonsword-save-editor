@@ -26,6 +26,80 @@ function toast(msg) {
   toast._t = setTimeout(() => t.classList.add("hidden"), 4000);
 }
 
+// ── Themed modal (replaces native prompt/confirm) ──────────────────────────
+// showModal resolves to a boolean (confirm) or, when `prompt` is true, the
+// entered string (Valider) / null (annulé). Keyboard: Enter validates (unless a
+// button is focused, which activates itself), Escape and overlay-click cancel;
+// Tab is trapped inside the card. Only one modal is expected at a time.
+function showModal({ title, message = "", prompt = false, value = "", okText, cancelText = "Annuler" }) {
+  return new Promise((resolve) => {
+    const cancelVal = prompt ? null : false;
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    const card = document.createElement("div");
+    card.className = "modal";
+    overlay.appendChild(card);
+
+    if (title) {
+      const h = document.createElement("div");
+      h.className = "modal-title";
+      h.textContent = title;
+      card.appendChild(h);
+    }
+    if (message) {
+      const m = document.createElement("div");
+      m.className = "modal-msg";
+      m.textContent = message;
+      card.appendChild(m);
+    }
+    let field = null;
+    if (prompt) {
+      field = document.createElement("input");
+      field.className = "modal-input";
+      field.type = "text";
+      field.value = value;
+      card.appendChild(field);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "modal-actions";
+    const cancel = document.createElement("button");
+    cancel.className = "modal-btn ghost";
+    cancel.textContent = cancelText;
+    const ok = document.createElement("button");
+    ok.className = "modal-btn primary";
+    ok.textContent = okText || (prompt ? "Valider" : "Confirmer");
+    actions.append(cancel, ok);
+    card.appendChild(actions);
+
+    const focusables = [field, cancel, ok].filter(Boolean);
+    const close = (val) => {
+      document.removeEventListener("keydown", onKey, true);
+      overlay.remove();
+      resolve(val);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") { e.preventDefault(); close(cancelVal); }
+      else if (e.key === "Enter" && e.target.tagName !== "BUTTON") { e.preventDefault(); close(prompt ? field.value.trim() : true); }
+      else if (e.key === "Tab") {
+        const first = focusables[0], last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    cancel.onclick = () => close(cancelVal);
+    ok.onclick = () => close(prompt ? field.value.trim() : true);
+    overlay.onclick = (e) => { if (e.target === overlay) close(cancelVal); };
+    document.addEventListener("keydown", onKey, true);
+
+    document.body.appendChild(overlay);
+    (field || ok).focus();
+    if (field) field.select();
+  });
+}
+const modalConfirm = (opts) => showModal({ ...opts, prompt: false });
+const modalPrompt = (opts) => showModal({ ...opts, prompt: true });
+
 const escapeHtml = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -253,9 +327,9 @@ function stepperRow({ item, name, cid, known, value, step = 1, onCommit, onLabel
     const edit = document.createElement("button");
     edit.className = "edit-label";
     edit.textContent = "✎";
-    edit.onclick = () => {
-      const v = prompt(`Nom pour CID ${cid}`, known ? name : "");
-      if (v !== null) onLabel(v.trim());
+    edit.onclick = async () => {
+      const v = await modalPrompt({ title: "Renommer", message: `Nom pour CID ${cid}`, value: known ? name : "" });
+      if (v !== null) onLabel(v);
     };
     iname.appendChild(edit);
   }
@@ -449,7 +523,7 @@ function renderInvCat(main, detail, model, cat) {
     const n = Math.max(0, parseInt(fillN.value, 10) || 0);
     const stacks = list.filter((e) => e.stackable);
     if (!stacks.length) return toast("Rien à remplir ici.");
-    if (!confirm(`Mettre les ${stacks.length} objets empilables de « ${catLabel(cat)} » à ${n} ?`)) return;
+    if (!(await modalConfirm({ title: "Remplir la catégorie", message: `Mettre les ${stacks.length} objets empilables de « ${catLabel(cat)} » à ${n} ?`, okText: "Remplir" }))) return;
     try { for (const e of stacks) await postJSON("/api/game/stackable", { cid: e.cid, count: n }); await RENDER.inv(); }
     catch (err) { toast("Remplissage échoué : " + err.message); }
   };
@@ -613,7 +687,7 @@ function namesCell(name, cid, known, onLabel) {
     const edit = document.createElement("button");
     edit.className = "edit-label";
     edit.textContent = "✎";
-    edit.onclick = () => { const v = prompt(`Nom pour CID ${cid}`, known ? name : ""); if (v !== null) onLabel(v.trim()); };
+    edit.onclick = async () => { const v = await modalPrompt({ title: "Renommer", message: `Nom pour CID ${cid}`, value: known ? name : "" }); if (v !== null) onLabel(v); };
     iname.appendChild(edit);
   }
   const icid = document.createElement("span");
@@ -644,8 +718,10 @@ function lockToggle(checked, onChange) {
   label.className = "lock";
   const cb = document.createElement("input");
   cb.type = "checkbox"; cb.checked = checked;
+  const sw = document.createElement("span");
+  sw.className = "switch";
   cb.onchange = async () => { try { await onChange(cb.checked); } catch (e) { cb.checked = !cb.checked; toast("Échec : " + e.message); } };
-  label.append(cb, document.createTextNode("verrou"));
+  label.append(cb, sw, document.createTextNode("verrou"));
   return label;
 }
 function statChips(cids) {
@@ -757,7 +833,7 @@ RENDER.cook = async function () {
   unlock.className = "action-btn";
   unlock.textContent = "Tout débloquer";
   unlock.onclick = async () => {
-    if (!confirm("Marquer toutes les recettes comme connues ?")) return;
+    if (!(await modalConfirm({ title: "Tout débloquer", message: "Marquer toutes les recettes comme connues ?", okText: "Tout débloquer" }))) return;
     unlock.disabled = true;
     try {
       await postJSON("/api/game/recipes/unlock-all", {});
