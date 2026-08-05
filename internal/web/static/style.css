@@ -67,6 +67,14 @@ body {
 
 .hidden { display: none !important; }
 
+/* ── Themed scrollbars (T6) ──────────────────────────────────────────────── */
+* { scrollbar-width: thin; scrollbar-color: var(--border-2) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+::-webkit-scrollbar-corner { background: transparent; }
+
 /* ── Bar 1: identity & actions ──────────────────────────────────────────── */
 .topbar {
   height: 60px;
