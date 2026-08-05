@@ -162,7 +162,6 @@ body:not(.has-save) .tab.needs-save:hover { color: var(--muted); }
   border-radius: 20px; border: 1px solid var(--border);
   background: var(--cell); color: var(--text); font-family: var(--mono); font-size: 13px;
 }
-.folder-row input:focus { outline: none; border-color: var(--accent); }
 .cur-folder { font-family: var(--mono); font-size: 11px; color: var(--faint); }
 
 .slots { display: flex; flex-wrap: wrap; gap: 16px; }
@@ -226,10 +225,16 @@ body:not(.has-save) .tab.needs-save:hover { color: var(--muted); }
 .stepper button.plus { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 .stepper input {
   flex: 1; height: 40px; min-width: 0; text-align: center;
-  border-radius: 20px; border: 1px solid var(--accent); background: var(--cell);
+  border-radius: 20px; border: 1px solid var(--border); background: var(--cell);
   color: var(--text); font-family: var(--mono); font-size: 18px;
 }
-.stepper input:focus { outline: none; }
+/* Unified focus ring across every editable field (T4+T5): neutral border at
+   rest, accent border + veil ring on focus, everywhere. */
+.folder-row input:focus, .stepper input:focus, .eq-field input:focus,
+.inv-fill input:focus, .sql-rail input:focus, .cook-search:focus,
+.modal-input:focus, #grid td.editable[contenteditable="true"]:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-veil);
+}
 /* Drop the native number spinner; the ± buttons and quick-fills replace it. */
 input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
 input[type="number"]::-webkit-outer-spin-button,
@@ -422,7 +427,6 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
   border: 1px solid var(--border); background: var(--cell); color: var(--text);
   font-family: var(--mono); font-size: 15px;
 }
-.modal-input:focus { outline: none; border-color: var(--accent); }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 2px; }
 .modal-btn {
   padding: 9px 18px; border: 0; border-radius: 22px; cursor: pointer;
