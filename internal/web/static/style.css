@@ -267,6 +267,13 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
   border-radius: 8px; border: 1px solid var(--border); background: var(--cell); color: var(--text);
   font-family: var(--mono);
 }
+/* Equip picker (costume wearer / character mount). */
+.equip-select {
+  height: 34px; min-width: 160px; padding: 0 10px;
+  border-radius: 8px; border: 1px solid var(--border); background: var(--cell); color: var(--text);
+  font-family: var(--ui); font-size: 13px; cursor: pointer;
+}
+.equip-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-veil); }
 /* Lock: themed switch driven by a visually-hidden (still focusable) checkbox. */
 .lock { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); cursor: pointer; }
 .lock input { position: absolute; width: 1px; height: 1px; opacity: 0; margin: 0; }

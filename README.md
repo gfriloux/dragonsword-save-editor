@@ -36,6 +36,10 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
   - **Cooking** — a recipe book: a grid of dish cards (known / locked) and a detail
     panel with the dish's eat-effect, its required ingredients (icons + owned/required
     counts), and a per-recipe known/lock toggle — plus a key-accurate "unlock all".
+  - **Costumes** and **Familiers** — unlock cosmetics and mounts and assign them to
+    characters: costumes (outfits + weapon skins) are non-exclusive per character;
+    mounts are one per character. Each screen lists what's owned plus a catalog of the
+    not-yet-owned to unlock.
 
   Item, character and equipment **names and icons** come from a bundled catalog
   datamined by [th.gl](https://dragonswordawakening.th.gl) — names in **French &
