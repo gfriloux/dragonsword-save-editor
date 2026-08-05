@@ -74,6 +74,12 @@ func New(cat *domain.Catalog) *Server {
 	s.mux.HandleFunc("/api/game/recipes", s.needSave(s.handleRecipes))
 	s.mux.HandleFunc("/api/game/recipes/known", s.needSave(s.handleSetRecipeKnown))
 	s.mux.HandleFunc("/api/game/recipes/unlock-all", s.needSave(s.handleUnlockRecipes))
+	s.mux.HandleFunc("/api/game/costumes", s.needSave(s.handleCostumes))
+	s.mux.HandleFunc("/api/game/costumes/unlock", s.needSave(s.handleCostumeUnlock))
+	s.mux.HandleFunc("/api/game/costumes/equip", s.needSave(s.handleCostumeEquip))
+	s.mux.HandleFunc("/api/game/familiers", s.needSave(s.handleFamiliers))
+	s.mux.HandleFunc("/api/game/familiers/unlock", s.needSave(s.handleFamilierUnlock))
+	s.mux.HandleFunc("/api/game/familiers/equip", s.needSave(s.handleFamilierEquip))
 	return s
 }
 

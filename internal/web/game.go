@@ -262,3 +262,128 @@ func (s *Server) handleSetRecipeKnown(w http.ResponseWriter, r *http.Request) {
 	}
 	writeJSON(w, 200, map[string]any{"ok": true})
 }
+
+// handleCostumes returns owned costumes, the catalog (with owned flags) and the
+// character roster the UI needs to resolve wearers and drive the equip picker.
+func (s *Server) handleCostumes(w http.ResponseWriter, r *http.Request) {
+	costumes, err := s.g.Costumes()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	catalog, err := s.g.CostumeCatalog()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	chars, err := s.g.Characters()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"costumes": costumes, "catalog": catalog, "characters": chars})
+}
+
+func (s *Server) handleCostumeUnlock(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		CID int64 `json:"cid"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.UnlockCostume(req.CID); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleCostumeEquip(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		DBID         int64 `json:"dbid,string"`
+		CharacterCID int64 `json:"characterCid"` // 0 unequips
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.SetCostumeEquip(req.DBID, req.CharacterCID); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+// handleFamiliers returns owned vehicles, the catalog (with owned flags), the
+// per-character mounts and the character roster.
+func (s *Server) handleFamiliers(w http.ResponseWriter, r *http.Request) {
+	vehicles, err := s.g.Vehicles()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	catalog, err := s.g.VehicleCatalog()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	mounts, err := s.g.Mounts()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	chars, err := s.g.Characters()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"vehicles": vehicles, "catalog": catalog, "mounts": mounts, "characters": chars})
+}
+
+func (s *Server) handleFamilierUnlock(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		CID int64 `json:"cid"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.UnlockVehicle(req.CID); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleFamilierEquip(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		CharacterCID int64 `json:"characterCid"`
+		VehicleDBID  int64 `json:"vehicleDbid,string"` // 0 removes the mount
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.SetMount(req.CharacterCID, req.VehicleDBID); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
