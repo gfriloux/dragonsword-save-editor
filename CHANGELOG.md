@@ -7,6 +7,24 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [0.15.0] - 2026-08-05
+
+### Features
+
+- **web**: Costumes & familiers panels
+- **web**: Costumes & familiers endpoints
+- **domain**: Unlock and equip vehicles (familiers)
+- **domain**: Read owned vehicles + per-character mounts
+- **domain**: Unlock and equip costumes
+- **domain**: Read owned costumes + costume catalog
+- **domain**: Mint unique instance DBIDs for inserts
+
+### Documentation
+
+- **plans**: Add v0.15.0 costumes & familiers plan
+- Document costume & vehicle tables and screens
+- Changelog for v0.14.0
+
 ## [0.14.0] - 2026-08-05
 
 ### Features
