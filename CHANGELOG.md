@@ -11,6 +11,27 @@ by git-cliff.
 
 ### Features
 
+- **web**: Themed lock toggle in equipment/gems
+- **web**: Reusable themed modal (confirm/prompt)
+
+### Bug fixes
+
+- **web**: Themed scrollbars
+- **web**: Unified input focus & editable-field borders
+- **web**: Drop native number-input spinners
+
+### Refactoring
+
+- **web**: Replace native prompt/confirm with themed modal
+
+### Documentation
+
+- **plan**: V0.14.0 theme polish (point C, T2–T6)
+
+## [0.13.0] - 2026-08-03
+
+### Features
+
 - **web**: Show an icon for category ingredients
 - **domain**: Representative icon for category ingredients
 - **cmd**: Recipes.json maps ingredient categories to a representative icon
@@ -24,6 +45,7 @@ by git-cliff.
 
 ### Documentation
 
+- Changelog for v0.13.0
 - Cooking recipe details (v0.13.0)
 - **plan**: V0.13.0 cooking recipe details + per-recipe unlock
 

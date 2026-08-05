@@ -166,3 +166,39 @@ commit que le code concerné si une mention bouge).
 - [ ] Revue visuelle des 9 écrans + les 6 items d'audit (T1–T6) — voir `manual_tests.md`
 - [ ] Plus aucun `window.prompt`/`window.confirm` dans `app.js`
 - [ ] Commits atomiques sur `feat/theme-polish` ; docs synchronisées si une mention bouge
+
+---
+
+## Delivered (v0.14.0)
+
+Livré sur `feat/theme-polish`. Les 6 items d'audit traités, chacun en un commit
+atomique passant `just ci` :
+
+- **T1** `fix(web): drop native number-input spinners` — spinner WebKit/Firefox
+  supprimé globalement (`input[type=number]`).
+- **T2** `feat(web): reusable themed modal` + `refactor(web): replace native
+  prompt/confirm with themed modal` — composant `showModal`/`modalConfirm`/
+  `modalPrompt` (overlay thémé, clavier Entrée/Échap/Tab piégé), branché sur les
+  4 dialogues natifs (renommage ×2, « Tout débloquer », « Remplir »). Plus aucun
+  `window.prompt`/`window.confirm`.
+- **T3** `feat(web): themed lock toggle` — le « verrou » (Équipement/Gemmes) est
+  un interrupteur CSS piloté par une checkbox masquée mais focusable
+  (accessibilité conservée).
+- **T4+T5** `fix(web): unified input focus & editable-field borders` — un seul
+  langage : `--border` au repos, bordure accent + anneau `--accent-veil` au
+  focus, partout ; le stepper perd sa bordure accent permanente.
+- **T6** `fix(web): themed scrollbars` — scrollbars sombres discrètes (Firefox
+  `scrollbar-*` + `::-webkit-scrollbar`).
+
+**Décisions/écarts pris en cours :**
+- Variante « danger » de la modale **abandonnée** : dans ce thème le rouge accent
+  est déjà la couleur d'action forte ; un second rouge n'aurait ajouté que du CSS
+  mort. Bouton primaire = accent, ghost = annuler.
+- Les deux items T4/T5 et T6 étaient d'abord libellés `style(web)` — type **hors
+  convention** du projet (`PROCEDURE_PLANS.md` : pas de `style`), donc ignorés
+  par git-cliff. Reformulés en `fix(web)` (cohérent avec le T1), le changelog les
+  couvre.
+
+**Docs :** `README.md`/`DESIGN.md`/`docs/` inchangés — le polish est un détail
+d'implémentation de la couche `web`, aucune mention n'y devenait inexacte.
+`CHANGELOG.md` régénéré. Gate `just build-windows` vert (`.exe` statique).
