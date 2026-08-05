@@ -7,7 +7,7 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
-## [Unreleased]
+## [0.14.0] - 2026-08-05
 
 ### Features
 
@@ -26,6 +26,7 @@ by git-cliff.
 
 ### Documentation
 
+- V0.14.0 theme polish
 - **plan**: V0.14.0 theme polish (point C, T2–T6)
 
 ## [0.13.0] - 2026-08-03
