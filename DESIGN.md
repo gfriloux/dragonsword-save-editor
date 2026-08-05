@@ -89,14 +89,18 @@ The app is player-facing. On first run it asks for the **game folder** (remember
 in the OS config dir), lists the existing **saves** with their screenshots, and — once
 a slot is opened — shows the "Sang & acier" editor: an own-line tab bar over game
 screens (Accueil · Monnaies · Inventaire · Personnages · Équipe · Équipement · Gemmes ·
-Cuisine · **SQL brut**). Item names come from a bundled bilingual catalog
+Costumes · Familiers · Cuisine · **SQL brut**). Item names come from a bundled bilingual catalog
 (`internal/domain/data/items.json`, names/categories/grade/icon paths from the paks,
 merged over th.gl), switchable FR/EN, with user-editable labels. Item **icons** are the
 authentic in-game art, extracted per-user from the paks and cached (falling back to the
 th.gl sprite, then a category dot). **Cuisine** is a recipe book: a grid of dish cards
 (known/locked) and a detail panel showing the eat-effect, the required ingredients
 (resolved to icons, with owned/required counts), and a per-recipe known/lock toggle.
-**SQL brut** is the generic `tb_*` table browser, kept as the power user's escape hatch.
+**Costumes** and **Familiers** unlock and equip cosmetics (`tb_costume`) and mounts
+(`tb_vehicle`): each lists what is owned, equips it per character (costumes are
+non-exclusive — outfit + weapon skin at once; mounts are one per character via
+`tb_equip_mount`), and offers the not-owned catalog to unlock. **SQL brut** is the
+generic `tb_*` table browser, kept as the power user's escape hatch.
 
 ## Reverse-engineered facts
 

@@ -26,6 +26,12 @@ Notes:
   consumables (`tb_stackable_item`): the **table** decides the kind, not the CID alone.
 - `stat` references (`MAIN_STAT_CID`, `SUB_STAT_CID*`, `STAT_INFO_CID`) are a separate CID
   space (small 4–5 digit ids); their meaning is **not yet documented**.
+- The `999xxxx` **costume** space bundles both **outfits and weapon skins** (all
+  `ItemType=COSTUME`, indistinguishable by type); they pair even/odd — an outfit `999xxx0`
+  with its matching weapon skin `999xxx1` (confirmed by the icon paths, e.g.
+  `…_Costume_Cerese_Unique_01` vs `…_Cerese_Unique_Weapon_01`). A character equips both at
+  once. `VEHICLE_CID 1320033` is currently untranslated in the game data (Korean
+  `흉악한 새끼 용`), so its catalog name is the raw Korean until a locale provides one.
 - The `141xxxx` range is **not** potions: `1410002`–`1410105` are **character-XP** training
   texts (`ItemType=CHARACTER_EXP`, e.g. `1410002` "Manuel des bases du combat"), while
   `14102xx` are the three **mana** upgrade mats (`ItemType=EQUIPMENT_EXP`: `1410202` Fragment

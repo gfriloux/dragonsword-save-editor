@@ -65,9 +65,27 @@ gems (often empty; unsocketed gems are stackable inventory items).
 
 ### `tb_costume` / `tb_vehicle` — cosmetics & mounts
 
-`tb_costume`: `COSTUME_DBID` PK, `COSTUME_CID`, `EQUIP_CHARACTER_CID`, `PARTS_ON`,
-`IS_NEW`. `tb_vehicle`: `VEHICLE_DBID` PK, `VEHICLE_CID`. `tb_equip_mount` links a mount
-to a character.
+**`tb_costume`** — one row per owned costume. `COSTUME_DBID` PK (instance id, fits a
+uint32), `COSTUME_CID` (the cosmetic, `999xxxx`), `EQUIP_CHARACTER_CID` (the wearer's
+character CID, `0` = not worn), `PARTS_ON` (visible-parts bitmask, not an on/off flag —
+stays `1` even when equipped), `IS_NEW` (unread badge). `EQUIP_CHARACTER_CID` is `NOT
+NULL` **without a default**, so an insert must supply it; `CREATED_DATE`/`PARTS_ON`/
+`IS_NEW` default to now/1/1. Equip is **not exclusive**: several rows may point to the
+same character at once — the `999xxxx` space bundles both outfits and weapon skins (see
+[content-ids](content-ids.md)), and a character wears an outfit + its matching weapon
+skin simultaneously.
+
+**`tb_vehicle`** — one row per owned mount (familier). `VEHICLE_DBID` PK, `VEHICLE_CID`
+(`132xxxx`), `CREATED_DATE`.
+
+**`tb_equip_mount`** — `(USER_DBID, CHARACTER_CID)` PK, one row per character. `VEHICLE`
+holds the equipped mount's `VEHICLE_DBID` (`0` = none); the `ACC_*`, `TALISMAN_*` and
+`KARMA` columns hold that character's mount accessories. A character may have no row at
+all, so equipping a mount upserts (insert with `0` defaults, or update `VEHICLE` in place
+keeping the accessories).
+
+The editor exposes both as **Costumes** and **Familiers** screens (unlock + equip);
+`tb_summon` (an unrelated, counter-shaped summon-collection table) is out of scope.
 
 ### `tb_quick_slot` — quick slots
 
