@@ -1,5 +1,7 @@
 package domain
 
+import "fmt"
+
 // Costume is a resolved owned costume row. The 999xxxx "costume" space bundles
 // both outfits and weapon skins (indistinguishable by type); they are listed
 // flat. Equip state lives only here — a character wears a costume when its
@@ -54,6 +56,49 @@ func (g *Game) Costumes() ([]Costume, error) {
 // picker.
 func (g *Game) CostumeCatalog() ([]CatalogEntry, error) {
 	return g.categoryCatalog("costume", "tb_costume", "COSTUME_CID")
+}
+
+// UnlockCostume adds an owned costume for cid, minting a fresh DBID. It is a
+// no-op if the costume is already owned. CREATED_DATE, PARTS_ON and IS_NEW fall
+// back to the table defaults the game itself uses (now, 1, 1).
+func (g *Game) UnlockCostume(cid int64) error {
+	if g.cat.Lookup(cid).Category != "costume" {
+		return fmt.Errorf("domain: CID %d is not a costume", cid)
+	}
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	var n int
+	if err := g.s.DB().QueryRow(
+		`SELECT COUNT(*) FROM tb_costume WHERE USER_DBID=? AND COSTUME_CID=?`, uid, cid).Scan(&n); err != nil {
+		return err
+	}
+	if n > 0 {
+		return nil // already owned
+	}
+	dbid, err := g.mintDBID("tb_costume", "COSTUME_DBID")
+	if err != nil {
+		return err
+	}
+	// EQUIP_CHARACTER_CID is NOT NULL without a default (0 = unequipped);
+	// CREATED_DATE, PARTS_ON and IS_NEW fall back to the game's own defaults.
+	_, err = g.s.Exec(
+		`INSERT INTO tb_costume (COSTUME_DBID, USER_DBID, COSTUME_CID, EQUIP_CHARACTER_CID) VALUES (?,?,?,0)`,
+		dbid, uid, cid)
+	return err
+}
+
+// SetCostumeEquip sets which character wears a costume; characterCID 0 unequips
+// it. The relation is not exclusive — a character may wear several costumes.
+func (g *Game) SetCostumeEquip(dbid, characterCID int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	return exactlyOne(g.s.Exec(
+		`UPDATE tb_costume SET EQUIP_CHARACTER_CID=? WHERE USER_DBID=? AND COSTUME_DBID=?`,
+		characterCID, uid, dbid))
 }
 
 // ownedCIDs returns the set of CIDs the save holds in table.col for this account.
