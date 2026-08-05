@@ -1,6 +1,9 @@
 package domain
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 // Vehicle is a resolved owned vehicle (familier / monture) row.
 type Vehicle struct {
@@ -47,6 +50,60 @@ func (g *Game) Vehicles() ([]Vehicle, error) {
 // picker.
 func (g *Game) VehicleCatalog() ([]CatalogEntry, error) {
 	return g.categoryCatalog("mount", "tb_vehicle", "VEHICLE_CID")
+}
+
+// UnlockVehicle adds an owned vehicle for cid, minting a fresh DBID. It is a
+// no-op if already owned. CREATED_DATE falls back to the game's column default.
+func (g *Game) UnlockVehicle(cid int64) error {
+	if g.cat.Lookup(cid).Category != "mount" {
+		return fmt.Errorf("domain: CID %d is not a vehicle", cid)
+	}
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	var n int
+	if err := g.s.DB().QueryRow(
+		`SELECT COUNT(*) FROM tb_vehicle WHERE USER_DBID=? AND VEHICLE_CID=?`, uid, cid).Scan(&n); err != nil {
+		return err
+	}
+	if n > 0 {
+		return nil // already owned
+	}
+	dbid, err := g.mintDBID("tb_vehicle", "VEHICLE_DBID")
+	if err != nil {
+		return err
+	}
+	_, err = g.s.Exec(
+		`INSERT INTO tb_vehicle (VEHICLE_DBID, USER_DBID, VEHICLE_CID) VALUES (?,?,?)`,
+		dbid, uid, cid)
+	return err
+}
+
+// SetMount equips vehicleDBID (an owned vehicle) on a character; vehicleDBID 0
+// removes the mount. The character's equip-mount row is created if absent
+// (other accessory columns keep their 0 defaults), or updated in place so the
+// equipped accessories are preserved.
+func (g *Game) SetMount(characterCID, vehicleDBID int64) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	if vehicleDBID != 0 {
+		var n int
+		if err := g.s.DB().QueryRow(
+			`SELECT COUNT(*) FROM tb_vehicle WHERE USER_DBID=? AND VEHICLE_DBID=?`, uid, vehicleDBID).Scan(&n); err != nil {
+			return err
+		}
+		if n == 0 {
+			return fmt.Errorf("domain: vehicle DBID %d is not owned", vehicleDBID)
+		}
+	}
+	_, err = g.s.Exec(
+		`INSERT INTO tb_equip_mount (USER_DBID, CHARACTER_CID, VEHICLE) VALUES (?,?,?)
+		 ON CONFLICT(USER_DBID, CHARACTER_CID) DO UPDATE SET VEHICLE=excluded.VEHICLE`,
+		uid, characterCID, vehicleDBID)
+	return err
 }
 
 // Mounts lists, per character that has an equip-mount row, which vehicle it

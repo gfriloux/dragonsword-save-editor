@@ -2,6 +2,145 @@ package domain
 
 import "testing"
 
+// mountFor returns the equip-mount row for a character, if any.
+func mountFor(t *testing.T, g *Game, characterCID int64) (Mount, bool) {
+	t.Helper()
+	mounts, err := g.Mounts()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, m := range mounts {
+		if m.CharacterCID == characterCID {
+			return m, true
+		}
+	}
+	return Mount{}, false
+}
+
+func TestUnlockVehicleRoundTrip(t *testing.T) {
+	g := openGame(t) // skips unless DSA_SAVE is set
+
+	cat, err := g.VehicleCatalog()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var target int64
+	for _, e := range cat {
+		if !e.Owned {
+			target = e.CID
+			break
+		}
+	}
+	if target == 0 {
+		t.Skip("save already owns every vehicle; nothing to unlock")
+	}
+
+	if err := g.UnlockVehicle(target); err != nil {
+		t.Fatalf("unlock: %v", err)
+	}
+	vehicles, err := g.Vehicles()
+	if err != nil {
+		t.Fatal(err)
+	}
+	count := 0
+	for _, v := range vehicles {
+		if v.CID == target {
+			count++
+			if v.DBID == 0 {
+				t.Error("unlocked vehicle has a zero DBID")
+			}
+		}
+	}
+	if count != 1 {
+		t.Fatalf("owned rows for CID %d = %d after unlock, want 1", target, count)
+	}
+
+	// No-op on re-unlock.
+	if err := g.UnlockVehicle(target); err != nil {
+		t.Fatalf("re-unlock: %v", err)
+	}
+	vehicles, _ = g.Vehicles()
+	count = 0
+	for _, v := range vehicles {
+		if v.CID == target {
+			count++
+		}
+	}
+	if count != 1 {
+		t.Fatalf("owned rows for CID %d = %d after double unlock, want 1", target, count)
+	}
+}
+
+func TestSetMountRoundTrip(t *testing.T) {
+	g := openGame(t)
+
+	vehicles, err := g.Vehicles()
+	if err != nil || len(vehicles) == 0 {
+		t.Fatalf("vehicles: %v", err)
+	}
+	owned := vehicles[0].DBID
+
+	// A character that already has an equip-mount row: equip then unequip.
+	mounts, err := g.Mounts()
+	if err != nil || len(mounts) == 0 {
+		t.Fatalf("mounts: %v", err)
+	}
+	existing := mounts[0].CharacterCID
+
+	if err := g.SetMount(existing, owned); err != nil {
+		t.Fatalf("equip existing: %v", err)
+	}
+	if m, _ := mountFor(t, g, existing); m.Vehicle == nil || m.VehicleDBID != owned {
+		t.Fatalf("char %d did not get vehicle %d", existing, owned)
+	}
+	if err := g.SetMount(existing, 0); err != nil {
+		t.Fatalf("unequip: %v", err)
+	}
+	if m, _ := mountFor(t, g, existing); m.VehicleDBID != 0 || m.Vehicle != nil {
+		t.Fatalf("char %d still has a mount after unequip", existing)
+	}
+
+	// A character with NO equip-mount row: SetMount must insert one.
+	chars, err := g.Characters()
+	if err != nil {
+		t.Fatal(err)
+	}
+	hasRow := map[int64]bool{}
+	for _, m := range mounts {
+		hasRow[m.CharacterCID] = true
+	}
+	var fresh int64
+	for _, c := range chars {
+		if !hasRow[c.CID] {
+			fresh = c.CID
+			break
+		}
+	}
+	if fresh != 0 {
+		if err := g.SetMount(fresh, owned); err != nil {
+			t.Fatalf("equip fresh: %v", err)
+		}
+		m, ok := mountFor(t, g, fresh)
+		if !ok || m.Vehicle == nil || m.VehicleDBID != owned {
+			t.Fatalf("insert path failed: char %d has no resolved mount", fresh)
+		}
+	} else {
+		t.Log("every character already has an equip-mount row; insert path not exercised")
+	}
+}
+
+func TestSetMountRejectsUnownedVehicle(t *testing.T) {
+	g := openGame(t)
+	chars, err := g.Characters()
+	if err != nil || len(chars) == 0 {
+		t.Fatalf("characters: %v", err)
+	}
+	// A DBID that is (almost certainly) not an owned vehicle.
+	if err := g.SetMount(chars[0].CID, 1); err == nil {
+		t.Fatal("expected an error equipping an unowned vehicle DBID")
+	}
+}
+
 func TestVehiclesResolve(t *testing.T) {
 	g := openGame(t) // skips unless DSA_SAVE is set
 	vehicles, err := g.Vehicles()
