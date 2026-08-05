@@ -718,8 +718,10 @@ function lockToggle(checked, onChange) {
   label.className = "lock";
   const cb = document.createElement("input");
   cb.type = "checkbox"; cb.checked = checked;
+  const sw = document.createElement("span");
+  sw.className = "switch";
   cb.onchange = async () => { try { await onChange(cb.checked); } catch (e) { cb.checked = !cb.checked; toast("Échec : " + e.message); } };
-  label.append(cb, document.createTextNode("verrou"));
+  label.append(cb, sw, document.createTextNode("verrou"));
   return label;
 }
 function statChips(cids) {
