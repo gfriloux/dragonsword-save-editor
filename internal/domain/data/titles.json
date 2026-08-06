@@ -1,0 +1,1037 @@
+{
+  "_source": "Titles datamined from the game's own AccountTitleData/StringData (paks). id/64 = tb_title CATEGORY, id%64 = bit. Regenerate with `go run ./cmd/pak-titles`.",
+  "titles": [
+    {
+      "id": 2100000,
+      "nameFr": "Restaurateur de la grâce",
+      "nameEn": "Restorer of Grace",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2100001,
+      "nameFr": "Pionnier de la voie du vent",
+      "nameEn": "Pioneer of the Wind Path",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2100002,
+      "nameFr": "Conquérant de donjons",
+      "nameEn": "Dungeon Conqueror",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2100003,
+      "nameFr": "Guide du monde",
+      "nameEn": "Guide of the World",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2100004,
+      "nameFr": "Mains curieuses",
+      "nameEn": "Curious Hands",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2100005,
+      "nameFr": "Accro aux coffres",
+      "nameEn": "Chest Addict",
+      "color": "GREEN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2100006,
+      "nameFr": "Explorateur légendaire",
+      "nameEn": "Legendary Explorer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2100007,
+      "nameFr": "Ramasseur de butin",
+      "nameEn": "Loot Sweeper",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2100008,
+      "nameFr": "Challenger de marmottes",
+      "nameEn": "Marmot Challenger",
+      "color": "BLUE"
+    },
+    {
+      "id": 2100009,
+      "nameFr": "Maître de la pression",
+      "nameEn": "Master of Pressing",
+      "color": "BLUE"
+    },
+    {
+      "id": 2100010,
+      "nameFr": "Casse-tête résolu en poussant",
+      "nameEn": "Puzzle Solved by Pushing",
+      "color": "BLUE"
+    },
+    {
+      "id": 2100011,
+      "nameFr": "Brigade anti-fruits à coque",
+      "nameEn": "Nut Patrol",
+      "color": "BROWN"
+    },
+    {
+      "id": 2100012,
+      "nameFr": "Traqueur de queues",
+      "nameEn": "Tail Tracker",
+      "color": "BLUE"
+    },
+    {
+      "id": 2100013,
+      "nameFr": "Victime et coupable",
+      "nameEn": "Victim and Perpetrator",
+      "color": "GREEN"
+    },
+    {
+      "id": 2100014,
+      "nameFr": "Un petit remords tout blanc",
+      "nameEn": "A Small White Pang of Conscience",
+      "color": "VIOLET"
+    },
+    {
+      "id": 2100015,
+      "nameFr": "Visiteur indésirable du nid",
+      "nameEn": "Uninvited Guest of the Nest",
+      "color": "BROWN"
+    },
+    {
+      "id": 2100016,
+      "nameFr": "Chef itinérant du monde",
+      "nameEn": "World Traveling Chef",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2100017,
+      "nameFr": "Celui qui suit le filon",
+      "nameEn": "One Who Walks the Vein",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2100018,
+      "nameFr": "Abondance sur la terre",
+      "nameEn": "Abundance Upon the Land",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2100019,
+      "nameFr": "Mécène de l'atelier",
+      "nameEn": "Patron of the Workshop",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2101000,
+      "nameFr": "Ailes noires",
+      "nameEn": "Black Wings",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "id": 2101001,
+      "nameFr": "Imprenable",
+      "nameEn": "Impregnable",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2101002,
+      "nameFr": "Celui qui relie les Six Héros",
+      "nameEn": "One Who Connects The Six Heroes",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 150
+        }
+      ]
+    },
+    {
+      "id": 2101003,
+      "nameFr": "Je veux faire des missions",
+      "nameEn": "I Want to Do Missions",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2101004,
+      "nameFr": "Maître de la cuisine aux champignons",
+      "nameEn": "Master of Mushroom Cuisine",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2101005,
+      "nameFr": "Parent gâteux",
+      "nameEn": "Doting Parent",
+      "color": "GREEN"
+    },
+    {
+      "id": 2101006,
+      "nameFr": "Éveille-toi, héros",
+      "nameEn": "Awaken, Hero",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2101007,
+      "nameFr": "Alchimiste des Neiges",
+      "nameEn": "Synthesizer of Snow",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2101008,
+      "nameFr": "Sage de la lune bleue",
+      "nameEn": "Sage of the Blue Moon",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2101009,
+      "nameFr": "La Sainte Dame de l'Aube",
+      "nameEn": "Saintess of Dawn",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2101010,
+      "nameFr": "Inquisiteur",
+      "nameEn": "Inquisitor",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2101011,
+      "nameFr": "Renard rouge",
+      "nameEn": "Red Fox",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2101012,
+      "nameFr": "Bienveillant",
+      "nameEn": "Kind",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2101013,
+      "nameFr": "Solutionneur",
+      "nameEn": "Fixer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 150
+        }
+      ]
+    },
+    {
+      "id": 2102000,
+      "nameFr": "Chasseur de lapins",
+      "nameEn": "Rabbit Hunter",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102001,
+      "nameFr": "Chasseur d'oies",
+      "nameEn": "Goose Hunter",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2102002,
+      "nameFr": "Chasseur de sangliers",
+      "nameEn": "Boar Hunter",
+      "color": "GREEN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": 2102003,
+      "nameFr": "Chasseur de renards",
+      "nameEn": "Fox Hunter",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2102004,
+      "nameFr": "Pêcheur de rivière",
+      "nameEn": "Riverside Angler",
+      "color": "BROWN"
+    },
+    {
+      "id": 2102005,
+      "nameFr": "Pêcheur d'argent",
+      "nameEn": "Silver Angler",
+      "color": "BLUE"
+    },
+    {
+      "id": 2102006,
+      "nameFr": "Pêcheur d'amont",
+      "nameEn": "Upstream Angler",
+      "color": "GREEN"
+    },
+    {
+      "id": 2102007,
+      "nameFr": "Cueilleur des sables",
+      "nameEn": "Sand Gatherer",
+      "color": "VIOLET"
+    },
+    {
+      "id": 2102008,
+      "nameFr": "Cueilleur des rives",
+      "nameEn": "Waterside Gatherer",
+      "color": "BROWN"
+    },
+    {
+      "id": 2102009,
+      "nameFr": "Cueilleur de la plage",
+      "nameEn": "Beach Gatherer",
+      "color": "VIOLET"
+    },
+    {
+      "id": 2102010,
+      "nameFr": "Cueilleur des vagues",
+      "nameEn": "Wave Gatherer",
+      "color": "BLUE"
+    },
+    {
+      "id": 2102011,
+      "nameFr": "Cueilleur des racines",
+      "nameEn": "Root Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102012,
+      "nameFr": "Cueilleur des eaux",
+      "nameEn": "Water Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102013,
+      "nameFr": "Cueilleur écarlate",
+      "nameEn": "Crimson Gatherer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2102014,
+      "nameFr": "Cueilleur parfumé",
+      "nameEn": "Fragrant Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102015,
+      "nameFr": "Cueilleur bleu",
+      "nameEn": "Blue Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102016,
+      "nameFr": "Petit cueilleur",
+      "nameEn": "Small Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102017,
+      "nameFr": "Cueilleur d'un blanc pur",
+      "nameEn": "Pure White Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102018,
+      "nameFr": "Cueilleur verdoyant",
+      "nameEn": "Verdant Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102019,
+      "nameFr": "Cueilleur violet",
+      "nameEn": "Violet Gatherer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2102020,
+      "nameFr": "Cueilleur robuste",
+      "nameEn": "Hardy Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102021,
+      "nameFr": "Cueilleur de la nature",
+      "nameEn": "Nature Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102022,
+      "nameFr": "Cueilleur suspect",
+      "nameEn": "Suspicious Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 5
+        }
+      ]
+    },
+    {
+      "id": 2102023,
+      "nameFr": "Cueilleur limpide",
+      "nameEn": "Serene Gatherer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2102024,
+      "nameFr": "Riziculteur",
+      "nameEn": "Rice Farmer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2102025,
+      "nameFr": "Cultivateur de blé",
+      "nameEn": "Wheat Farmer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2102026,
+      "nameFr": "Brigade anti-cacahuètes",
+      "nameEn": "Peanut Patrol",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2102027,
+      "nameFr": "Brigade anti-noix",
+      "nameEn": "Walnut Patrol",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 150
+        }
+      ]
+    },
+    {
+      "id": 2102028,
+      "nameFr": "Cueilleur de l'aube",
+      "nameEn": "Dawn Gatherer",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "id": 2102029,
+      "nameFr": "Cueilleur étrange",
+      "nameEn": "Strange Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2102030,
+      "nameFr": "Cueilleur délicat",
+      "nameEn": "Delicate Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2102031,
+      "nameFr": "Cueilleur pur",
+      "nameEn": "Pure Gatherer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 150
+        }
+      ]
+    },
+    {
+      "id": 2102032,
+      "nameFr": "Apiculteur",
+      "nameEn": "Beekeeper",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2102033,
+      "nameFr": "Cueilleur d'œufs d'oiseau",
+      "nameEn": "Bird Egg Gatherer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2102034,
+      "nameFr": "Cueilleur d'œufs d'oie",
+      "nameEn": "Goose Egg Gatherer",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2103000,
+      "nameFr": "Chasseur de monstres aguerri",
+      "nameEn": "Skilled Hunter",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2103001,
+      "nameFr": "Le début d'un héros",
+      "nameEn": "A Hero's Beginning",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2103002,
+      "nameFr": "Agent d'entretien",
+      "nameEn": "Environmental Cleaner",
+      "color": "BROWN"
+    },
+    {
+      "id": 2103003,
+      "nameFr": "Celui qui efface les noms",
+      "nameEn": "One Who Erases Names",
+      "color": "BROWN"
+    },
+    {
+      "id": 2103004,
+      "nameFr": "Conquérant de Furcas",
+      "nameEn": "Conqueror of Furcas",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103005,
+      "nameFr": "Conquérant de Vanak",
+      "nameEn": "Conqueror of Vanak",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103006,
+      "nameFr": "Conquérant de Gallore de l'Effondrement",
+      "nameEn": "Conqueror of Gallore the Collapse",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103007,
+      "nameFr": "Conquérant de la Goule de l'Avidité",
+      "nameEn": "Conqueror of Ghoul Greed",
+      "color": "GREEN",
+      "stats": [
+        {
+          "type": "Defence_Penetrate",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2103008,
+      "nameFr": "Conquérant de l'Earthlander",
+      "nameEn": "Conqueror of the Earthlander",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103009,
+      "nameFr": "l'Errant",
+      "nameEn": "the Roamer",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": 2103010,
+      "nameFr": "le Prédateur",
+      "nameEn": "the Predator",
+      "color": "BROWN"
+    },
+    {
+      "id": 2103011,
+      "nameFr": "de la Soif",
+      "nameEn": "Specter of Thirst",
+      "color": "BROWN"
+    },
+    {
+      "id": 2103012,
+      "nameFr": "le Gratteur",
+      "nameEn": "Scraping",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 2103013,
+      "nameFr": "des Ténèbres",
+      "nameEn": "Dark Necromancer",
+      "color": "BLUE"
+    },
+    {
+      "id": 2103014,
+      "nameFr": "le Tyran",
+      "nameEn": "Tyrant",
+      "color": "BLUE"
+    },
+    {
+      "id": 2103015,
+      "nameFr": "l'Ardent",
+      "nameEn": "Feather of Burning Ashes",
+      "color": "GREEN",
+      "stats": [
+        {
+          "type": "Attack",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": 2103016,
+      "nameFr": "l'Affamé",
+      "nameEn": "Hungry Eye",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103017,
+      "nameFr": "l'Écrasant",
+      "nameEn": "Crushing Darkness",
+      "color": "GREEN"
+    },
+    {
+      "id": 2103018,
+      "nameFr": "Celui qui a brisé la Corne du dragon",
+      "nameEn": "One Who Broke the Dragon Horn",
+      "color": "RED"
+    },
+    {
+      "id": 2103019,
+      "nameFr": "Celui qui a brisé la Foudre",
+      "nameEn": "One Who Broke the Thunderbolt",
+      "color": "RED"
+    },
+    {
+      "id": 2104000,
+      "nameFr": "Diviser pour mieux régner",
+      "nameEn": "Turning the Enemy Against Itself",
+      "color": "BROWN"
+    },
+    {
+      "id": 2104001,
+      "nameFr": "Destructeur",
+      "nameEn": "Destroyer",
+      "color": "BROWN"
+    },
+    {
+      "id": 2104002,
+      "nameFr": "Maître de l'embuscade",
+      "nameEn": "Master of Ambush",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104003,
+      "nameFr": "Maître des altérations d'état",
+      "nameEn": "Status Ailment Master",
+      "color": "GREEN"
+    },
+    {
+      "id": 2104005,
+      "nameFr": "En chute libre",
+      "nameEn": "Falling",
+      "color": "BROWN"
+    },
+    {
+      "id": 2104006,
+      "nameFr": "Architecte",
+      "nameEn": "Architect",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104007,
+      "nameFr": "【 777 】",
+      "nameEn": "【 777 】",
+      "color": "BROWN"
+    },
+    {
+      "id": 2104008,
+      "nameFr": "Instasaisie",
+      "nameEn": "Instagrab",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104009,
+      "nameFr": "État d'agonie",
+      "nameEn": "Near-Death State",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104010,
+      "nameFr": "Celui dont le passe-temps est de piétiner",
+      "nameEn": "One Whose Hobby Is Stomping",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104011,
+      "nameFr": "Celui qui défie la gravité",
+      "nameEn": "One Who Defies Gravity",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104012,
+      "nameFr": "Manège",
+      "nameEn": "Carousel",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104013,
+      "nameFr": "Magnat",
+      "nameEn": "Tycoon",
+      "color": "BLUE"
+    },
+    {
+      "id": 2104014,
+      "nameFr": "Dragon's Word",
+      "nameEn": "Dragon's Word",
+      "color": "RED"
+    },
+    {
+      "id": 2104100,
+      "nameFr": "Corps de mercenaires de niveau inférieur",
+      "nameEn": "Novice Mercenary Corps",
+      "color": "VIOLET",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "id": 2104101,
+      "nameFr": "Corps de mercenaires de niveau intermédiaire",
+      "nameEn": "Intermediate Mercenary Corps",
+      "color": "BROWN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": 2104102,
+      "nameFr": "Corps de mercenaires de haut niveau",
+      "nameEn": "High-Ranking Mercenary Corps",
+      "color": "BLUE",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 150
+        }
+      ]
+    },
+    {
+      "id": 2104103,
+      "nameFr": "Corps de mercenaires d'élite",
+      "nameEn": "Elite Mercenary Corps",
+      "color": "GREEN",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 190
+        }
+      ]
+    },
+    {
+      "id": 2104104,
+      "nameFr": "Corps de mercenaires vétérans",
+      "nameEn": "Veteran Mercenary Corps",
+      "color": "RED",
+      "stats": [
+        {
+          "type": "MaxHP",
+          "value": 385
+        }
+      ]
+    }
+  ]
+}
