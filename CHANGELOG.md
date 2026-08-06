@@ -7,6 +7,22 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [0.16.0] - 2026-08-06
+
+### Features
+
+- **web**: Titles panel
+- **web**: Titles endpoints
+- **domain**: Unlock titles (per-title and unlock-all)
+- **domain**: Read titles with unlocked state from tb_title
+- **cmd**: Pak-titles converter → titles.json
+
+### Documentation
+
+- Document tb_title and the titles screen
+- **plans**: Add v0.16.0 titles plan
+- Changelog for v0.15.0
+
 ## [0.15.0] - 2026-08-05
 
 ### Features
