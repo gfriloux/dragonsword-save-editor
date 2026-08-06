@@ -908,6 +908,144 @@ RENDER.familiers = async function () {
   el.appendChild(unlockGrid(locked, (cid) => postJSON("/api/game/familiers/unlock", { cid }), () => RENDER.familiers(), "Tous les familiers sont déjà possédés."));
 };
 
+// ── Titres (flat checklist, bitmask tb_title) ──────────────────────────────
+const titles = { list: [], search: "", filter: "all" };
+
+const TITLE_COLORS = { BLUE: "#5aa0e0", BROWN: "#b08050", GREEN: "#6fcf7f", RED: "#e05a5a", VIOLET: "#b98ce0" };
+const STAT_LABELS = {
+  MaxHP: ["PV max", "Max HP"], Attack: ["Attaque", "Attack"], Defence: ["Défense", "Defence"],
+};
+
+function titleName(t) {
+  const n = lang === "fr" ? t.nameFr : t.nameEn;
+  return n || t.nameEn || t.nameFr || "ID " + t.id;
+}
+
+function statText(t) {
+  return (t.stats || [])
+    .map((s) => `${(STAT_LABELS[s.type] || [s.type, s.type])[lang === "fr" ? 0 : 1]} +${s.value}`)
+    .join(" · ");
+}
+
+RENDER.titles = async function () {
+  const el = $("#screen-titles");
+  el.className = "screen panel";
+  el.innerHTML = `<div class="panel-head"><span class="overline">Distinctions</span><h2>Titres</h2><span class="sub">Titres de compte (<span class="mono">tb_title</span>, masque de bits). Coche pour débloquer ; le titre affiché en jeu n'est pas modifié.</span></div>`;
+  const data = await api("/api/game/titles");
+  titles.list = data.titles || [];
+
+  const bar = document.createElement("div");
+  bar.className = "titles-toolbar";
+  const count = document.createElement("span");
+  count.className = "cook-count";
+  titles._count = count;
+
+  const filterSeg = document.createElement("div");
+  filterSeg.className = "seg";
+  for (const [val, label] of [["all", "Tous"], ["locked", "À débloquer"], ["unlocked", "Débloqués"]]) {
+    const b = document.createElement("button");
+    b.textContent = label;
+    b.className = titles.filter === val ? "on" : "";
+    b.onclick = () => {
+      titles.filter = val;
+      filterSeg.querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+      paintTitles();
+    };
+    filterSeg.appendChild(b);
+  }
+
+  const search = document.createElement("input");
+  search.className = "cook-search";
+  search.type = "search";
+  search.placeholder = "Rechercher un titre…";
+  search.value = titles.search;
+  search.oninput = () => { titles.search = search.value; paintTitles(); };
+
+  const unlock = document.createElement("button");
+  unlock.className = "action-btn";
+  unlock.textContent = "Tout débloquer";
+  unlock.onclick = async () => {
+    if (!(await modalConfirm({ title: "Tout débloquer", message: "Débloquer les 108 titres ?", okText: "Tout débloquer" }))) return;
+    unlock.disabled = true;
+    try {
+      await postJSON("/api/game/titles/unlock-all", {});
+      for (const t of titles.list) t.unlocked = true;
+      paintTitles();
+      toast("Titres débloqués — clique « Écrire dans la save ».");
+    } catch (e) { toast("Échec : " + e.message); }
+    finally { unlock.disabled = false; }
+  };
+
+  bar.append(count, filterSeg, search, unlock);
+  el.appendChild(bar);
+
+  const rows = document.createElement("div");
+  rows.className = "rows";
+  titles._rows = rows;
+  el.appendChild(rows);
+  paintTitles();
+};
+
+function paintTitles() {
+  const q = titles.search.trim().toLowerCase();
+  const shown = titles.list.filter((t) => {
+    if (titles.filter === "locked" && t.unlocked) return false;
+    if (titles.filter === "unlocked" && !t.unlocked) return false;
+    if (q && !titleName(t).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const on = titles.list.filter((t) => t.unlocked).length;
+  if (titles._count) titles._count.textContent = `${on}/${titles.list.length} débloqués`;
+
+  const rows = titles._rows;
+  rows.innerHTML = "";
+  if (!shown.length) { rows.innerHTML = `<p class="empty-note">Aucun titre.</p>`; return; }
+  for (const t of shown) {
+    const row = document.createElement("label");
+    row.className = "row title-row";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = t.unlocked;
+    cb.className = "title-check";
+    cb.onchange = async () => {
+      cb.disabled = true;
+      try {
+        await postJSON("/api/game/titles/unlock", { id: t.id, unlocked: cb.checked });
+        t.unlocked = cb.checked;
+        if (titles._count) titles._count.textContent = `${titles.list.filter((x) => x.unlocked).length}/${titles.list.length} débloqués`;
+        if (titles.filter !== "all") paintTitles();
+      } catch (e) { cb.checked = !cb.checked; toast("Échec : " + e.message); }
+      finally { cb.disabled = false; }
+    };
+
+    const dot = document.createElement("span");
+    dot.className = "title-dot";
+    dot.style.background = TITLE_COLORS[t.color] || "var(--muted)";
+    dot.title = t.color || "";
+
+    const names = document.createElement("div");
+    names.className = "names";
+    const iname = document.createElement("span");
+    iname.className = "iname" + (t.unlocked ? "" : " unknown");
+    iname.textContent = titleName(t);
+    const icid = document.createElement("span");
+    icid.className = "icid";
+    icid.textContent = "ID " + t.id;
+    names.append(iname, icid);
+
+    row.append(cb, dot, names);
+    const st = statText(t);
+    if (st) {
+      const stats = document.createElement("span");
+      stats.className = "title-stats";
+      stats.textContent = st;
+      row.appendChild(stats);
+    }
+    rows.appendChild(row);
+  }
+}
+
 // ── Cuisine (recipe grid + detail panel) ───────────────────────────────────
 const cook = { recipes: [], tools: [], tool: "", search: "", known: "all", sel: null };
 
