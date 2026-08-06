@@ -7,6 +7,16 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [0.16.1] - 2026-08-06
+
+### Bug fixes
+
+- **web**: Don't reveal the inventory screen when writing the save
+
+### Documentation
+
+- Changelog for v0.16.0
+
 ## [0.16.0] - 2026-08-06
 
 ### Features
