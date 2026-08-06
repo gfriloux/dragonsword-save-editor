@@ -1413,7 +1413,10 @@ $("#save-btn").onclick = async () => {
     await api("/api/save", { method: "POST" });
     resetModif();
     invBaseline = {}; // written to disk → new baseline
-    if (loaded.has("inv")) RENDER.inv().catch(() => {});
+    // Refresh the inventory baseline (amber dots), but never un-hide it:
+    // RENDER.inv() rebuilds el.className and would strip the "hidden" class.
+    if (currentView === "inv") RENDER.inv().catch(() => {});
+    else loaded.delete("inv"); // recapture baseline on next view
     toast("Sauvegarde écrite · backup .bak créé");
   } catch (e) { toast("Écriture échouée : " + e.message); }
   finally { btn.disabled = false; }
