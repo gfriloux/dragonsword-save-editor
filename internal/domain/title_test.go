@@ -34,6 +34,22 @@ func TestTitlePos(t *testing.T) {
 	}
 }
 
+// TestTitleUnlockAllMaskHighBit asserts the unlock mask reaches category 32843's high
+// bits (past 62), which only round-trip through tb_title's INTEGER as a negative int64.
+func TestTitleUnlockAllMaskHighBit(t *testing.T) {
+	masks := map[int]uint64{}
+	for _, ts := range titleSeeds {
+		cat, bit := titlePos(ts.ID)
+		masks[cat] |= 1 << uint(bit)
+	}
+	if masks[32843] == 0 {
+		t.Fatal("no category-32843 bits in the unlock mask")
+	}
+	if int64(masks[32843]) >= 0 {
+		t.Fatalf("category 32843 mask %#x has no high bit set (want a negative int64)", masks[32843])
+	}
+}
+
 // --- real-save gated ------------------------------------------------------------
 
 func TestTitlesRead(t *testing.T) {
@@ -62,5 +78,102 @@ func TestTitlesRead(t *testing.T) {
 		if !got[id] {
 			t.Fatalf("title %d expected unlocked, but is not", id)
 		}
+	}
+}
+
+func TestTitlesToggle(t *testing.T) {
+	g := openGame(t)
+	before, err := g.Titles()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var target Title
+	for _, ti := range before {
+		if !ti.Unlocked {
+			target = ti
+			break
+		}
+	}
+	if target.ID == 0 {
+		t.Skip("every title already unlocked in this save")
+	}
+	if err := g.SetTitleUnlocked(target.ID, true); err != nil {
+		t.Fatal(err)
+	}
+	after, err := g.Titles()
+	if err != nil {
+		t.Fatal(err)
+	}
+	prev := map[int64]bool{}
+	for _, ti := range before {
+		prev[ti.ID] = ti.Unlocked
+	}
+	for _, ti := range after {
+		want := prev[ti.ID]
+		if ti.ID == target.ID {
+			want = true
+		}
+		if ti.Unlocked != want {
+			t.Fatalf("title %d unlocked=%v, want %v (only the target should change)", ti.ID, ti.Unlocked, want)
+		}
+	}
+	// And it round-trips back off.
+	if err := g.SetTitleUnlocked(target.ID, false); err != nil {
+		t.Fatal(err)
+	}
+	back, err := g.Titles()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, ti := range back {
+		if ti.ID == target.ID && ti.Unlocked {
+			t.Fatalf("title %d still unlocked after locking", target.ID)
+		}
+	}
+}
+
+func TestUnlockAllTitles(t *testing.T) {
+	g := openGame(t)
+	if err := g.UnlockAllTitles(); err != nil {
+		t.Fatal(err)
+	}
+	titles, err := g.Titles()
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, ti := range titles {
+		if !ti.Unlocked {
+			t.Fatalf("title %d (cat %d bit %d) not unlocked after UnlockAllTitles", ti.ID, ti.Category, ti.Bit)
+		}
+	}
+}
+
+// TestSetTitlePreservesFav proves the write leaves FAV_BIT_FIELD (the displayed title)
+// intact — an INSERT OR REPLACE would have wiped it.
+func TestSetTitlePreservesFav(t *testing.T) {
+	g := openGame(t)
+	uid, err := g.UserID()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Seed a non-zero favourite in category 32812 (present in the fixture), then unlock a
+	// different title in that category and assert the favourite is untouched.
+	const cat, fav = 32812, int64(1 << 5)
+	if _, err := g.s.Exec(
+		`INSERT INTO tb_title (USER_DBID, CATEGORY, BIT_FIELD, FAV_BIT_FIELD) VALUES (?,?,0,?)
+		 ON CONFLICT(USER_DBID, CATEGORY) DO UPDATE SET FAV_BIT_FIELD=excluded.FAV_BIT_FIELD`,
+		uid, cat, fav); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.SetTitleUnlocked(int64(cat)*64+10, true); err != nil {
+		t.Fatal(err)
+	}
+	var gotFav int64
+	if err := g.s.DB().QueryRow(
+		`SELECT FAV_BIT_FIELD FROM tb_title WHERE USER_DBID=? AND CATEGORY=?`, uid, cat).Scan(&gotFav); err != nil {
+		t.Fatal(err)
+	}
+	if gotFav != fav {
+		t.Fatalf("FAV_BIT_FIELD = %d after unlock, want %d (preserved)", gotFav, fav)
 	}
 }

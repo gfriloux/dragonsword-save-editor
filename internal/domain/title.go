@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 )
@@ -87,6 +88,73 @@ func (g *Game) Titles() ([]Title, error) {
 		})
 	}
 	return out, nil
+}
+
+// upsertTitleField writes BIT_FIELD for one (uid, category) without disturbing
+// FAV_BIT_FIELD (the displayed/favourite title). Unlike tb_switch's three-column
+// INSERT OR REPLACE, tb_title carries that extra column, so a REPLACE would wipe it;
+// the UPSERT touches BIT_FIELD only. exec is *sql.DB.Exec or *sql.Tx.Exec.
+func upsertTitleField(exec func(string, ...any) (sql.Result, error), uid int64, cat int, field int64) error {
+	_, err := exec(
+		`INSERT INTO tb_title (USER_DBID, CATEGORY, BIT_FIELD) VALUES (?,?,?)
+		 ON CONFLICT(USER_DBID, CATEGORY) DO UPDATE SET BIT_FIELD=excluded.BIT_FIELD`,
+		uid, cat, field)
+	return err
+}
+
+// SetTitleUnlocked flips one title's unlocked flag: it read-modify-writes the title's bit
+// in its tb_title category, preserving the other bits and FAV_BIT_FIELD.
+func (g *Game) SetTitleUnlocked(id int64, unlocked bool) error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	cat, bit := titlePos(id)
+	var cur int64
+	err = g.s.DB().QueryRow(
+		`SELECT BIT_FIELD FROM tb_title WHERE USER_DBID=? AND CATEGORY=?`, uid, cat).Scan(&cur)
+	if err != nil && err != sql.ErrNoRows {
+		return err
+	}
+	field := uint64(cur)
+	if unlocked {
+		field |= 1 << uint(bit)
+	} else {
+		field &^= 1 << uint(bit)
+	}
+	return upsertTitleField(g.s.Exec, uid, cat, int64(field))
+}
+
+// UnlockAllTitles marks every catalogued title as unlocked by OR-ing the exact bit of each
+// title id into its tb_title category. It touches only the 108 real title bits (never a
+// blanket mask) and leaves FAV_BIT_FIELD alone. The masks are held as uint64 and stored as
+// int64 so the high-bit category (32843, bits past 62) round-trips via two's complement.
+func (g *Game) UnlockAllTitles() error {
+	uid, err := g.UserID()
+	if err != nil {
+		return err
+	}
+	masks := map[int]uint64{}
+	for _, ts := range titleSeeds {
+		cat, bit := titlePos(ts.ID)
+		masks[cat] |= 1 << uint(bit)
+	}
+	tx, err := g.s.DB().Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	for cat, mask := range masks {
+		var cur int64
+		err := tx.QueryRow(`SELECT BIT_FIELD FROM tb_title WHERE USER_DBID=? AND CATEGORY=?`, uid, cat).Scan(&cur)
+		if err != nil && err != sql.ErrNoRows {
+			return err
+		}
+		if err := upsertTitleField(tx.Exec, uid, cat, int64(uint64(cur)|mask)); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
 }
 
 // titleUnlockedBits reads the tb_title categories into a cat→bitfield map.
