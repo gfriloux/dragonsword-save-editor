@@ -20,12 +20,17 @@ Confirmed from real saves and the th.gl database:
 | Material      | `100x`,`131x`,`143x`–`147x`,`19xx`,`200x` | `1000500`, `1450001` … | `tb_stackable_item.ITEM_CID` |
 | Mount         | `132xxxx`              | `1320000` … `1320033`         | `tb_vehicle.VEHICLE_CID` |
 | Costume       | `999xxxx`              | `9990008` … `9990031`         | `tb_costume.COSTUME_CID` |
+| Title         | `210xxxx`              | `2100000` … `2104xxx` (108)   | `tb_title` bit (`CATEGORY = id/64`) |
 
 Notes:
 - The `1000xxx` prefix is shared by currencies (`tb_currency`) and some stackable
   consumables (`tb_stackable_item`): the **table** decides the kind, not the CID alone.
 - `stat` references (`MAIN_STAT_CID`, `SUB_STAT_CID*`, `STAT_INFO_CID`) are a separate CID
   space (small 4–5 digit ids); their meaning is **not yet documented**.
+- **Titles** (`210xxxx`) are not one-row-per-title: unlocking is a **bit** in `tb_title`
+  (`CATEGORY = id/64`, `bit = id%64`), the same bitmask shape as recipes. The 108 titles,
+  names, font colours and stat bonuses come from `AccountTitleData.xml` + `StringData.xml`
+  in the paks (see `cmd/pak-titles`). Ranges observed: 7 categories `32812`–`32876`.
 - The `999xxxx` **costume** space bundles both **outfits and weapon skins** (all
   `ItemType=COSTUME`, indistinguishable by type); they pair even/odd — an outfit `999xxx0`
   with its matching weapon skin `999xxx1` (confirmed by the icon paths, e.g.

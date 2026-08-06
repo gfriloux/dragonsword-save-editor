@@ -19,7 +19,9 @@ patron que Cuisine/Équipement : accesseur typé `internal/domain` → endpoint
   contredit par les strings shippées. Éditer cette table ne mappe à rien de vivant.
 - ~~**Costumes / Apparences** — `tb_costume`.~~ **SHIPPED v0.15.0** — écran Costumes
   (débloquer + équiper par perso, non exclusif : tenue + skin d'arme).
-- [ ] **Titres** — `tb_title`. Déblocage.
+- [ ] **Titres** — `tb_title`. Déblocage. **PLANIFIÉ v0.16.0** (`.claude/plans/v0.16.0/`) —
+  étude faite 2026-08-06 : bitmask comme les recettes, catalogue data-driven (108 titres,
+  `AccountTitleData.xml`).
 - ~~**Montures / Véhicules** — `tb_vehicle`, `tb_equip_mount`.~~ **SHIPPED v0.15.0** —
   écran Familiers (débloquer + une monture par perso via `tb_equip_mount`).
 - [ ] **Compétences** — `tb_skill_growth`. Niveaux de skill par personnage.

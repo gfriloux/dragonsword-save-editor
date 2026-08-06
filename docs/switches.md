@@ -80,3 +80,19 @@ never unlocked by the blanket. The key-accurate map fixes this.
   `1423001`, "Champignons de l'ascension grillés" `1430920`) do **not** appear in
   `CookRecipeData.xml` at all — they live in a different table and are **not** covered by
   this map.
+
+## Other bitmask collections — account titles (`tb_title`)
+
+Account **titles** reuse the same bitmask idea in a dedicated table. Whether a title is
+*unlocked* is one bit, with `CATEGORY = title_id / 64` and `bit = title_id % 64` — exactly
+the recipe shape, over the title id (`210xxxx`). The 108 titles are datamined into
+`internal/domain/data/titles.json` (see `cmd/pak-titles`, from `AccountTitleData.xml` +
+`StringData.xml`).
+
+Two differences from `tb_switch`:
+
+- `tb_title` has a second mask column, `FAV_BIT_FIELD` (the displayed/favourite title), so
+  writes must **not** use `INSERT OR REPLACE` (it would wipe it) — the editor UPSERTs
+  `BIT_FIELD` only.
+- Category `32843` uses bits past 62, so its full mask has the high bit set; it is held as
+  `uint64` and stored as `int64` (two's complement), never a blanket `-1`.

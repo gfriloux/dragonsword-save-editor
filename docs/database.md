@@ -87,6 +87,21 @@ keeping the accessories).
 The editor exposes both as **Costumes** and **Familiers** screens (unlock + equip);
 `tb_summon` (an unrelated, counter-shaped summon-collection table) is out of scope.
 
+### `tb_title` — account titles
+
+`(USER_DBID, CATEGORY)` PK, plus `BIT_FIELD` and `FAV_BIT_FIELD` (both 64-bit masks). A
+**bitmask** collection like `tb_switch`: whether a title is *unlocked* is one bit, with
+`CATEGORY = title_id / 64` and `bit = title_id % 64`. The 108 titles come from
+`AccountTitleData.xml` in the paks (ids `2100000`–`2104xxx`, 7 categories; see
+[content-ids](content-ids.md)); each also carries a font colour and a small stat bonus.
+`BIT_FIELD` holds the unlocked set; `FAV_BIT_FIELD` the displayed/favourite title.
+
+The editor's **Titres** screen unlocks titles (per-title checkbox or unlock-all). Writes
+go through an UPSERT that sets `BIT_FIELD` only, so `FAV_BIT_FIELD` is preserved — unlike
+`tb_switch`, `tb_title` has that extra column, so a plain `INSERT OR REPLACE` would wipe
+it. Editing the favourite/displayed title is out of scope. Category `32843` uses bits past
+62, so masks are held as `uint64` and stored as `int64` (two's complement).
+
 ### `tb_quick_slot` — quick slots
 
 `(USER_DBID, SLOT_INDEX)` PK, `ITEM_DBID`, `ITEM_CID`.

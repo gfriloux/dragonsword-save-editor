@@ -40,6 +40,9 @@ The editor opens `http://127.0.0.1:<port>/` in your browser with two tabs:
     characters: costumes (outfits + weapon skins) are non-exclusive per character;
     mounts are one per character. Each screen lists what's owned plus a catalog of the
     not-yet-owned to unlock.
+  - **Titles** — a checklist of the 108 account titles (`tb_title` bitmask): each row
+    shows a colour dot, name and stat bonus, with a per-title checkbox and an unlock-all
+    button (the displayed title is left untouched).
 
   Item, character and equipment **names and icons** come from a bundled catalog
   datamined by [th.gl](https://dragonswordawakening.th.gl) — names in **French &

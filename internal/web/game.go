@@ -263,6 +263,48 @@ func (s *Server) handleSetRecipeKnown(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, 200, map[string]any{"ok": true})
 }
 
+// handleTitles returns every catalogued title with its unlocked state.
+func (s *Server) handleTitles(w http.ResponseWriter, r *http.Request) {
+	titles, err := s.g.Titles()
+	if err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"titles": titles})
+}
+
+func (s *Server) handleSetTitleUnlocked(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	var req struct {
+		ID       int64 `json:"id"`
+		Unlocked bool  `json:"unlocked"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	if err := s.g.SetTitleUnlocked(req.ID, req.Unlocked); err != nil {
+		writeErr(w, 400, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) handleUnlockTitles(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeErr(w, 405, fmt.Errorf("POST only"))
+		return
+	}
+	if err := s.g.UnlockAllTitles(); err != nil {
+		writeErr(w, 500, err)
+		return
+	}
+	writeJSON(w, 200, map[string]any{"ok": true})
+}
+
 // handleCostumes returns owned costumes, the catalog (with owned flags) and the
 // character roster the UI needs to resolve wearers and drive the equip picker.
 func (s *Server) handleCostumes(w http.ResponseWriter, r *http.Request) {
