@@ -73,6 +73,7 @@ type consumableCategory struct {
 	LabelFR string `json:"labelFr"`
 	LabelEN string `json:"labelEn"`
 	Color   string `json:"color"`
+	Group   string `json:"group"` // game CategoryType; the super-category the rail groups under
 	id      int    // for ordering only
 }
 
@@ -336,14 +337,14 @@ func main() {
 			return
 		}
 		id, _ := strconv.Atoi(r.ID)
-		cats = append(cats, consumableCategory{Key: r.ID, LabelFR: s.FR, LabelEN: s.EN, Color: color, id: id})
+		cats = append(cats, consumableCategory{Key: r.ID, LabelFR: s.FR, LabelEN: s.EN, Color: color, Group: r.CategoryType, id: id})
 		consumable[r.ID] = true
 	})
 	if err != nil {
 		log.Fatalf("parse categories: %v", err)
 	}
 	sort.Slice(cats, func(i, j int) bool { return cats[i].id < cats[j].id })
-	cats = append(cats, consumableCategory{Key: "unsorted", LabelFR: "Non trié", LabelEN: "Unsorted", Color: "#8a93a6"})
+	cats = append(cats, consumableCategory{Key: "unsorted", LabelFR: "Non trié", LabelEN: "Unsorted", Color: "#8a93a6", Group: "unsorted"})
 
 	var added, updated, noName int
 	itemValue1 := map[string]string{}   // CID -> Value1 (dish effect id, among others)

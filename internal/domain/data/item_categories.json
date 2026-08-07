@@ -5,307 +5,358 @@
       "key": "1200",
       "labelFr": "Griller",
       "labelEn": "Grilling",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1201",
       "labelFr": "Bouillir",
       "labelEn": "Boiling",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1202",
       "labelFr": "Découper",
       "labelEn": "Slice",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1203",
       "labelFr": "Autres",
       "labelEn": "Other",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1204",
       "labelFr": "Produits alimentaires transformés",
       "labelEn": "Processed Food",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1205",
       "labelFr": "Noix",
       "labelEn": "Nuts",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1206",
       "labelFr": "Aliments naturels",
       "labelEn": "Natural Foods",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1299",
       "labelFr": "Événement",
       "labelEn": "Event",
-      "color": "#cf8f6f"
+      "color": "#cf8f6f",
+      "group": "COOK"
     },
     {
       "key": "1400",
       "labelFr": "Amplitude",
       "labelEn": "Amplitude",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1401",
       "labelFr": "Écrasement",
       "labelEn": "Crushing",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1402",
       "labelFr": "Rafale",
       "labelEn": "Gale",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1403",
       "labelFr": "Fougue",
       "labelEn": "Bloodburst",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1404",
       "labelFr": "Flamme rouge",
       "labelEn": "Blazeflame",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1405",
       "labelFr": "Glace",
       "labelEn": "Frostbite",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1406",
       "labelFr": "Foudre",
       "labelEn": "Thunderbolt",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1407",
       "labelFr": "Turbulence",
       "labelEn": "Venom",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1408",
       "labelFr": "Choc",
       "labelEn": "Breaker",
-      "color": "#d75f8f"
+      "color": "#d75f8f",
+      "group": "KARMA"
     },
     {
       "key": "1500",
       "labelFr": "Détermination",
       "labelEn": "Resolve",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1501",
       "labelFr": "Protection",
       "labelEn": "Guardian",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1502",
       "labelFr": "Vitalité",
       "labelEn": "Vitality",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1503",
       "labelFr": "Concentration",
       "labelEn": "Focus",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1504",
       "labelFr": "Amplification",
       "labelEn": "Amplification",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1505",
       "labelFr": "Coup fatal",
       "labelEn": "One-Hit",
-      "color": "#b98ce0"
+      "color": "#b98ce0",
+      "group": "GEM"
     },
     {
       "key": "1600",
       "labelFr": "Matériaux d'amélioration des héros",
       "labelEn": "Hero Growth Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1601",
       "labelFr": "Matériaux d'amélioration de Karma",
       "labelEn": "Karma Growth Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1602",
       "labelFr": "Matériaux d'amélioration d'équipement",
       "labelEn": "Equipment Growth Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1603",
       "labelFr": "Matériaux de monstres",
       "labelEn": "Monster Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1604",
       "labelFr": "Ressources minières",
       "labelEn": "Mining Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1605",
       "labelFr": "Ressources de collecte",
       "labelEn": "Gathering Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1606",
       "labelFr": "Insigne",
       "labelEn": "Insignia",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1607",
       "labelFr": "Pierres de caractéristiques",
       "labelEn": "Trait Stone",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1608",
       "labelFr": "Matériaux de fabrication d'équipement",
       "labelEn": "Equipment Crafting Materials",
-      "color": "#e08a5a"
+      "color": "#e08a5a",
+      "group": "GROW_MATERIAL"
     },
     {
       "key": "1700",
       "labelFr": "Viande",
       "labelEn": "Meat",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1701",
       "labelFr": "Poisson",
       "labelEn": "Fish",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1702",
       "labelFr": "Fruits de mer",
       "labelEn": "Seafood",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1703",
       "labelFr": "Œufs",
       "labelEn": "Eggs",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1704",
       "labelFr": "Légumes",
       "labelEn": "Vegetables",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1705",
       "labelFr": "Champignons",
       "labelEn": "Mushrooms",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1706",
       "labelFr": "Céréales",
       "labelEn": "Grains",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1707",
       "labelFr": "Herbes",
       "labelEn": "Herbs",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1708",
       "labelFr": "Produits alimentaires transformés",
       "labelEn": "Processed Food",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1709",
       "labelFr": "Aliments naturels",
       "labelEn": "Natural Foods",
-      "color": "#6fcf7f"
+      "color": "#6fcf7f",
+      "group": "NORMAL_MATERIAL"
     },
     {
       "key": "1800",
       "labelFr": "Pierre d'invocation",
       "labelEn": "Summoning Stone",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1802",
       "labelFr": "Matériaux d'échange",
       "labelEn": "Exchange Materials",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1803",
       "labelFr": "Clés de trésor",
       "labelEn": "Treasure Key",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1804",
       "labelFr": "Carte au trésor",
       "labelEn": "Treasure Map",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1805",
       "labelFr": "Matériaux spéciaux",
       "labelEn": "Special Materials",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1900",
       "labelFr": "Coffre groupé",
       "labelEn": "Bulk Box",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1901",
       "labelFr": "Coffre au choix",
       "labelEn": "Select Box",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "1902",
       "labelFr": "Boîte aléatoire",
       "labelEn": "Probability Box",
-      "color": "#e0a44a"
+      "color": "#e0a44a",
+      "group": "VALUABLE"
     },
     {
       "key": "unsorted",
       "labelFr": "Non trié",
       "labelEn": "Unsorted",
-      "color": "#8a93a6"
+      "color": "#8a93a6",
+      "group": "unsorted"
     }
   ]
 }
