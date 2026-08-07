@@ -93,7 +93,11 @@ Costumes · Familiers · Titres · Cuisine · **SQL brut**). Item names come fro
 (`internal/domain/data/items.json`, names/categories/grade/icon paths from the paks,
 merged over th.gl), switchable FR/EN, with user-editable labels. Item **icons** are the
 authentic in-game art, extracted per-user from the paks and cached (falling back to the
-th.gl sprite, then a category dot). **Cuisine** is a recipe book: a grid of dish cards
+th.gl sprite, then a category dot). **Inventaire** lists owned + catalog consumables in a
+category rail whose entries are grouped under super-category headers — the game's item
+`CategoryType` (Cuisine · Runes · Effets · Ingrédients · Matériaux · Objets de valeur,
+with a trailing *Autres*), datamined by `cmd/pak-catalog` into `item_categories.json`.
+**Cuisine** is a recipe book: a grid of dish cards
 (known/locked) and a detail panel showing the eat-effect, the required ingredients
 (resolved to icons, with owned/required counts), and a per-recipe known/lock toggle.
 **Costumes** and **Familiers** unlock and equip cosmetics (`tb_costume`) and mounts
