@@ -201,7 +201,7 @@ function onSaveOpened(path) {
 function reloadAll() {
   const keep = currentView;
   loaded.clear();
-  catalogCache = consCatsCache = null;
+  catalogCache = consMetaCache = null;
   if (keep !== "home" && RENDER[keep]) {
     loaded.add(keep);
     RENDER[keep]().catch((e) => toast("Rechargement échoué : " + e.message));
@@ -409,10 +409,13 @@ async function catalog() {
   if (!catalogCache) catalogCache = (await api("/api/game/catalog")).items || [];
   return catalogCache;
 }
-let consCatsCache = null;
-async function consCategories() {
-  if (!consCatsCache) consCatsCache = (await api("/api/game/consumable-categories")).categories || [];
-  return consCatsCache;
+let consMetaCache = null;
+async function consMeta() {
+  if (!consMetaCache) {
+    const r = await api("/api/game/consumable-categories");
+    consMetaCache = { categories: r.categories || [], groups: r.groups || [] };
+  }
+  return consMetaCache;
 }
 let selectedCat = null;
 let selInvKey = null; // selected cell (detail panel)
@@ -430,7 +433,8 @@ const entryKey = (e) => (e.stackable ? "c" + e.cid : "k" + (e.item.id || e.cid))
 const rarityClass = (e) => (e.item && e.item.grade ? "r-" + e.item.grade : "r-normal");
 
 async function buildConsumableModel() {
-  const [{ items: owned }, cat, cats] = await Promise.all([api("/api/game/consumables"), catalog(), consCategories()]);
+  const [{ items: owned }, cat, meta] = await Promise.all([api("/api/game/consumables"), catalog(), consMeta()]);
+  const { categories: cats, groups } = meta;
   const catByCid = {};
   for (const it of cat) catByCid[it.cid] = it;
   const entries = {};
@@ -455,7 +459,7 @@ async function buildConsumableModel() {
       commit: (v) => postJSON("/api/game/stackable", { cid: it.cid, count: v }) });
   }
   for (const k in entries) entries[k].sort((a, b) => (b.owned - a.owned) || a.name.localeCompare(b.name));
-  return { entries, cats };
+  return { entries, cats, groups };
 }
 
 RENDER.inv = async function () {
@@ -482,7 +486,9 @@ RENDER.inv = async function () {
   if (!cats.length) { main.innerHTML = `<p class="empty-note">Aucun consommable.</p>`; return; }
   if (!selectedCat || !cats.some((c) => c.key === selectedCat)) selectedCat = cats[0].key;
 
-  for (const c of cats) {
+  // Rail grouped under super-category headers (game CategoryType), in the group order
+  // the API returns; categories with no known group land under a trailing "Autres".
+  const mkCatBtn = (c) => {
     const list = model.entries[c.key];
     const ownedN = list.filter((e) => e.owned).length;
     const b = document.createElement("button");
@@ -495,8 +501,20 @@ RENDER.inv = async function () {
       $$(".cat-link").forEach((x) => x.classList.toggle("active", x.dataset.key === c.key));
       renderInvCat(main, detail, model, c);
     };
-    rail.appendChild(b);
-  }
+    return b;
+  };
+  const addGroup = (label, members) => {
+    if (!members.length) return;
+    const h = document.createElement("div");
+    h.className = "cat-group-header";
+    const dot = members[0].color ? `<span class="cat-dot" style="background:${members[0].color}"></span>` : "";
+    h.innerHTML = `${dot}<span>${escapeHtml(label)}</span>`;
+    rail.appendChild(h);
+    for (const c of members) rail.appendChild(mkCatBtn(c));
+  };
+  const groupKeys = new Set((model.groups || []).map((g) => g.key));
+  for (const g of model.groups || []) addGroup(catLabel(g), cats.filter((c) => c.group === g.key));
+  addGroup(lang === "fr" ? "Autres" : "Other", cats.filter((c) => !groupKeys.has(c.group)));
   renderInvCat(main, detail, model, cats.find((c) => c.key === selectedCat));
 };
 
