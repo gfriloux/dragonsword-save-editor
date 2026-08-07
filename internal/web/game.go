@@ -46,9 +46,14 @@ func (s *Server) handleConsumables(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleConsumableCategories returns the ordered curated functional categories used
-// to group the Consumables panel. Each item's category key is in its "group" field.
+// to group the Consumables panel (each item's category key is in its "group" field),
+// plus the ordered super-category groups the rail renders as section headers (a
+// category's "group" field holds its group key).
 func (s *Server) handleConsumableCategories(w http.ResponseWriter, r *http.Request) {
-	writeJSON(w, 200, map[string]any{"categories": domain.ConsumableCategories()})
+	writeJSON(w, 200, map[string]any{
+		"categories": domain.ConsumableCategories(),
+		"groups":     domain.ConsumableGroups(),
+	})
 }
 
 func (s *Server) handleStack(w http.ResponseWriter, r *http.Request) {

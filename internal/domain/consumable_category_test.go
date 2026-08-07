@@ -27,6 +27,38 @@ func TestConsumableCategoriesShape(t *testing.T) {
 	}
 }
 
+func TestConsumableGroups(t *testing.T) {
+	groups := ConsumableGroups()
+	known := map[string]bool{}
+	for _, g := range groups {
+		if g.Key == "" || g.LabelFR == "" || g.LabelEN == "" {
+			t.Errorf("group %+v has an empty field", g)
+		}
+		known[g.Key] = true
+	}
+	// The six surfaced CategoryTypes must all be declared as headers.
+	for _, want := range []string{"COOK", "GEM", "KARMA", "NORMAL_MATERIAL", "GROW_MATERIAL", "VALUABLE"} {
+		if !known[want] {
+			t.Errorf("missing super-category group %q", want)
+		}
+	}
+	// Every category's Group is a known header key or the unsorted fallback, and is
+	// never empty (the UI needs it to place the category under a header).
+	for _, c := range ConsumableCategories() {
+		if c.Group == "" {
+			t.Errorf("category %q (%s) has no group", c.Key, c.LabelFR)
+		}
+		if !known[c.Group] && c.Group != groupUnsorted {
+			t.Errorf("category %q has unknown group %q", c.Key, c.Group)
+		}
+	}
+	// Returned slice must be a copy.
+	groups[0].LabelFR = "MUTATED"
+	if ConsumableGroups()[0].LabelFR == "MUTATED" {
+		t.Error("ConsumableGroups() leaks its backing array")
+	}
+}
+
 func TestItemGroupFromSeed(t *testing.T) {
 	c, err := LoadCatalog("")
 	if err != nil {
