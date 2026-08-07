@@ -7,6 +7,19 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [0.17.0] - 2026-08-07
+
+### Features
+
+- **web**: Group the inventory rail under super-category headers
+- **web**: Expose consumable category groups via the API
+- **cmd**: Tag consumable categories with their CategoryType group
+
+### Documentation
+
+- Plan v0.17.0 (inventory super-categories)
+- Changelog for v0.16.1
+
 ## [0.16.1] - 2026-08-06
 
 ### Bug fixes
