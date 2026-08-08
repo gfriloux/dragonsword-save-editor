@@ -48,8 +48,18 @@ build:
     go build ./...
 
 # Cross-compile the Windows editor: a single static .exe, no CGO.
-build-windows:
-    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o dist/dsa-save-editor.exe ./cmd/dsa-save-editor
+# `just build-windows 0.17.0` stamps the version reported by `--version`.
+build-windows version="dev":
+    CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build \
+        -ldflags "-s -w -X main.buildVersion={{ version }}" \
+        -o dist/dsa-save-editor.exe ./cmd/dsa-save-editor
+
+# Build the Linux release editor: a single static binary, no CGO.
+# Same contract as build-windows; both are what the release workflow ships.
+build-linux version="dev":
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+        -ldflags "-s -w -X main.buildVersion={{ version }}" \
+        -o dist/dsa-save-editor ./cmd/dsa-save-editor
 
 # Run the editor against a save file (opens the browser UI).
 run save:
