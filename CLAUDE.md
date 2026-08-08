@@ -20,6 +20,21 @@ game closed before writing).
   the tag** — pushing a `v*` tag runs `.github/workflows/release.yml`, which reuses
   that version's changelog section as the release notes and attaches the Linux and
   Windows binaries. No changelog section for the tag ⇒ the job fails.
+  The order is not interchangeable:
+
+  ```sh
+  git pull                                       # rebase FIRST — see below
+  git merge --no-ff <branch>                     # the plan branch
+  git-cliff --tag vX.Y.Z --output CHANGELOG.md   # --tag labels the untagged commits
+  git commit -am "docs: changelog for vX.Y.Z"    # the notes must be IN the tag
+  git tag -a vX.Y.Z -m "vX.Y.Z"
+  git push origin main                           # branch BEFORE tag
+  git push origin vX.Y.Z                         # this is what triggers the workflow
+  ```
+
+  Two traps, both hit on v0.17.1: a `git pull --rebase` **after** tagging rewrites the
+  commits and leaves the tag on an orphaned one (retag on the new `main`); and pushing
+  the tag before `main` can leave GitHub with no workflow to run, so nothing fires.
 - **Docs in the same commit** as the code they describe. A structural change without
   a doc update is a defect.
 
