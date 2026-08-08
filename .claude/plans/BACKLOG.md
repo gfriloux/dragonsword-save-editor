@@ -73,6 +73,12 @@ Ordre valeur/risque suggéré : Costumes/Titres → Compétences → Montures.
 
 ## F. Distribution (P3)
 
-- [ ] **Clarifier le workflow de release** — le tag `v*` déclenche un workflow, mais
-  `DESIGN.md` dit « pas de CI GitHub » : trancher la contradiction.
-- [ ] **Packaging du binaire Windows** (signature / archive de release).
+- [x] **Clarifier le workflow de release** — tranché : pas de CI de build/PR, un
+  workflow release sur tag `v*` (`.github/workflows/release.yml`) qui publie les
+  binaires Linux + Windows et les notes issues du `CHANGELOG.md`.
+  Plan : [`release/ci-release.md`](release/ci-release.md).
+- [ ] **Packaging du binaire Windows** (signature / archive de release) — la release
+  attache l'`.exe` nu et un `SHA256SUMS` ; reste la signature et l'archivage.
+- [ ] **Version unique** (P2) — `flake.nix` code en dur `version = "0.1.0"`, donc
+  `nix run .#default -- --version` ment. La release stampe le tag via `just`, mais il
+  faudrait une seule source de vérité pour la version.

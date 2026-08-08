@@ -25,7 +25,9 @@ accurate for build/PR CI, and closes the backlog item *Clarifier le workflow de 
 - `Justfile` — `build-linux` and `build-windows` take an optional `version` argument
   and stamp it into `main.buildVersion` via `-ldflags`. Default stays `dev`, so local
   behaviour is unchanged.
-- Docs: `CLAUDE.md`, `README.md`, `DESIGN.md` (release section), `.claude/plans/BACKLOG.md`.
+- Docs: `CLAUDE.md`, `README.md`, `.claude/plans/BACKLOG.md`. (`DESIGN.md` turned out
+  to say nothing about CI or releases — the contradiction lives in `CLAUDE.md` and
+  `README.md` only, so `DESIGN.md` is left untouched.)
 
 **Out of scope:**
 - A build/test CI on push or PR — release-on-tag only (user's call). pre-commit
@@ -57,8 +59,8 @@ accurate for build/PR CI, and closes the backlog item *Clarifier le workflow de 
 2. `build: stamp the version into the release binaries` — Justfile `build-linux` /
    `build-windows` with a `version` argument (+ `Justfile` doc comments).
 3. `ci: publish a GitHub release on v* tags` — the workflow.
-4. `docs: document the release workflow` — `CLAUDE.md`, `README.md`, `DESIGN.md`,
-   backlog item closed.
+4. `docs: document the release workflow` — `CLAUDE.md`, `README.md`, backlog item
+   closed.
 
 ## Quality gates
 

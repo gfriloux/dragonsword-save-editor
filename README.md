@@ -118,8 +118,22 @@ just check             # nix flake check (build + go test + gofmt)
 pre-commit install     # run the gates automatically before each commit
 ```
 
-`just` is the single source of truth for the gates; pre-commit and `nix flake
-check` reuse them. (No GitHub CI by choice.)
+`just` is the single source of truth for the gates; pre-commit, `nix flake check`
+and the release workflow reuse them. There is no build/PR CI by choice — the only
+GitHub workflow is the release below.
+
+## Releases
+
+Ready-made binaries are attached to every
+[release](https://github.com/gfriloux/dragonsword-save-editor/releases):
+`dsa-save-editor-<version>-linux-amd64`,
+`dsa-save-editor-<version>-windows-amd64.exe` and a `SHA256SUMS` to check them.
+
+Pushing a `v*` tag runs `.github/workflows/release.yml`, which — inside the Nix dev
+shell, with the same `just` recipes used locally — runs the gates, builds both
+binaries stamped with the tag, and publishes the release using that version's
+`CHANGELOG.md` section as the notes. So the changelog (`just changelog`) is
+regenerated and committed **before** tagging.
 
 ## Tests
 
