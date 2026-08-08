@@ -7,6 +7,22 @@ by git-cliff.
 [Keep a Changelog]: https://keepachangelog.com/en/1.1.0/
 [SemVer]: https://semver.org/
 
+## [0.17.1] - 2026-08-08
+
+### Documentation
+
+- Document the release workflow
+- **plans**: Plan the release CI
+- Changelog for v0.17.0
+
+### Build & tooling
+
+- Stamp the version into the release binaries
+
+### Continuous integration
+
+- Publish a GitHub release on v* tags
+
 ## [0.17.0] - 2026-08-07
 
 ### Features
